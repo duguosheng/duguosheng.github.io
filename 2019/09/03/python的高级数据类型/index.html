@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":5,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("https://duguosheng.github.io");
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
+
+  <meta name="description" content="获取元素类型">
+<meta name="keywords" content="python基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python的高级数据类型">
+<meta property="og:url" content="http://yoursite.com/2019/09/03/python的高级数据类型/index.html">
+<meta property="og:site_name" content="Duguosheng的博客">
+<meta property="og:description" content="获取元素类型">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-03T16:03:56.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python的高级数据类型">
+<meta name="twitter:description" content="获取元素类型">
+  <link rel="canonical" href="http://yoursite.com/2019/09/03/python的高级数据类型/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>python的高级数据类型 | Duguosheng的博客</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duguosheng的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习记录，点滴成长</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/duguosheng" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/03/python的高级数据类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Duguosheng">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duguosheng的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">python的高级数据类型
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 12:22:23" itemprop="dateCreated datePublished" datetime="2019-09-03T12:22:23+08:00">2019-09-03</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-04 00:03:56" itemprop="dateModified" datetime="2019-09-04T00:03:56+08:00">2019-09-04</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>3.9k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>4 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="获取元素类型"><a href="#获取元素类型" class="headerlink" title="获取元素类型"></a>获取元素类型</h2><a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用type()获取数据类型</span></span><br><span class="line">my_list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">print(type(my_list))</span><br></pre></td></tr></table></figure>
+
+<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><ul>
+<li>类似于其他数据类型中的<strong>数组</strong></li>
+<li>列表使用<code>[]</code>括起来</li>
+<li>列表中可以存储不同类型的数据类型</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">my_list = [<span class="string">"aaa"</span>,<span class="string">"bbb"</span>,<span class="string">"ccc"</span>]</span><br><span class="line">print(my_list[<span class="number">0</span>])   <span class="comment">#取值</span></span><br><span class="line">print(my_list.index(<span class="string">"aaa"</span>)) <span class="comment">#取索引</span></span><br><span class="line"></span><br><span class="line">my_list[<span class="number">0</span>] = <span class="string">"ddd"</span>  <span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line">my_list.append(<span class="string">"eee"</span>)   <span class="comment">#增加数据</span></span><br><span class="line">my_list.insert(<span class="number">1</span>,<span class="string">"fff"</span>) <span class="comment">#插入数据在my_list[1]，后面的数据后移</span></span><br><span class="line">temp_list = [<span class="string">"a"</span>,<span class="string">"b"</span>]</span><br><span class="line">my_list.extend(temp_list)   <span class="comment">#将另一个列表扩展进来</span></span><br><span class="line"></span><br><span class="line">my_list.remove(<span class="string">"bbb"</span>)   <span class="comment"># 删除指定元素,如果出现多次，删除第一个</span></span><br><span class="line">my_list.pop()       <span class="comment">#默认删除最后一个元素（出栈）</span></span><br><span class="line">my_list.pop(<span class="number">3</span>)      <span class="comment">#删除my_list[3]</span></span><br><span class="line">my_list.clear       <span class="comment">#清空列表</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">del</span> my_list[<span class="number">1</span>]      <span class="comment">#利用del删除（直接从内存中删除，后续代码不可使用该变量）</span></span><br><span class="line">a = <span class="number">10</span></span><br><span class="line"><span class="keyword">del</span> a</span><br><span class="line"></span><br><span class="line">length = len(my_list)   <span class="comment">#读取列表大小</span></span><br><span class="line">time = my_list.count(<span class="string">"aaa"</span>)     <span class="comment">#读取aaa出现的次数</span></span><br><span class="line"></span><br><span class="line">my_list.sort()      <span class="comment">#升序排序</span></span><br><span class="line">my_list.sort(reverse=<span class="literal">True</span>)  <span class="comment">#降序排序</span></span><br><span class="line">my_list.reverse()   <span class="comment">#逆序反转</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>迭代遍历<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> temp_name <span class="keyword">in</span> my_list:</span><br><span class="line">    print(<span class="string">"the name is %s"</span> % temp_name)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h2><ul>
+<li><p>元组与列表相似，不同之处在于元组的元素<strong>不能修改</strong> </p>
+</li>
+<li><p>使用<code>()</code> 定义</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义空元组</span></span><br><span class="line">empty_tuple = ()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义单元素元组</span></span><br><span class="line">single_tuple = (<span class="number">5</span>)   <span class="comment">#这样定义得到的single_tuple是int类型</span></span><br><span class="line">single_tuple = (<span class="number">5</span>,)  <span class="comment">#正确</span></span><br><span class="line"></span><br><span class="line">my_tuple(<span class="number">1</span>)     <span class="comment"># 取值</span></span><br><span class="line">my_tuple.index(<span class="string">"aaa"</span>)   <span class="comment">#取索引</span></span><br><span class="line">my_tuple.count(<span class="string">"aaa"</span>)   <span class="comment">#统计aaa出现次数</span></span><br><span class="line">len(my_tuple)       <span class="comment">#统计长度</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>遍历元组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> temp_info <span class="keyword">in</span> my_tuple:</span><br><span class="line">    执行代码</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="元组的应用"><a href="#元组的应用" class="headerlink" title="元组的应用"></a>元组的应用</h3><ul>
+<li><p>拼接字符串</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">my_tuple = (<span class="string">"zhangsan"</span>, <span class="number">18</span>, <span class="number">175.5</span>)</span><br><span class="line">print(<span class="string">"%s的年龄是%d,身高是%f"</span> % my_tuple)</span><br><span class="line"></span><br><span class="line">my_str = <span class="string">"%s的年龄是%d,身高是%f"</span> % my_tuple</span><br><span class="line">print(my_str)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>保护列表安全</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">my_list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">my_tuple1 = tuple(my_list)      <span class="comment">#使用tuple()将list转换成tuple</span></span><br><span class="line">my_list2 = list(my_tuple1)      <span class="comment">#使用list()将tuple转换成list</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>利用元组返回多个值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    num = <span class="number">1</span></span><br><span class="line">    str = <span class="string">"hello"</span></span><br><span class="line">    <span class="keyword">return</span> (num, str)</span><br><span class="line">    </span><br><span class="line">temp = test()       <span class="comment">#则temp是一个元组类型</span></span><br><span class="line">temp1, temp2 = test() <span class="comment">#多个变量接收返回值</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>交换数字</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a, b = (b, a)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><ul>
+<li>使用<code>{}</code>定义</li>
+<li>列表是有序的数据集合</li>
+<li>字典是无序的数据集合</li>
+<li>使用<code>键值对</code>存储数据<ul>
+<li><strong>键</strong> <em>(key)</em> 是索引，必须<strong>唯一</strong> ，只能是<strong>字符串，数字，或者元组</strong> </li>
+<li><strong>值</strong> <em>(value)</em> 是数据，可以是任意数据类型</li>
+<li><em>key</em> 和<em>value</em> 之间使用<code>:</code> 分隔</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 由于字典无序，通常使用print()打印的结果与定义的顺序不同</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#定义</span></span><br><span class="line">xiaoming = &#123;<span class="string">"name"</span>: <span class="string">"小明"</span>, </span><br><span class="line">            <span class="string">"age"</span>: <span class="number">18</span>, </span><br><span class="line">            <span class="string">"height"</span>: <span class="number">175</span>&#125;</span><br><span class="line">            </span><br><span class="line">xiaoming[<span class="string">"name"</span>]        <span class="comment">#取值</span></span><br><span class="line">xiaoming[<span class="string">"weight"</span>] = <span class="number">70</span> <span class="comment">#不存在则增加</span></span><br><span class="line">xiaoming[<span class="string">"age"</span>] = <span class="number">19</span>    <span class="comment">#若存在则修改</span></span><br><span class="line"></span><br><span class="line">xiaoming.pop(<span class="string">"weight"</span>)  <span class="comment">#删除</span></span><br><span class="line"></span><br><span class="line">len(xiaoming)           <span class="comment">#统计键值对数目</span></span><br><span class="line"></span><br><span class="line">temp_dict = &#123;<span class="string">"gender"</span>: boy, </span><br><span class="line">             <span class="string">"age"</span>: <span class="number">20</span>&#125;</span><br><span class="line">xiaoming.update(temp_dict)  <span class="comment">#若新增key不存在，则增加;若key重复，则会替换掉之前的value</span></span><br><span class="line"></span><br><span class="line">xiaoming.clear()        <span class="comment">#清空</span></span><br><span class="line">xiaoming.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>遍历字典</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">my_dict = &#123;<span class="string">"name"</span>: <span class="string">"zhangsan"</span>, </span><br><span class="line">           <span class="string">"age"</span>: <span class="string">"18"</span>&#125;</span><br><span class="line">           </span><br><span class="line"><span class="comment"># 变量temp是my_dict中的key</span></span><br><span class="line"><span class="keyword">for</span> temp <span class="keyword">in</span> my_dict:</span><br><span class="line">    print(<span class="string">"%s - %s"</span> % (temp,my_dict[temp]))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>应用<br>先用字典存储复杂数据，再将多个字典放在一个列表中管理</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">card_list = [</span><br><span class="line">    &#123;<span class="string">"name"</span>: <span class="string">"zhangsan"</span>, </span><br><span class="line">     <span class="string">"qq"</span>: <span class="string">"12345"</span>&#125;</span><br><span class="line">    &#123;<span class="string">"name"</span>: <span class="string">"lisi"</span>, </span><br><span class="line">     <span class="string">"qq"</span>: <span class="string">"12412"</span>&#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> info <span class="keyword">in</span> card_list:</span><br><span class="line">    print(info)</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字符串定义：使用''或""括起来的内容</span></span><br><span class="line">str1 = <span class="string">"hello"</span></span><br><span class="line">str2 = <span class="string">'world'</span>  <span class="comment">#为了和其他语言统一，尽量不使用单引号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#当需要字符串中包含引号时</span></span><br><span class="line">str3 = <span class="string">"my name is "</span>dgs<span class="string">""</span>   <span class="comment">#错误</span></span><br><span class="line">str4 = <span class="string">'my name is "dgs"'</span>   <span class="comment">#正确</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#取值</span></span><br><span class="line">str = <span class="string">"abcdefabcbac"</span></span><br><span class="line">str[<span class="number">2</span>]  <span class="comment">#第三个字符</span></span><br><span class="line">str[<span class="number">-1</span>] <span class="comment">#倒数第一个字符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#迭代遍历</span></span><br><span class="line"><span class="keyword">for</span> temp <span class="keyword">in</span> str:</span><br><span class="line">    print(temp)</span><br><span class="line"></span><br><span class="line">len(str)        <span class="comment">#统计长度</span></span><br><span class="line">str.index(”e“)    <span class="comment">#获取索引</span></span><br><span class="line">str.count(”a“)    <span class="comment">#统计a出现的次数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 字符串切片  字符串[开始索引:结束索引:步长]，不包含结尾处索引的内容</span></span><br><span class="line">str[<span class="number">2</span>:<span class="number">6</span>]    <span class="comment">#截取第二个到第六个</span></span><br><span class="line">str[<span class="number">2</span>:]     <span class="comment">#从第二个到末尾</span></span><br><span class="line">str[<span class="number">2</span>:<span class="number">-1</span>]   <span class="comment">#从第二个到倒数第一个</span></span><br><span class="line">str[:<span class="number">6</span>]     <span class="comment">#从开头到第六个</span></span><br><span class="line">str[::<span class="number">2</span>]    <span class="comment">#每隔一个截取一个</span></span><br><span class="line">str[<span class="number">-1</span>::<span class="number">-1</span>] <span class="comment">#获得字符串倒序</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="公共方法"><a href="#公共方法" class="headerlink" title="公共方法"></a>公共方法</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>len(item)</td>
+<td>计算容器中元素个数</td>
+<td></td>
+</tr>
+<tr>
+<td>del(item)</td>
+<td>删除变量</td>
+<td><code>del</code> 有两种方式<code>del(temp[1])</code> /<code>del(temp)</code></td>
+</tr>
+<tr>
+<td>max(item)</td>
+<td>返回容器元素最大值</td>
+<td>字典只比较key</td>
+</tr>
+<tr>
+<td>min(item)</td>
+<td>返回容器元素最小值</td>
+<td>字典只比较key</td>
+</tr>
+<tr>
+<td>cmp(item1, item2)</td>
+<td>比较两个值，<code>-1</code> 小于，<code>0</code> 等于，<code>1</code> 大于</td>
+<td>python3取消了cmp</td>
+</tr>
+</tbody></table>
+<ul>
+<li>字符串比较遵循：<code>0</code> &lt;<code>A</code> &lt;<code>a</code> </li>
+</ul>
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">l1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>][::<span class="number">2</span>]</span><br><span class="line">t1 = (<span class="string">"s"</span>, <span class="number">2</span>, <span class="string">"hello"</span>, <span class="number">4</span>, <span class="number">5</span>)[::<span class="number">2</span>]</span><br><span class="line"><span class="comment"># 字典不能切片</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>演示</th>
+<th>结果</th>
+<th>描述</th>
+<th>支持类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>[1, 2]+[3, 4]</td>
+<td>[1, 2, 3, 4]</td>
+<td>合并</td>
+<td>字符串，列表，元组</td>
+</tr>
+<tr>
+<td>*</td>
+<td>(“hi”)*3</td>
+<td>(“hi”,”hi”,”hi”)</td>
+<td>重复</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>in</td>
+<td>3 in (1, 2, 3)</td>
+<td>True</td>
+<td>是否存在，字典判断key</td>
+<td>字符串，列表，元组，字典</td>
+</tr>
+<tr>
+<td>not in</td>
+<td>4 not in (1, 2, 3)</td>
+<td>True</td>
+<td>是否不存在，字典判断key</td>
+<td>同上</td>
+</tr>
+<tr>
+<td><code>&lt;</code> <code>&gt;</code> 等</td>
+<td>(1, 2, 3)&lt;(2, 3, 4)</td>
+<td>True</td>
+<td>比较</td>
+<td>字符串，列表，元组</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>+</code> 与<code>entend()</code> 方法的区别：前者生成一个新的变量，后者追加到调用该方法的变量</p>
+</blockquote>
+<ul>
+<li><p>append()与extend()区别</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">l2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">l2.append(<span class="number">4</span>)</span><br><span class="line">print(l2)</span><br><span class="line"><span class="comment"># 不能l2.extend(5)，extend()只能传入容器</span></span><br><span class="line">l2.append([<span class="number">6</span>, <span class="number">7</span>])</span><br><span class="line">print(l2)</span><br><span class="line">l2.extend([<span class="number">8</span>, <span class="number">9</span>])</span><br><span class="line">print(l2)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输出结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">6</span>, <span class="number">7</span>]]        <span class="comment"># 将append([6, 7])当成了一个元素</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">6</span>, <span class="number">7</span>], <span class="number">8</span>, <span class="number">9</span>]  <span class="comment"># 将extend([8, 9])追加</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="完整的for循环"><a href="#完整的for循环" class="headerlink" title="完整的for循环"></a>完整的for循环</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 变量 <span class="keyword">in</span> 集合:</span><br><span class="line">    循环体代码</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    没有通过<span class="keyword">break</span>退出循环，遍历结束后就会执行</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>应用<br>遍历完成后，如果没有查询的就提示</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li>对变量使用自身的方法进行增删改不会改变id，而重新赋值会改变，这时它的指针指向了另一个地址</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/python基础/" rel="tag"><i class="fa fa-tag"></i> python基础</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/03/python的一些基础知识/" rel="next" title="python的一些基础知识">
+                  <i class="fa fa-chevron-left"></i> python的一些基础知识
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/03/python中关于全局变量/" rel="prev" title="python中关于全局变量">
+                  python中关于全局变量 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取元素类型"><span class="nav-number">1.</span> <span class="nav-text">获取元素类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表"><span class="nav-number">2.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#元组"><span class="nav-number">3.</span> <span class="nav-text">元组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元组的应用"><span class="nav-number">3.1.</span> <span class="nav-text">元组的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典"><span class="nav-number">4.</span> <span class="nav-text">字典</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串"><span class="nav-number">5.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公共方法"><span class="nav-number">6.</span> <span class="nav-text">公共方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切片"><span class="nav-number">7.</span> <span class="nav-text">切片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运算符"><span class="nav-number">8.</span> <span class="nav-text">运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整的for循环"><span class="nav-number">9.</span> <span class="nav-text">完整的for循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">10.</span> <span class="nav-text">其他</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/touxiang1.gif"
+      alt="Duguosheng">
+  <p class="site-author-name" itemprop="name">Duguosheng</p>
+  <div class="site-description" itemprop="description">武汉大学17级，机械专业</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duguosheng</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">33k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">30 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+    
+    
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script defer src="/lib/three/three.min.js"></script>
+  <script defer src="/lib/three/three-waves.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":175,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>

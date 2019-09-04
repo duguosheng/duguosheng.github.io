@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":5,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("https://duguosheng.github.io");
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
+
+  <meta name="description" content="some tips Tab can auto compelete command Ctrl+c can stop the command or clear your input(终止命令或清空刚才的输入–命令较长时backspace太慢)">
+<meta name="keywords" content="linux,终端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="终端指令">
+<meta property="og:url" content="http://yoursite.com/2019/08/29/终端指令/index.html">
+<meta property="og:site_name" content="Duguosheng的博客">
+<meta property="og:description" content="some tips Tab can auto compelete command Ctrl+c can stop the command or clear your input(终止命令或清空刚才的输入–命令较长时backspace太慢)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/portNum1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/ssh1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/ssh3.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/user1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/user2.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/user4.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/user5.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/终端指令/user6.png">
+<meta property="og:updated_time" content="2019-08-30T05:30:06.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="终端指令">
+<meta name="twitter:description" content="some tips Tab can auto compelete command Ctrl+c can stop the command or clear your input(终止命令或清空刚才的输入–命令较长时backspace太慢)">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/29/终端指令/portNum1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/08/29/终端指令/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>终端指令 | Duguosheng的博客</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duguosheng的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习记录，点滴成长</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/duguosheng" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/终端指令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Duguosheng">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duguosheng的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">终端指令
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-29 17:11:16" itemprop="dateCreated datePublished" datetime="2019-08-29T17:11:16+08:00">2019-08-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-08-30 13:30:06" itemprop="dateModified" datetime="2019-08-30T13:30:06+08:00">2019-08-30</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>14k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>13 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="some-tips"><a href="#some-tips" class="headerlink" title="some tips"></a>some tips</h2><ul>
+<li><code>Tab</code> can auto compelete command</li>
+<li><code>Ctrl+c</code> can stop the command or clear your input(终止命令或清空刚才的输入–命令较长时backspace太慢)</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="the-command-format"><a href="#the-command-format" class="headerlink" title="the command format"></a>the command format</h2><p><code>command [-options] [parameter]</code></p>
+<h3 id="instructions"><a href="#instructions" class="headerlink" title="instructions"></a>instructions</h3><ul>
+<li>command: command name</li>
+<li>[-options]: control the command, it can be omited</li>
+<li>[parameter]: maybe only one, or two, or three…</li>
+<li>[]: means optional</li>
+</ul>
+<h2 id="basic-command"><a href="#basic-command" class="headerlink" title="basic command"></a>basic command</h2><table>
+<thead>
+<tr>
+<th>command</th>
+<th>word</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ls</td>
+<td>list</td>
+<td>view the contents of the current folder</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>print work directory</td>
+<td>view current position</td>
+</tr>
+<tr>
+<td>cd [directory]</td>
+<td>change directory</td>
+<td>move to the specified directory</td>
+</tr>
+<tr>
+<td>touch [file name]</td>
+<td>touch</td>
+<td>create new file(s)</td>
+</tr>
+<tr>
+<td>mkdir [directory]</td>
+<td>make directory</td>
+<td>create new directory</td>
+</tr>
+<tr>
+<td>rm [file name]</td>
+<td>remove</td>
+<td>remove empty file(s)</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>clear</td>
+<td>clean the screen</td>
+</tr>
+</tbody></table>
+<h2 id="view-help-information"><a href="#view-help-information" class="headerlink" title="view help information"></a>view help information</h2><ul>
+<li><code>command --help</code></li>
+<li><code>man command</code>(means manual)</li>
+</ul>
+<h2 id="files-and-directory-commands"><a href="#files-and-directory-commands" class="headerlink" title="files and directory commands"></a>files and directory commands</h2><ul>
+<li>hidden files<blockquote>
+<p>if the file begin with a dot <code>.</code> it is a hidden file</p>
+</blockquote>
+</li>
+<li><code>.</code> and<code>..</code> <blockquote>
+<p><code>.</code> means this level directory<br><code>..</code> means upper level directory</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h3><table>
+<thead>
+<tr>
+<th>options</th>
+<th>word</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>all</td>
+<td>display all files(including hidden files)</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>list</td>
+<td>list display files (first letter is<code>d</code>:dir; <code>-</code>: file)</td>
+</tr>
+<tr>
+<td>-h</td>
+<td></td>
+<td>display file size(Kb), it must be used with <code>-l</code> (ls -lh)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>wildcard character(通配符)</p>
+<table>
+<thead>
+<tr>
+<th>symbol</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>represents any number of characters(任意个数字符)</td>
+</tr>
+<tr>
+<td>？</td>
+<td>represents one character</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>give some choices</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>examples</p>
+</li>
+<li><ul>
+<li><code>*</code> <blockquote>
+<p><code>ls a*</code> display files begin with <code>a</code><br><code>ls *a.txt</code> display files end with <code>a.txt</code><br><code>ls *a*</code> display files contains <code>a</code> </p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>** <code>?</code> </p>
+<blockquote>
+<p><code>ls ?a?.txt</code> display files like <code>1a1.txt</code> </p>
+</blockquote>
+<p>** <code>[]</code> </p>
+<blockquote>
+<p><code>ls [abcde]ab.txt</code> display files like <code>aab.txt</code> or<code>bab.txt</code> and so on<br><code>ls [a-f]ab.txt</code> display files begin with <code>abcdef</code> like <code>eab.txt</code></p>
+</blockquote>
+<h3 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h3><ul>
+<li><p>absolute path</p>
+<blockquote>
+<p>specific path from the root directory or home directory(从根目录或家目录开始的具体路径)<br>example:<code>/home/duguosheng/Desktop/</code> </p>
+</blockquote>
+</li>
+<li><p>relative path</p>
+<blockquote>
+<p>the path from current directory</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>examples:<code>../Desktop/</code> </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cd</td>
+<td>go back to the current user home directory</td>
+</tr>
+<tr>
+<td>cd ~</td>
+<td>just like<code>cd</code></td>
+</tr>
+<tr>
+<td>cd .</td>
+<td>keep in the current directory</td>
+</tr>
+<tr>
+<td>cd ..</td>
+<td>go to the parent directory</td>
+</tr>
+<tr>
+<td>cd -</td>
+<td>switch back and forth between the last two directory</td>
+</tr>
+</tbody></table>
+<h3 id="touch-file"><a href="#touch-file" class="headerlink" title="touch (file)"></a>touch (file)</h3><p>if the file doesn’t exist, the file will be created<br>otherwise, the last modification time of the file will be modified(否则会更改文件的末次修改时间)</p>
+<h3 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h3><p>create a new file</p>
+<ul>
+<li><code>mkdir -p a/b/c/d</code> <strong>recursively</strong> create directories(递归创建目录)<blockquote>
+<p>the directory name can’t be same as <strong>existing file or directory</strong> </p>
+</blockquote>
+</li>
+</ul>
+<h3 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h3><ul>
+<li>delete file or directory (can not be restore)(不可恢复)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-r</td>
+<td>recursively delete directory(递归删除目录)</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>forced deletion(强制删除)</td>
+</tr>
+</tbody></table>
+<h2 id="copy-and-move-files-or-directories"><a href="#copy-and-move-files-or-directories" class="headerlink" title="copy and move files or directories"></a>copy and move files or directories</h2><h3 id="tree-directory"><a href="#tree-directory" class="headerlink" title="tree [directory]"></a>tree [directory]</h3><p>display directories and files in a tree view </p>
+<ul>
+<li><code>tree ~</code> display files form home directory</li>
+<li><code>tree -d</code> only display directories</li>
+</ul>
+<h3 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h3><ul>
+<li><code>cp src dest</code> copy file<blockquote>
+<p>example: <code>cp ~/Documents/test.txt .</code> copy test.txt to current directory,if you want to change file name, you can write<code>cp ~/a.txt ./b.txt</code> </p>
+</blockquote>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i</td>
+<td>promat before overwritting files(覆盖文件前提示)</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>copy directory</td>
+</tr>
+</tbody></table>
+<h3 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h3><p>move file or directory</p>
+<p><strong>format</strong>: <code>mv src dest</code> </p>
+<blockquote>
+<p>example:<code>mv test ~/Documents/</code> move <em>test</em> to <em>Documents/</em> </p>
+</blockquote>
+<p><strong>change file or directory name</strong></p>
+<blockquote>
+<p>if <em>src</em> and <em>dest</em> are under the same directory, then it can be renamed</p>
+</blockquote>
+<p><strong>overwrite file</strong> </p>
+<blockquote>
+<p>if<code>test1.txt</code>and<code>test2</code>have been existed, then input <code>cp test1.txt test2.txt</code>, after that, <code>test1.txt</code> will be renamed as<code>test2.txt</code> and original file<code>test2.txt</code> will be deleted, <strong>this operation is unsafe</strong> </p>
+</blockquote>
+<p><code>cp -i src dest</code></p>
+<blockquote>
+<p>prompt before overwriting files</p>
+</blockquote>
+<h2 id="view-file-content"><a href="#view-file-content" class="headerlink" title="view file content"></a>view file content</h2><h3 id="cat-concatenate连接合并"><a href="#cat-concatenate连接合并" class="headerlink" title="cat(concatenate连接合并)"></a>cat(concatenate连接合并)</h3><p><strong>format</strong>: <code>cat (file)</code> </p>
+<blockquote>
+<p>view all content of the file </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-b</td>
+<td>show line number(except blank lines)</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>show line number(including blank lines)</td>
+</tr>
+</tbody></table>
+<h3 id="more"><a href="#more" class="headerlink" title="more"></a>more</h3><p><strong>format</strong>: <code>more (file)</code> </p>
+<blockquote>
+<p>view the beginning of the file</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>operation</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><space></space></td>
+<td>display next page</td>
+</tr>
+<tr>
+<td><enter></enter></td>
+<td>display next row</td>
+</tr>
+<tr>
+<td>b</td>
+<td>go back</td>
+</tr>
+<tr>
+<td>f</td>
+<td>go forward</td>
+</tr>
+<tr>
+<td>q</td>
+<td>quit</td>
+</tr>
+</tbody></table>
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><p>a text search tool(文本搜索工具)</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-n</td>
+<td>show line number(行号)</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>show lines which don’t match(不匹配的所有行)</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>ignore case(忽略大小写)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>example:<blockquote>
+<p><code>grep as test.txt</code> look for the letter <strong>as</strong> in the <code>test.txt</code></p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p><code>grep -n as test.txt</code> look for the letter <strong>as</strong> in the <code>test.txt</code> and show the line number</p>
+</blockquote>
+<blockquote>
+<p><code>grep -v as test.txt</code> look for lines that don’t contain the letter <strong>as</strong> in the <code>test.txt</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>param</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>^a</td>
+<td>look for lines start with the letter <strong>a</strong></td>
+</tr>
+<tr>
+<td>ke$</td>
+<td>looke for lines end with <strong>ke</strong></td>
+</tr>
+</tbody></table>
+<h2 id="other-command"><a href="#other-command" class="headerlink" title="other command"></a>other command</h2><h3 id="echo-some-words"><a href="#echo-some-words" class="headerlink" title="echo (some words)"></a>echo (some words)</h3><ul>
+<li>the words will show in the terminal, it is always used with <strong>redirect command</strong></li>
+<li><code>echo hello &gt; a</code> if <code>a</code> doesn’t exist, <code>a</code> will be created, and write <em>hello</em> inside file.(创建文件并指定内容)</li>
+</ul>
+<h3 id="redirect-gt-and-gt-gt"><a href="#redirect-gt-and-gt-gt" class="headerlink" title="redirect &gt;and&gt;&gt;"></a>redirect <code>&gt;</code>and<code>&gt;&gt;</code></h3><ul>
+<li><p>linux allows to <strong>redirect command execution results to a file</strong>(linux允许将命令执行结果重定向到一个文件)</p>
+</li>
+<li><p><strong>output/append</strong> the content that should be displayed on the terminal to the specified file(将本应显示在终端的内容<strong>输出/追加</strong>到文件中)</p>
+</li>
+<li><p><code>&gt;</code>: output, overwrite the file</p>
+</li>
+<li><p><code>&gt;&gt;</code>: append, append content to the file</p>
+</li>
+<li><p>examples:</p>
+<ul>
+<li><code>echo helloworld &gt; a.txt</code></li>
+<li><code>echo ls -lh &gt; a.txt</code> write the file list and their information to <code>a.txt</code> </li>
+<li><code>echo goodbye &gt;&gt; a.txt</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="pipe-管道"><a href="#pipe-管道" class="headerlink" title="pipe | (管道)"></a>pipe <code>|</code> (管道)</h3><ul>
+<li><p>the output of a command can be input to another with pipe(一个命令的输出可以通过管道作为另一个命令的输入)</p>
+</li>
+<li><p><code>|</code> divides commands into left and right, left to write, right to read</p>
+</li>
+<li><p>common commands</p>
+<ul>
+<li><code>more</code>: spilt screen display content</li>
+<li><code>grep</code>: search for the specified content in the command execution result(在命令执行结果中搜索指定内容)</li>
+</ul>
+</li>
+<li><p>example:</p>
+<ul>
+<li><code>ls -lha ~ | more</code> spilt screen view files and directories</li>
+<li><code>ls -lha ~ | grep aa</code> display files with letter <em>aa</em> in its name</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="shutdown-restart"><a href="#shutdown-restart" class="headerlink" title="shutdown/restart"></a>shutdown/restart</h2><h3 id="shutdown"><a href="#shutdown" class="headerlink" title="shutdown"></a>shutdown</h3><ul>
+<li><code>shutdown</code> command can safely shut down or restart the system</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-r</td>
+<td>restart</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>if the command has no options and parameters, it will turn off after 1 minute by default(默认一分钟后关机)<br>when remotely maintaining the serve, you’d better restart rather than shut down.</p>
+</blockquote>
+<ul>
+<li>examples:<ul>
+<li><code>shutdown -r now</code> –&gt;restart now</li>
+<li><code>shut down now</code> –&gt;shut down now</li>
+<li><code>shutdown 20:30</code> –&gt;shut down at 8:30pm</li>
+<li><code>shutdown +10</code> –&gt;shut down 10 minutes later</li>
+<li><code>shutdown -c</code> –&gt;cancel last command with shutdown</li>
+</ul>
+</li>
+</ul>
+<h2 id="view-and-configure-network-card-information-查看和配置网卡信息"><a href="#view-and-configure-network-card-information-查看和配置网卡信息" class="headerlink" title="view and configure network card information(查看和配置网卡信息)"></a>view and configure network card information(查看和配置网卡信息)</h2><table>
+<thead>
+<tr>
+<th>command</th>
+<th>word</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ifconfig</td>
+<td>configure a network interface</td>
+<td>view/configure the network card information</td>
+</tr>
+<tr>
+<td>ping (ip address)</td>
+<td>ping</td>
+<td>check the connection with target IP address is normal or not</td>
+</tr>
+</tbody></table>
+<h3 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h3><ul>
+<li>in <strong>manjaro</strong>, use command <code>ip addr</code> instead of <code>ifconfig</code> </li>
+<li>a computer may have <strong>a physical network card</strong> and <strong>multiple virtual network cards</strong> (一台计算机中可能有一个物理网卡和多个虚拟网卡)</li>
+<li>view ip address: <code>ifconfig | grep inet</code> (<code>ip addr | grep inet</code> in mangaro )</li>
+</ul>
+<h3 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h3><ul>
+<li><code>ping (IP)</code> ‘s working principle just like sonar(声纳), it sends out a packet, and the target IP addr returns a packet, the shorter the time, the faster the network speed(指令发出数据包，目标IP收到后返回一个数据包，这段时间越短，则网速越快)</li>
+<li><code>ping (IP)</code> can check the target computer is open or not</li>
+</ul>
+<h2 id="Romote-login-and-copy-files-远程登录和复制文件"><a href="#Romote-login-and-copy-files-远程登录和复制文件" class="headerlink" title="Romote login and copy files(远程登录和复制文件)"></a>Romote login and copy files(远程登录和复制文件)</h2><h3 id="Basics-of-SSH"><a href="#Basics-of-SSH" class="headerlink" title="Basics of SSH"></a>Basics of <strong><em>SSH</em></strong></h3><ul>
+<li>Based on the <strong>SSH Client</strong> and <strong>SSH Serve</strong> </li>
+<li><strong>SSH Client</strong> is a software program connected to a remote computer with protocol <code>Secure Shell(SSH)</code> (SSH客户端是一种使用SSH协议连接到远程计算机的软件程序)</li>
+<li>Transmitted data is<ul>
+<li><strong>Encrypted(加密)</strong> –Prevent information from being leaked</li>
+<li><strong>Compressed(压缩)</strong> –Increase transmission speed</li>
+</ul>
+</li>
+</ul>
+<h3 id="Port-number-端口号-and-Domain-name-域名"><a href="#Port-number-端口号-and-Domain-name-域名" class="headerlink" title="Port number(端口号) and Domain name(域名)"></a>Port number(端口号) and Domain name(域名)</h3><ul>
+<li>Port number:<ul>
+<li>IP address: just like <code>172.168.12.13</code> use it can <strong>find computer</strong> on internet</li>
+<li>Port number: can <strong>find application</strong> running on the computer<ul>
+<li><strong>SSH Client</strong> default port number is <code>22</code>, if it’s default port number, you can omit the port number when connecting(默认端口号连接时可以省略)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>services</th>
+<th>port number</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SSH Serve</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Web Serve</td>
+<td>80</td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td>443</td>
+</tr>
+<tr>
+<td>FTP Serve</td>
+<td>21</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Domain name: just like <strong><a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></strong> , it use aliases for easy memory(使用别名，方便记忆)</li>
+</ul>
+<center>
+<img src="portNum1.png" height="100" width="800" alt="notFound" title="command ping">
+</center>
+
+<blockquote>
+<p>As shown in figure, <code>www.baidu.com</code> is <code>180.97.33.107</code> aliases, if you type <code>180.97.33.107</code> in the browser, also can visit <code>Baidu</code> </p>
+</blockquote>
+<blockquote>
+<p>Also, you can input <code>180.97.33.107:80</code> to visit <code>Baidu</code>, IP addr<code>180.97.33.107</code> to find the computer, and port number <code>80</code> to find its application program (web serve)</p>
+</blockquote>
+<h3 id="SSH-Serve"><a href="#SSH-Serve" class="headerlink" title="SSH Serve"></a>SSH Serve</h3><ul>
+<li>format:<code>ssh [-p port] user@romote</code> <ul>
+<li><code>user</code> default current user</li>
+<li><code>romote</code> IP addr, Alias Or Domain name of remote computer</li>
+<li><code>port</code> the port of <strong>SSH Serve</strong> to listen, default<code>22</code> </li>
+</ul>
+</li>
+<li>exp: <code>ssh -p 22 duguosheng@172.16.140.138</code> </li>
+</ul>
+<blockquote>
+<p>Tips:</p>
+<ul>
+<li><code>exit</code>: Log out of the current user(退出当前账户登录)</li>
+<li>Linux and Mac can use SSH without doing anything, but in Windows, you have to install some software for free<ul>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank" rel="noopener">Putty</a></li>
+<li><a href="http://xshellcn.com" target="_blank" rel="noopener">XShell</a></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h3><ul>
+<li><p><code>scp</code> is <code>secure copy</code>, it be used to <strong>remote copy file</strong> </p>
+</li>
+<li><p>example:</p>
+<ul>
+<li><p>If the path after<code>:</code> isn’t an absolute path, the user’s home directory is used as the reference path(<code>:</code> 后面的路径如果不是绝对路径，则以用户的家目录作为参照路径)</p>
+<blockquote>
+<p>copy <code>01.py</code> from your local current directory to<code>Desktop/01.py</code> in your remote home directory(把本地当前目录下的 01.py 文件复制到远程家目录下的 Desktop/01.py)</p>
+<blockquote>
+<p><code>scp -P port 01.py user@remote:Desktop/01.py</code> <strong>P is capital(大写)</strong> </p>
+<blockquote>
+<p><code>scp -P 22 01.py duguosheng@172.16.139.122:Desktop/</code> &lt;++&gt;</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>copy <code>Desktop/01.py</code> from remote home directory to <code>01.py</code> in local current directory</p>
+<blockquote>
+<p><code>scp -P port user@remote:Desktop/01.py 01.py</code> </p>
+</blockquote>
+</blockquote>
+</li>
+<li><p>use <code>-r</code> can copy directory</p>
+<blockquote>
+<p><code>demo</code> under current local dir <strong>–&gt;</strong> remote <code>Desktop/</code></p>
+<blockquote>
+<p><code>scp -r demo user@remote:Desktop</code> </p>
+<blockquote>
+<p><code>scp -P 22 -r demo duguosheng@212.134.23.123:Desktop/</code> </p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><code>Desktop</code> under remote home dir <strong>–&gt;</strong> <code>demo/</code> in local current dir</p>
+<blockquote>
+<p><code>scp -r user user@remote:Desktop demo</code> </p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Attention:</p>
+<ul>
+<li><code>scp</code> only can use in <code>linux</code> or <code>unix</code> </li>
+<li>in <code>Windows</code>, you can install <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank" rel="noopener">Putty</a>, use <code>pscp</code> <strong>OR</strong> install <a href="https://www.filezilla.cn/download/client" target="_blank" rel="noopener">FileZilla</a>, use <code>FTP</code> <ul>
+<li><code>FTP</code> use <code>Ftp</code> instead of <code>Ssh</code>, so its port number is <code>21</code>  </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="SSH-advanced"><a href="#SSH-advanced" class="headerlink" title="SSH advanced"></a>SSH advanced</h3><blockquote>
+<p>All SSH ci=onfiguration information is stroed in the <code>/home/user/.ssh</code></p>
+</blockquote>
+<h4 id="Password-free-login-免密码登录"><a href="#Password-free-login-免密码登录" class="headerlink" title="Password free login(免密码登录)"></a>Password free login(免密码登录)</h4><ul>
+<li><p>Steps:</p>
+<ul>
+<li><p>Configure the public key(配置公钥)</p>
+<blockquote>
+<p>Execute <code>ssh-keygen</code> to generate a public key(生成公钥), you can see <code>id_rsa</code>(private key) and <code>id_rsa.pub</code>(public key) under <code>~/.ssh/</code></p>
+</blockquote>
+</li>
+<li><p>upload public key to Serve</p>
+<blockquote>
+<p>Execute <code>ssh-copy-id -p port user@remote</code> can let the Serve remember our pulic key, in fact, this command copy <code>id_rsa.pub</code> to Serve’s <code>~/.ssh/</code> </p>
+</blockquote>
+<p><img src="ssh1.png" alt="原理"></p>
+</li>
+</ul>
+</li>
+<li><p>Asymmetric encryption algorithm(非对称加密算法)</p>
+<ul>
+<li>Data encrypted using the public key needs to be decrypted using the private key(使用公钥加密的数据，需要使用私钥解密)</li>
+<li>Data encrypted using the private key needs to be decrypted using the public key(使用私钥加密的数据，需要使用公钥解密)</li>
+</ul>
+</li>
+</ul>
+<h4 id="Configure-an-alias"><a href="#Configure-an-alias" class="headerlink" title="Configure an alias"></a>Configure an alias</h4><ul>
+<li>Steps:<ul>
+<li><code>cd ~/.ssh/</code> </li>
+<li><code>touch config</code> </li>
+<li><code>vi config</code> </li>
+<li>edit <code>config</code> </li>
+</ul>
+</li>
+<li>for example, <code>ssh -p 22 example@100.100.100.100</code> can be changed to <code>ssh exp</code> by edit <code>config</code> like this<br><img src="ssh3.png" alt="config"></li>
+<li>Also, you can use <code>scp -r ~/Desktop exp:Desktop/demo</code> to copy a directory</li>
+</ul>
+<h2 id="Commands-about-User-Premissions-用户权限"><a href="#Commands-about-User-Premissions-用户权限" class="headerlink" title="Commands about User Premissions(用户权限)"></a>Commands about User Premissions(用户权限)</h2><h3 id="User-and-Premission"><a href="#User-and-Premission" class="headerlink" title="User and Premission"></a><strong><em>User</em></strong> and <strong><em>Premission</em></strong></h3><ul>
+<li>In Linux, you can specify different permissions for different <strong>files or directories</strong> for each user</li>
+<li>the permissions contains:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>permission</th>
+<th>abbreviation</th>
+<th>number</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>read</td>
+<td>r</td>
+<td>4</td>
+</tr>
+<tr>
+<td>write</td>
+<td>w</td>
+<td>2</td>
+</tr>
+<tr>
+<td>executive</td>
+<td>x</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<h3 id="ls-l-extended"><a href="#ls-l-extended" class="headerlink" title="ls -l extended"></a><code>ls -l</code> extended</h3><ul>
+<li>execute <code>ls -lh</code> get some infomation like this<br><img src="user1.png" alt="result"> </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><code>d</code>or<code>-</code></th>
+<th>rwx</th>
+<th>r-x</th>
+<th>r–</th>
+<th>2</th>
+<th>duguosheng</th>
+<th>duguosheng</th>
+<th>4.0K</th>
+<th>Aug 2 23:04</th>
+<th>桌面/</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>d</code> directory <code>-</code> file</td>
+<td>user permission</td>
+<td>group permission</td>
+<td>other people permission</td>
+<td>Number of hard links</td>
+<td>user name</td>
+<td>group name</td>
+<td>size</td>
+<td>last version time</td>
+<td>file or directory name</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Number of hard links(硬链接数)<blockquote>
+<p>how many ways to access the current directory/file</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<blockquote>
+<p>if it is a file, the number is 1, through the path</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>if it is a directory without subdirectories(没有子目录), the number is 2, through the path or<code>cd .</code> </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>if it is a directory with n subdirectories(有n个子目录), the number is 2+n, through the path, <code>cd .</code> or <code>cd ..</code> </p>
+</blockquote>
+</blockquote>
+<h3 id="chmod"><a href="#chmod" class="headerlink" title="chmod"></a>chmod</h3><ul>
+<li><code>chmod</code> can change permission of user/group</li>
+<li>format: <code>chmod +/- rwx fileName/dirName</code> this usage will permission of both change user and group</li>
+</ul>
+<h3 id="sudo"><a href="#sudo" class="headerlink" title="sudo"></a>sudo</h3><ul>
+<li><code>su</code> is <code>substitute user</code>, default is <code>root</code> </li>
+</ul>
+<h3 id="Group"><a href="#Group" class="headerlink" title="Group"></a>Group</h3><ul>
+<li>To facilitate user management, you can group users and then assign permissions to groups(分组，为组分配权限)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>groupadd (name)</td>
+<td>add a group</td>
+</tr>
+<tr>
+<td>groupdel (name)</td>
+<td>delete a group</td>
+</tr>
+<tr>
+<td>cat /etc/group</td>
+<td>view group</td>
+</tr>
+<tr>
+<td>chgrp -R (group_name) (dir)</td>
+<td>change the group to which the dir belongs</td>
+</tr>
+</tbody></table>
+<h3 id="User-management"><a href="#User-management" class="headerlink" title="User management"></a>User management</h3><h4 id="create-delete-user-And-change-password"><a href="#create-delete-user-And-change-password" class="headerlink" title="create/delete user And change password"></a>create/delete user And change password</h4><table>
+<thead>
+<tr>
+<th>command</th>
+<th>function</th>
+<th>tips</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>useraddd -m -g (groupName) (userName)</td>
+<td>add a user</td>
+<td><code>-m</code> auto create home directory, <code>-g</code> specify user’s group, otherwise a group with the same name as the user will be created</td>
+</tr>
+<tr>
+<td>passwd (user)</td>
+<td>set user’s password</td>
+<td>normal user can set set password by <code>passwd</code></td>
+</tr>
+<tr>
+<td>userdel -r (user)</td>
+<td>delete user</td>
+<td><code>-r</code> will delete user’s home dir</td>
+</tr>
+</tbody></table>
+<ul>
+<li>if you foget to add <code>-m</code>, you can delete user and recreate it</li>
+<li>the user information is stored in the <code>/etc/passwd</code> </li>
+</ul>
+<h4 id="view-user-information"><a href="#view-user-information" class="headerlink" title="view user information"></a>view user information</h4><table>
+<thead>
+<tr>
+<th>command</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id (user)</td>
+<td>view uid and gid</td>
+</tr>
+<tr>
+<td>who</td>
+<td>View a list of all currently logged in users(查看当前所有登录的用户列表)</td>
+</tr>
+<tr>
+<td>whoami</td>
+<td>view current user</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>id duguosheng</code> </li>
+<li><code>cat -n /etc/passwd</code><br><img src="user2.png" alt="id"> </li>
+<li><code>cat -n /etc/group</code> </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>duguosheng</th>
+<th>x</th>
+<th>1000</th>
+<th>1000</th>
+<th>duguosheng</th>
+<th>/home/duguosheng</th>
+<th>/usr/bin/fish</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user</td>
+<td>encrypted password</td>
+<td>user id</td>
+<td>group id</td>
+<td>group</td>
+<td>home dir</td>
+<td>shell</td>
+</tr>
+</tbody></table>
+<h4 id="usermod"><a href="#usermod" class="headerlink" title="usermod"></a>usermod</h4><ul>
+<li><code>usermod</code> can be used to set the user’s primary/additional group and login shell(设置主组/附加组，和登录shell)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>usermod -g (group) (user)</td>
+<td>change user’s primary group</td>
+</tr>
+<tr>
+<td>usermod -G (group) (user)</td>
+<td>change user’s additional group</td>
+</tr>
+<tr>
+<td>usermod -s /bin/bash (user)</td>
+<td>change user’s shell</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Users added by default with <code>useradd</code> do not have permission to use <strong>sudo</strong> to execute commands as <strong>root</strong>. Users can be added to sudo additional groups by using the following commands(默认使用 useradd 添加的用户是没有权限使用 sudo 以 root 身份执行命令的，可以使用以下命令，将用户添加到 sudo 附加组中)<br><code>usermod -G sudo (user)</code> </li>
+</ul>
+<h4 id="which"><a href="#which" class="headerlink" title="which"></a>which</h4><p><code>which (command)</code> see the path of command</p>
+<ul>
+<li><code>which ls</code> <blockquote>
+<p>result: <code>/bin/ls</code></p>
+</blockquote>
+</li>
+<li><code>bin</code> and <code>sbin</code> </li>
+</ul>
+<p><img src="user4.png" alt="command_dir"> </p>
+<h4 id="change-user"><a href="#change-user" class="headerlink" title="change user"></a>change user</h4><table>
+<thead>
+<tr>
+<th>command</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>su</td>
+<td>change to root(not safe)</td>
+</tr>
+<tr>
+<td>su (user)</td>
+<td>change user</td>
+</tr>
+<tr>
+<td>su - (user)</td>
+<td>change user and go his home dir</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>log out</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>Modify File Permissions(修改文件权限)</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chown (user) (file/dir)</td>
+<td>change ower</td>
+</tr>
+<tr>
+<td>chgrp -R (user) (file/dir)</td>
+<td>change group</td>
+</tr>
+<tr>
+<td>chmod -R 755 (file/dir)</td>
+<td>change permission</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p><img src="user5.png" alt="permission"> </p>
+<h2 id="system"><a href="#system" class="headerlink" title="system"></a>system</h2><h3 id="time"><a href="#time" class="headerlink" title="time"></a>time</h3><table>
+<thead>
+<tr>
+<th>command</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>date</td>
+<td>view system time</td>
+</tr>
+<tr>
+<td>cal</td>
+<td>view calendar</td>
+</tr>
+<tr>
+<td>cal -y</td>
+<td>view calendar of a year</td>
+</tr>
+</tbody></table>
+<h3 id="disk-information-磁盘信息"><a href="#disk-information-磁盘信息" class="headerlink" title="disk information(磁盘信息)"></a>disk information(磁盘信息)</h3><table>
+<thead>
+<tr>
+<th>command</th>
+<th>word</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>df -h</td>
+<td>disk free</td>
+<td>show free space of disk(剩余空间)</td>
+</tr>
+<tr>
+<td>du -h [dir]</td>
+<td>disk usage</td>
+<td>display the file size in the dir(目录下的文件大小)</td>
+</tr>
+</tbody></table>
+<h3 id="process-information-进程信息"><a href="#process-information-进程信息" class="headerlink" title="process information(进程信息)"></a>process information(进程信息)</h3><table>
+<thead>
+<tr>
+<th>command</th>
+<th>word</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ps (aux)</td>
+<td>process status</td>
+<td>view process</td>
+</tr>
+<tr>
+<td>top</td>
+<td></td>
+<td>Display running processes dynamically and sort them(动态显示运行中的进程并且排序)</td>
+</tr>
+<tr>
+<td>kill [-9] (process)</td>
+<td></td>
+<td><code>process</code> can be a name or its pid, stop the process, <code>-9</code> :force to stop</td>
+</tr>
+</tbody></table>
+<ul>
+<li>option of <code>ps</code> <ul>
+<li><code>a</code> :Display all processes on the terminal, including those of other users(显示终端上的所有进程，包括其他用户的进程)</li>
+<li><code>u</code> :display details of process</li>
+<li><code>x</code> :Display processes without control terminals(显示没有控制终端的进程)</li>
+</ul>
+</li>
+</ul>
+<h2 id="Other-command"><a href="#Other-command" class="headerlink" title="Other command"></a>Other command</h2><h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><ul>
+<li>format: <code>find [path] -name &quot;*.png&quot;</code> <blockquote>
+<p>if no path, default in current directory</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="Softlink-软链接"><a href="#Softlink-软链接" class="headerlink" title="Softlink(软链接)"></a>Softlink(软链接)</h3><ul>
+<li>format: <code>ln -s src destfile</code> use absolute path, don’t use relative path</li>
+</ul>
+<h3 id="Hardlink-硬链接"><a href="#Hardlink-硬链接" class="headerlink" title="Hardlink(硬链接)"></a>Hardlink(硬链接)</h3><ul>
+<li>format: <code>ln src destfile</code><br><img src="user6.png" alt="hardlink"> </li>
+</ul>
+<h3 id="Packing-and-Compression-打包压缩"><a href="#Packing-and-Compression-打包压缩" class="headerlink" title="Packing and Compression(打包压缩)"></a>Packing and Compression(打包压缩)</h3><h4 id="Pack-unpack-打包-解包"><a href="#Pack-unpack-打包-解包" class="headerlink" title="Pack/unpack(打包/解包)"></a>Pack/unpack(打包/解包)</h4><ul>
+<li><p>different OS has different mode of pack and compression</p>
+<ul>
+<li><code>windows</code> : <code>rar</code> </li>
+<li><code>mac</code> : <code>zip</code> </li>
+<li><code>linux</code> : <code>tar</code>  </li>
+</ul>
+</li>
+<li><p><code>tar</code> can pack a series of files into a large file or restore a packaged large file into a series of files(此命令可以把一系列文件打包到 一个大文件中，也可以把一个打包的大文件恢复成一系列文件)</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tar -cvf 打包文件.tar 被打包文件/路径…</td>
+<td>pack</td>
+</tr>
+<tr>
+<td>tar -xvf 打包文件.tar</td>
+<td>unpack</td>
+</tr>
+</tbody></table>
+<ul>
+<li>options of tar</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>func</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c</td>
+<td>生成档案文件，创建打包文件</td>
+</tr>
+<tr>
+<td>x</td>
+<td>解开档案文件</td>
+</tr>
+<tr>
+<td>v</td>
+<td>列出详细过程，显示进度</td>
+</tr>
+<tr>
+<td>f</td>
+<td>指定档案文件，f后面一定是.tar文件，所以必须放选项最后</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>attention: </p>
+<blockquote>
+<p><code>f</code> 必须放在选项最后，其他随意<br><code>tar</code> 只负责打包，不负责压缩</p>
+</blockquote>
+</blockquote>
+<h4 id="compression-decompression-压缩-解压"><a href="#compression-decompression-压缩-解压" class="headerlink" title="compression/decompression(压缩/解压)"></a>compression/decompression(压缩/解压)</h4><h5 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h5><ul>
+<li><code>tar</code> 与<code>gzip</code> 结合可实现打包压缩</li>
+<li>用<code>gzip</code> 压缩<code>tar</code> 打包后的文件，扩展名一般用<code>xxx.tar.gz</code> </li>
+<li>在<code>tar</code> 命令中，有一个<code>-z</code> 选项可以调用<code>gzip</code> </li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 压缩文件</span></span><br><span class="line">tar -zcvf 打包文件.tar.gz 被压缩的文件/路径...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -zxvf 打包文件.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩到指定路径,该指定路径必须已存在</span></span><br><span class="line">tar -zxvf 打包文件.tar.gz -C 指定路径</span><br></pre></td></tr></table></figure>
+
+<h4 id="bzip2"><a href="#bzip2" class="headerlink" title="bzip2"></a>bzip2</h4><ul>
+<li><code>tar</code> 与<code>bzip2</code> 结合可实现打包压缩</li>
+<li>用<code>bzip2</code> 压缩<code>tar</code> 打包后的文件，扩展名一般用<code>xxx.tar.bz2</code> </li>
+<li>在<code>tar</code> 命令中，有一个<code>-j</code> 选项可以调用<code>bzip2</code> </li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 压缩文件</span></span><br><span class="line">tar -jcvf 打包文件.tar.bz2 被压缩的文件/路径...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -jxvf 打包文件.tar.bz2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩到指定路径,该指定路径必须已存在</span></span><br><span class="line">tar -jxvf 打包文件.tar.bz2 -C 指定路径</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+            
+              <a href="/tags/终端/" rel="tag"><i class="fa fa-tag"></i> 终端</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/08/29/archlinux包管理工具pacman/" rel="next" title="archlinux包管理工具pacman">
+                  <i class="fa fa-chevron-left"></i> archlinux包管理工具pacman
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/08/29/git快速入门/" rel="prev" title="git快速入门">
+                  git快速入门 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#some-tips"><span class="nav-number">1.</span> <span class="nav-text">some tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-command-format"><span class="nav-number">2.</span> <span class="nav-text">the command format</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#instructions"><span class="nav-number">2.1.</span> <span class="nav-text">instructions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#basic-command"><span class="nav-number">3.</span> <span class="nav-text">basic command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#view-help-information"><span class="nav-number">4.</span> <span class="nav-text">view help information</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#files-and-directory-commands"><span class="nav-number">5.</span> <span class="nav-text">files and directory commands</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ls"><span class="nav-number">5.1.</span> <span class="nav-text">ls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cd"><span class="nav-number">5.2.</span> <span class="nav-text">cd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#touch-file"><span class="nav-number">5.3.</span> <span class="nav-text">touch (file)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mkdir"><span class="nav-number">5.4.</span> <span class="nav-text">mkdir</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm"><span class="nav-number">5.5.</span> <span class="nav-text">rm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#copy-and-move-files-or-directories"><span class="nav-number">6.</span> <span class="nav-text">copy and move files or directories</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tree-directory"><span class="nav-number">6.1.</span> <span class="nav-text">tree [directory]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cp"><span class="nav-number">6.2.</span> <span class="nav-text">cp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mv"><span class="nav-number">6.3.</span> <span class="nav-text">mv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#view-file-content"><span class="nav-number">7.</span> <span class="nav-text">view file content</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cat-concatenate连接合并"><span class="nav-number">7.1.</span> <span class="nav-text">cat(concatenate连接合并)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#more"><span class="nav-number">7.2.</span> <span class="nav-text">more</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grep"><span class="nav-number">7.3.</span> <span class="nav-text">grep</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#other-command"><span class="nav-number">8.</span> <span class="nav-text">other command</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#echo-some-words"><span class="nav-number">8.1.</span> <span class="nav-text">echo (some words)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redirect-gt-and-gt-gt"><span class="nav-number">8.2.</span> <span class="nav-text">redirect &gt;and&gt;&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipe-管道"><span class="nav-number">8.3.</span> <span class="nav-text">pipe | (管道)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shutdown-restart"><span class="nav-number">9.</span> <span class="nav-text">shutdown/restart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shutdown"><span class="nav-number">9.1.</span> <span class="nav-text">shutdown</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#view-and-configure-network-card-information-查看和配置网卡信息"><span class="nav-number">10.</span> <span class="nav-text">view and configure network card information(查看和配置网卡信息)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ifconfig"><span class="nav-number">10.1.</span> <span class="nav-text">ifconfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ping"><span class="nav-number">10.2.</span> <span class="nav-text">ping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Romote-login-and-copy-files-远程登录和复制文件"><span class="nav-number">11.</span> <span class="nav-text">Romote login and copy files(远程登录和复制文件)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basics-of-SSH"><span class="nav-number">11.1.</span> <span class="nav-text">Basics of SSH</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-number-端口号-and-Domain-name-域名"><span class="nav-number">11.2.</span> <span class="nav-text">Port number(端口号) and Domain name(域名)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-Serve"><span class="nav-number">11.3.</span> <span class="nav-text">SSH Serve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scp"><span class="nav-number">11.4.</span> <span class="nav-text">scp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-advanced"><span class="nav-number">11.5.</span> <span class="nav-text">SSH advanced</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Password-free-login-免密码登录"><span class="nav-number">11.5.1.</span> <span class="nav-text">Password free login(免密码登录)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-an-alias"><span class="nav-number">11.5.2.</span> <span class="nav-text">Configure an alias</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Commands-about-User-Premissions-用户权限"><span class="nav-number">12.</span> <span class="nav-text">Commands about User Premissions(用户权限)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#User-and-Premission"><span class="nav-number">12.1.</span> <span class="nav-text">User and Premission</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ls-l-extended"><span class="nav-number">12.2.</span> <span class="nav-text">ls -l extended</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chmod"><span class="nav-number">12.3.</span> <span class="nav-text">chmod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sudo"><span class="nav-number">12.4.</span> <span class="nav-text">sudo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Group"><span class="nav-number">12.5.</span> <span class="nav-text">Group</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#User-management"><span class="nav-number">12.6.</span> <span class="nav-text">User management</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#create-delete-user-And-change-password"><span class="nav-number">12.6.1.</span> <span class="nav-text">create/delete user And change password</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#view-user-information"><span class="nav-number">12.6.2.</span> <span class="nav-text">view user information</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#usermod"><span class="nav-number">12.6.3.</span> <span class="nav-text">usermod</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#which"><span class="nav-number">12.6.4.</span> <span class="nav-text">which</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#change-user"><span class="nav-number">12.6.5.</span> <span class="nav-text">change user</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system"><span class="nav-number">13.</span> <span class="nav-text">system</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#time"><span class="nav-number">13.1.</span> <span class="nav-text">time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#disk-information-磁盘信息"><span class="nav-number">13.2.</span> <span class="nav-text">disk information(磁盘信息)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-information-进程信息"><span class="nav-number">13.3.</span> <span class="nav-text">process information(进程信息)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-command"><span class="nav-number">14.</span> <span class="nav-text">Other command</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">14.1.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softlink-软链接"><span class="nav-number">14.2.</span> <span class="nav-text">Softlink(软链接)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hardlink-硬链接"><span class="nav-number">14.3.</span> <span class="nav-text">Hardlink(硬链接)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Packing-and-Compression-打包压缩"><span class="nav-number">14.4.</span> <span class="nav-text">Packing and Compression(打包压缩)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pack-unpack-打包-解包"><span class="nav-number">14.4.1.</span> <span class="nav-text">Pack/unpack(打包/解包)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#compression-decompression-压缩-解压"><span class="nav-number">14.4.2.</span> <span class="nav-text">compression/decompression(压缩/解压)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#gzip"><span class="nav-number">14.4.2.1.</span> <span class="nav-text">gzip</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bzip2"><span class="nav-number">14.4.3.</span> <span class="nav-text">bzip2</span></a></li></ol></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/touxiang1.gif"
+      alt="Duguosheng">
+  <p class="site-author-name" itemprop="name">Duguosheng</p>
+  <div class="site-description" itemprop="description">武汉大学17级，机械专业</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duguosheng</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">33k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">30 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+    
+    
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script defer src="/lib/three/three.min.js"></script>
+  <script defer src="/lib/three/three-waves.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":175,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
