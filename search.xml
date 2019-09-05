@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[单例模式]]></title>
+    <url>%2F2019%2F09%2F05%2F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[类属性，类方法，静态方法]]></title>
     <url>%2F2019%2F09%2F05%2F%E7%B1%BB%E5%B1%9E%E6%80%A7%EF%BC%8C%E7%B1%BB%E6%96%B9%E6%B3%95%EF%BC%8C%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%2F</url>
     <content type="text"><![CDATA[类的结构 实例 创建出来的对象叫实例 创建对象的动作叫实例化 对象的属性叫做实例属性 对象调用的方法叫实例方法 每一个对象都有自己独立的内存空间，保存各自不同的属性 多个对象的方法，在内存中只有一份，调用方法时，需要把对象的引用传递到方法内部 类是特殊的对象 python中一切皆对象 class A定义的类属于类对象 aa = A()属于实例对象 在程序运行时，类也会被加载到内存 类对象在内存中只有一份，使用一个类可以创建出很多对象实例 除了实例的属性和方法外，类对象还可以拥有自己的属性和方法 类属性 类方法 通过类名.的方式可以访问 类属性和实例属性使用 类属性旧式给类对象定义的属性，通常用它来记录与这个类相关的特征 123456789class A(object): count = 0 def __init__(self): A.count += 1a1 = A()print(A.count)a2 = A()print(A.count) 执行结果 1212 属性获取机制 访问属性有两种方式 类名.类属性 对象.类属性（不推荐） 在python中使用对象.属性时 先从对象内部查找对象属性，如果没有就会向上寻找类属性 上例中也可写作 12print("a1.count")print("a2.count") 不要使用对象访问类属性 使用对象.类属性的方式给类属性赋值时，会给添加一个属性，不会影响到类属性 123456789class A(object): count = 0 def __init__(self): A.count += 1a1 = A()a1.count = 5print(A.count)print(a1.count) 执行结果 1215 类方法 定义类方法 123@classmethoddef 类方法名(cls): pass 可以使用cls.访问类的属性和方法 静态方法 在开发时既不需要访问实例属性和实例方法，也不需要访问类方法和类属性，就可定义为静态方法 语法如下 123@staticmethoddef 静态方法名(): pass 方法名后面直接跟()，不需要加self或cls 通过类名.静态方法调用 12345class A(object): @staticmethod def test(): print("hello")A.test() 执行结果 1hello]]></content>
