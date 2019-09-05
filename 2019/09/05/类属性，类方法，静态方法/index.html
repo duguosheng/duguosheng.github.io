@@ -70,22 +70,19 @@
     })();
 </script>
 
-  <meta name="description" content="git版本创建">
-<meta name="keywords" content="版本控制,代码管理">
+  <meta name="description" content="类的结构">
+<meta name="keywords" content="python面向对象">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git使用">
-<meta property="og:url" content="http://yoursite.com/2019/08/30/git使用/index.html">
+<meta property="og:title" content="类属性，类方法，静态方法">
+<meta property="og:url" content="http://yoursite.com/2019/09/05/类属性，类方法，静态方法/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
-<meta property="og:description" content="git版本创建">
+<meta property="og:description" content="类的结构">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/08/30/git使用/git_log.png">
-<meta property="og:image" content="http://yoursite.com/2019/08/30/git使用/git_status.png">
-<meta property="og:updated_time" content="2019-09-03T14:42:15.267Z">
+<meta property="og:updated_time" content="2019-09-05T10:08:01.337Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git使用">
-<meta name="twitter:description" content="git版本创建">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/30/git使用/git_log.png">
-  <link rel="canonical" href="http://yoursite.com/2019/08/30/git使用/">
+<meta name="twitter:title" content="类属性，类方法，静态方法">
+<meta name="twitter:description" content="类的结构">
+  <link rel="canonical" href="http://yoursite.com/2019/09/05/类属性，类方法，静态方法/">
 
 
 <script id="page-configurations">
@@ -99,7 +96,7 @@
   };
 </script>
 
-  <title>git使用 | Duguosheng的博客</title>
+  <title>类属性，类方法，静态方法 | Duguosheng的博客</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -264,7 +261,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/git使用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/类属性，类方法，静态方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Duguosheng">
@@ -276,7 +273,7 @@
       <meta itemprop="name" content="Duguosheng的博客">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">git使用
+        <h1 class="post-title" itemprop="name headline">类属性，类方法，静态方法
 
           
         </h1>
@@ -292,19 +289,11 @@
                 
               
 
-              <time title="创建时间：2019-08-30 08:03:04" itemprop="dateCreated datePublished" datetime="2019-08-30T08:03:04+08:00">2019-08-30</time>
+              <time title="创建时间：2019-09-05 10:45:13 / 修改时间：18:08:01" itemprop="dateCreated datePublished" datetime="2019-09-05T10:45:13+08:00">2019-09-05</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-09-03 22:42:15" itemprop="dateModified" datetime="2019-09-03T22:42:15+08:00">2019-09-03</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -313,7 +302,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
 
                 
                 
@@ -338,7 +327,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>306</span>
+              <span>969</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -361,24 +350,93 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="git版本创建"><a href="#git版本创建" class="headerlink" title="git版本创建"></a>git版本创建</h2><a id="more"></a>
+        <h1 id="类的结构"><a href="#类的结构" class="headerlink" title="类的结构"></a>类的结构</h1><a id="more"></a>
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git init        <span class="comment">//初始化git仓库</span></span><br><span class="line">git add .       <span class="comment">//添加全部修改</span></span><br><span class="line">git add 文件名  <span class="comment">//添加指定文件的修改</span></span><br><span class="line">git commit -m <span class="string">"说明信息"</span>    <span class="comment">//提交并添加备注</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span>     <span class="comment">//查看版本信息</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="git_log.png" alt="git log"> </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status  <span class="comment">//查看修改信息</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="git_status.png" alt="gitstatus"> </p>
-<h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><ul>
-<li><code>HEAD</code>指针会指向最新的版本</li>
-<li><code>HEAD^</code>指向上一个版本</li>
-<li><code>HEAD^^</code>指向上上个版本…</li>
-<li>或者使用<code>HEAD~n</code>代表前n个版本</li>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><ol>
+<li>创建出来的对象叫<strong>实例</strong></li>
+<li>创建对象的动作叫<strong>实例化</strong></li>
+<li>对象的属性叫做<strong>实例属性</strong></li>
+<li>对象调用的方法叫<strong>实例方法</strong></li>
+</ol>
+<ul>
+<li>每一个对象都有自己独立的内存空间，保存各自不同的属性</li>
+<li>多个对象的方法，在内存中只有一份，调用方法时，需要把<strong>对象的引用</strong>传递到方法内部</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard HEAD^      <span class="comment">//回退到上一个版本</span></span><br><span class="line">git reset --hard HEAD~<span class="number">3</span>     <span class="comment">//回退到之前3个版本</span></span><br></pre></td></tr></table></figure>
+<h4 id="类是特殊的对象"><a href="#类是特殊的对象" class="headerlink" title="类是特殊的对象"></a>类是特殊的对象</h4><ul>
+<li>python中一切皆对象<ul>
+<li><code>class A</code>定义的类属于<strong>类对象</strong></li>
+<li><code>aa = A()</code>属于实例对象</li>
+</ul>
+</li>
+<li>在程序运行时，类也会被<strong>加载到内存</strong><ul>
+<li>类对象在内存中<strong>只有一份</strong>，使用一个类可以创建出很多对象实例</li>
+<li>除了实例的属性和方法外，类对象还可以拥有自己的属性和方法<ul>
+<li>类属性</li>
+<li>类方法</li>
+<li>通过<code>类名.</code>的方式可以访问</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="类属性和实例属性"><a href="#类属性和实例属性" class="headerlink" title="类属性和实例属性"></a>类属性和实例属性</h2><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li><p>类属性旧式给<strong>类对象</strong>定义的属性，通常用它来记录与这个类相关的特征</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">	count = <span class="number">0</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">		A.count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">a1 = A()</span><br><span class="line">print(A.count)</span><br><span class="line">a2 = A()</span><br><span class="line">print(A.count)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
 
+</li>
+</ul>
+<h3 id="属性获取机制"><a href="#属性获取机制" class="headerlink" title="属性获取机制"></a>属性获取机制</h3><ul>
+<li>访问属性有两种方式<ul>
+<li>类名.类属性</li>
+<li>对象.类属性（不推荐）</li>
+</ul>
+</li>
+<li>在python中使用<code>对象.属性</code>时<ul>
+<li>先从对象内部查找对象属性，如果没有就会向上寻找类属性<blockquote>
+<p>上例中也可写作</p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"a1.count"</span>)</span><br><span class="line">print(<span class="string">"a2.count"</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="不要使用对象访问类属性"><a href="#不要使用对象访问类属性" class="headerlink" title="不要使用对象访问类属性"></a>不要使用对象访问类属性</h4><ul>
+<li><p>使用<code>对象.类属性</code>的方式给类属性赋值时，会给<strong>添加一个属性</strong>，<strong>不会影响到类属性</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">	count = <span class="number">0</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">		A.count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">a1 = A()</span><br><span class="line">a1.count = <span class="number">5</span></span><br><span class="line">print(A.count)</span><br><span class="line">print(a1.count)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h2><ul>
+<li><p>定义类方法</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> 类方法名<span class="params">(cls)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以使用<code>cls.</code>访问类的属性和方法</p>
+</li>
+</ul>
+<h2 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h2><blockquote>
+<p>在开发时<strong>既不需要访问实例属性和实例方法，也不需要访问类方法和类属性</strong>，就可定义为静态方法</p>
+</blockquote>
+<ul>
+<li><p>语法如下</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@staticmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> 静态方法名<span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法名后面直接跟<code>()</code>，不需要加<code>self</code>或<code>cls</code></p>
+</li>
+<li><p>通过<code>类名.静态方法</code>调用</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">	@staticmethod</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">		print(<span class="string">"hello"</span>)</span><br><span class="line">A.test()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 
     </div>
 
@@ -405,9 +463,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/版本控制/" rel="tag"><i class="fa fa-tag"></i> 版本控制</a>
-            
-              <a href="/tags/代码管理/" rel="tag"><i class="fa fa-tag"></i> 代码管理</a>
+              <a href="/tags/python面向对象/" rel="tag"><i class="fa fa-tag"></i> python面向对象</a>
             
           </div>
         
@@ -417,8 +473,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/08/29/git快速入门/" rel="next" title="git快速入门">
-                  <i class="fa fa-chevron-left"></i> git快速入门
+                <a href="/2019/09/05/python-面向对象-多态/" rel="next" title="python--面向对象_多态">
+                  <i class="fa fa-chevron-left"></i> python--面向对象_多态
                 </a>
               
             </div>
@@ -426,10 +482,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/08/30/markdown语法/" rel="prev" title="markdown语法">
-                  markdown语法 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -478,7 +530,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#git版本创建"><span class="nav-number">1.</span> <span class="nav-text">git版本创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看信息"><span class="nav-number">2.</span> <span class="nav-text">查看信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本回退"><span class="nav-number">3.</span> <span class="nav-text">版本回退</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类的结构"><span class="nav-number">1.</span> <span class="nav-text">类的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类是特殊的对象"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">类是特殊的对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类属性和实例属性"><span class="nav-number">1.1.</span> <span class="nav-text">类属性和实例属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性获取机制"><span class="nav-number">1.1.2.</span> <span class="nav-text">属性获取机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#不要使用对象访问类属性"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">不要使用对象访问类属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类方法"><span class="nav-number">1.2.</span> <span class="nav-text">类方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态方法"><span class="nav-number">1.3.</span> <span class="nav-text">静态方法</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
