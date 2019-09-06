@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[python的模块和包]]></title>
     <url>%2F2019%2F09%2F06%2Fpython%E7%9A%84%E6%A8%A1%E5%9D%97%E5%92%8C%E5%8C%85%2F</url>
-    <content type="text"><![CDATA[模块每一个以py结尾的python源代码文件都是一个模块 模块导入import导入格式 不推荐格式：将几个模块放在一行 1import 模块名1, 模块名2 推荐:每个模块单独占一行 12import 模块名1import 模块名2 导入之后可以通过模块名.的方式使用模块提供的工具：全局变量，类，函数 使用as指定模块别名 如果模块名字太长就可以使用as来指定别名，方便实用1import 模块名 as 模块别名 模块别名应该符合大驼峰命名法 from…import导入 如果希望从某一个模块中，导入部分工具，就可以使用这种方式 语法格式12# 从模块导入某一个工具from 模块名 import 工具名 导入之后不需要通过模块名.就可以直接使用模块的工具如果两个模块]]></content>
+    <content type="text"><![CDATA[test 模块每一个以py结尾的python源代码文件都是一个模块 模块导入import导入格式 不推荐格式：将几个模块放在一行 1import 模块名1, 模块名2 推荐:每个模块单独占一行 12import 模块名1import 模块名2 导入之后可以通过模块名.的方式使用模块提供的工具：全局变量，类，函数 使用as指定模块别名 如果模块名字太长就可以使用as来指定别名，方便实用1import 模块名 as 模块别名 模块别名应该符合大驼峰命名法 from…import导入 如果希望从某一个模块中，导入部分工具，就可以使用这种方式 语法格式12# 从模块导入某一个工具from 模块名 import 工具名 导入之后不需要通过模块名.就可以直接使用模块的工具如果两个模块]]></content>
       <categories>
         <category>python</category>
       </categories>
