@@ -70,18 +70,18 @@
     })();
 </script>
 
-  <meta name="description" content="test 模块每一个以py结尾的python源代码文件都是一个模块">
+  <meta name="description" content="模块每一个以py结尾的python源代码文件都是一个模块">
 <meta name="keywords" content="python进阶">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python的模块和包">
 <meta property="og:url" content="http://yoursite.com/2019/09/06/python的模块和包/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
-<meta property="og:description" content="test 模块每一个以py结尾的python源代码文件都是一个模块">
+<meta property="og:description" content="模块每一个以py结尾的python源代码文件都是一个模块">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-06T10:31:29.750Z">
+<meta property="og:updated_time" content="2019-09-06T12:27:42.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python的模块和包">
-<meta name="twitter:description" content="test 模块每一个以py结尾的python源代码文件都是一个模块">
+<meta name="twitter:description" content="模块每一个以py结尾的python源代码文件都是一个模块">
   <link rel="canonical" href="http://yoursite.com/2019/09/06/python的模块和包/">
 
 
@@ -289,7 +289,7 @@
                 
               
 
-              <time title="创建时间：2019-09-06 16:36:05 / 修改时间：18:31:29" itemprop="dateCreated datePublished" datetime="2019-09-06T16:36:05+08:00">2019-09-06</time>
+              <time title="创建时间：2019-09-06 16:36:05 / 修改时间：20:27:42" itemprop="dateCreated datePublished" datetime="2019-09-06T16:36:05+08:00">2019-09-06</time>
             </span>
           
             
@@ -327,7 +327,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>326</span>
+              <span>2.5k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -337,7 +337,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
           
 
@@ -350,8 +350,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>test</p>
-<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><p>每一个以<code>py</code>结尾的python源代码文件都是一个模块</p>
+        <h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><p>每一个以<code>py</code>结尾的python源代码文件都是一个模块</p>
 <a id="more"></a>
 
 <h2 id="模块导入"><a href="#模块导入" class="headerlink" title="模块导入"></a>模块导入</h2><h3 id="import导入"><a href="#import导入" class="headerlink" title="import导入"></a>import导入</h3><h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><ul>
@@ -379,8 +378,125 @@
 </li>
 </ul>
 <blockquote>
-<p>导入之后不需要通过<code>模块名.</code>就可以直接使用模块的工具<br>如果两个模块</p>
+<p>导入之后不需要通过<code>模块名.</code>就可以直接使用模块的工具<br>如果两个模块存在<strong>同名的函数</strong>，那么后导入模块的函数，会<strong>覆盖掉先导入的函数</strong></p>
 </blockquote>
+<ul>
+<li>可以通过<code>as</code>别名的方式调用前面导入的函数<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pkg1 <span class="keyword">import</span> test <span class="keyword">as</span> pkg1_test  <span class="comment">#给test()函数起别名</span></span><br><span class="line"><span class="keyword">from</span> pkg2 <span class="keyword">import</span> test   <span class="comment"># pkg1和pkg2中同时含有test()方法</span></span><br><span class="line"></span><br><span class="line">pkg1_test()     <span class="comment">#调用pkg1的test()</span></span><br><span class="line">test()      <span class="comment">#调用pkg2的test()</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="导入全部"><a href="#导入全部" class="headerlink" title="导入全部"></a>导入全部</h4><ul>
+<li>语法<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从 模块 导入 所有工具</span></span><br><span class="line"><span class="keyword">from</span> 模块名 <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>不推荐使用，因为函数重名不好排查</p>
+</blockquote>
+<h2 id="python导入模块的顺序"><a href="#python导入模块的顺序" class="headerlink" title="python导入模块的顺序"></a>python导入模块的顺序</h2><ol>
+<li>搜索<strong>当前目录</strong>指定模块名的文件，如果有就直接导入</li>
+<li>如果没有，再搜索系统目录<blockquote>
+<p>在开发时创建文件，命名不要和系统模块文件重名，否则调用系统方法时会因为当前目录下存在该模块而不去搜索系统目录，使程序无法正确执行</p>
+</blockquote>
+</li>
+</ol>
+<ul>
+<li>使用内置方法<code>__file__</code>可查看文件完整路径<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(模块名.__file__)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="关于模块导入"><a href="#关于模块导入" class="headerlink" title="关于模块导入"></a>关于模块导入</h2><ul>
+<li>在导入模块时，文件中没有缩进的代码<strong>都会被执行一遍</strong><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是test1模块中的内容</span></span><br><span class="line">print(<span class="string">"这是模块一"</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是test2模块中的内容</span></span><br><span class="line"><span class="keyword">import</span> test1</span><br><span class="line">print(<span class="string">"这是模块二"</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在模块test2中<code>run</code>，执行结果<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">这是模块一</span><br><span class="line">这是模块二</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>而有时开发中开发者要做一些测试，写的一些代码只希望在本文件内执行而不想在被导入时执行</p>
+<h3 id="name-属性"><a href="#name-属性" class="headerlink" title="__name__属性"></a><code>__name__</code>属性</h3><blockquote>
+<p><code>__name__</code>属性可以做到，测试模块的代码只在测试时执行，在被导入时不执行</p>
+</blockquote>
+<ul>
+<li><code>__name__</code>属性是python的一个内置属性，记录着一个字符串</li>
+<li>如果是被其他文件导入的，则记录的是<strong>模块名</strong></li>
+<li>如果是当前执行的程序，<code>__name__</code>是<code>__main__</code><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模块test1中</span></span><br><span class="line">print(__name__)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模块test2中</span></span><br><span class="line"><span class="keyword">import</span> test1</span><br><span class="line">print(__name__)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在test2中<code>run</code>，运行结果</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test1</span><br><span class="line">__main__</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所以在测试时可以通过<code>__name__</code>来实现代码仅在测试时执行</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模块test1中</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    print(<span class="string">"这是模块一"</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模块test2中</span></span><br><span class="line"><span class="keyword">import</span> test1</span><br><span class="line">print(<span class="string">"这是模块二"</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在模块test2中<code>run</code>，运行结果</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这是模块二</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写代码格式</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件末尾，编写本地测试代码</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="包"><a href="#包" class="headerlink" title="包"></a>包</h1><ul>
+<li><strong>包</strong>是一个包含多个模块的<strong>特殊目录</strong></li>
+<li>目录下有一个特殊的文件<strong><code>__init__.py</code></strong></li>
+<li>包的命名和变量一致，使用<code>小写字母</code>和<code>_</code>，如<code>this_is_a_pkg</code></li>
+<li>可以使用<code>import 包名</code>的方式，一次性导入包中所有的模块</li>
+<li>在pycharm中鼠标停在工程名上点击鼠标右键<ul>
+<li>选择new –&gt; Python Package可以建立包并自动创建<code>__init__.py</code>空文件</li>
+<li>或选择new –&gt; Directory创建文件目录，再自行创建<code>__init__.py</code>文件</li>
+</ul>
+</li>
+<li><code>__init__.py</code>文件<ul>
+<li>包中可以对外界使用的模块，需要在<code>__init__.py</code>中写出列表<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从 当前目录 导入 模块列表</span></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> 模块名称<span class="number">1</span></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> 模块名称<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="发布模块包的步骤"><a href="#发布模块包的步骤" class="headerlink" title="发布模块包的步骤"></a>发布模块包的步骤</h1><h2 id="发布包"><a href="#发布包" class="headerlink" title="发布包"></a>发布包</h2><ul>
+<li>创建<code>setup.py</code>文件<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line"></span><br><span class="line">setup(name=<span class="string">"pkg_name"</span>,  <span class="comment"># 包名</span></span><br><span class="line">      version=<span class="string">"1.0"</span>,  <span class="comment"># 版本</span></span><br><span class="line">      description=<span class="string">"some text"</span>,  <span class="comment"># 描述信息</span></span><br><span class="line">      long_description=<span class="string">"完整的发送和接收消息模块"</span>,  <span class="comment"># 完整描述信息</span></span><br><span class="line">      author=<span class="string">"itheima"</span>,  <span class="comment"># 作者</span></span><br><span class="line">      author_email=<span class="string">"abc.com"</span>,  <span class="comment"># 作者邮箱</span></span><br><span class="line">      url=<span class="string">"www.abc.com"</span>,  <span class="comment"># 主页</span></span><br><span class="line">      py_modules=[<span class="string">"包名.模块名1"</span>,  <span class="comment">#要分享的模块</span></span><br><span class="line">                  <span class="string">"包名.模块名2"</span>])</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>有关字典参数的详细信息，可以参阅<a href="https://docs.python.org/2/distutils/apiref.html" target="_blank" rel="noopener">官方网站</a> </p>
+<ul>
+<li><p>构建模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 setup.py build</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成发布压缩包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 setup.py sdist</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>注意：要制作哪个版本的模块，就使用哪个版本的解释器执行！</p>
+</blockquote>
+<h2 id="下载包"><a href="#下载包" class="headerlink" title="下载包"></a>下载包</h2><ul>
+<li><p>安装模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf 压缩包名.tar.gz </span><br><span class="line">sudo python3 setup.py install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>卸载模块<br>直接从安装目录下，把安装模块的目录删除就可以</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib/python3.7/dist-packages/</span><br><span class="line">sudo rm -r 包名*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以使用pip安装第三方模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将第三方模块安装到python2.x环境</span></span><br><span class="line">sudo pip install 模块</span><br><span class="line">sudo pip uninstall 模块</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将第三方模块安装到python3.x环境</span></span><br><span class="line">sudo pip3 install 模块</span><br><span class="line">sudo pip3 uninstall 模块</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 
     </div>
 
@@ -474,7 +590,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模块"><span class="nav-number">1.</span> <span class="nav-text">模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块导入"><span class="nav-number">1.1.</span> <span class="nav-text">模块导入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#import导入"><span class="nav-number">1.1.1.</span> <span class="nav-text">import导入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#格式"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用as指定模块别名"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">使用as指定模块别名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#from…import导入"><span class="nav-number">1.1.2.</span> <span class="nav-text">from…import导入</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模块"><span class="nav-number">1.</span> <span class="nav-text">模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块导入"><span class="nav-number">1.1.</span> <span class="nav-text">模块导入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#import导入"><span class="nav-number">1.1.1.</span> <span class="nav-text">import导入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#格式"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用as指定模块别名"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">使用as指定模块别名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#from…import导入"><span class="nav-number">1.1.2.</span> <span class="nav-text">from…import导入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#导入全部"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">导入全部</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python导入模块的顺序"><span class="nav-number">1.2.</span> <span class="nav-text">python导入模块的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于模块导入"><span class="nav-number">1.3.</span> <span class="nav-text">关于模块导入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#name-属性"><span class="nav-number">1.3.1.</span> <span class="nav-text">__name__属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包"><span class="nav-number">2.</span> <span class="nav-text">包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发布模块包的步骤"><span class="nav-number">3.</span> <span class="nav-text">发布模块包的步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#发布包"><span class="nav-number">3.1.</span> <span class="nav-text">发布包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载包"><span class="nav-number">3.2.</span> <span class="nav-text">下载包</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -593,12 +709,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">42k</span>
+    <span title="站点总字数">44k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">38 分钟</span>
+    <span title="站点阅读时长">40 分钟</span>
 </div>
 
         
