@@ -70,15 +70,18 @@
     })();
 </script>
 
-  <meta name="keywords" content="solidworks, java, 编程, 嵌入式">
+  <meta name="description" content="程序开发时很难将所有特殊情况都处理的面面俱到，通过异常捕获可以针对突发事件集中处理，从而保证程序的稳定性和健壮性">
+<meta name="keywords" content="python面向对象">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python中的异常">
 <meta property="og:url" content="http://yoursite.com/2019/09/06/python中的异常/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
+<meta property="og:description" content="程序开发时很难将所有特殊情况都处理的面面俱到，通过异常捕获可以针对突发事件集中处理，从而保证程序的稳定性和健壮性">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-06T07:10:12.197Z">
+<meta property="og:updated_time" content="2019-09-06T08:34:39.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python中的异常">
+<meta name="twitter:description" content="程序开发时很难将所有特殊情况都处理的面面俱到，通过异常捕获可以针对突发事件集中处理，从而保证程序的稳定性和健壮性">
   <link rel="canonical" href="http://yoursite.com/2019/09/06/python中的异常/">
 
 
@@ -286,7 +289,24 @@
                 
               
 
-              <time title="创建时间：2019-09-06 15:10:12" itemprop="dateCreated datePublished" datetime="2019-09-06T15:10:12+08:00">2019-09-06</time>
+              <time title="创建时间：2019-09-06 15:10:12 / 修改时间：16:34:39" itemprop="dateCreated datePublished" datetime="2019-09-06T15:10:12+08:00">2019-09-06</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
             </span>
           
 
@@ -307,7 +327,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>0</span>
+              <span>2.1k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -317,7 +337,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
           
 
@@ -330,7 +350,113 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <a id="more"></a>
+        <p>程序开发时很难将所有特殊情况都处理的面面俱到，通过异常捕获可以针对突发事件集中处理，从而保证程序的稳定性和健壮性</p>
+<a id="more"></a>
+
+<h2 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a>捕获异常</h2><h3 id="简单捕获"><a href="#简单捕获" class="headerlink" title="简单捕获"></a>简单捕获</h3><ul>
+<li>格式<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    尝试执行的代码</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    出现错误的处理</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>执行后会继续执行下方的代码</p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	num = int(input(<span class="string">"请输入一个整数:  "</span>))</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">	print(<span class="string">"请输入正确的整数"</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"继续执行了下方代码"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>执行程序：用户输入了aaa，无法转化为整数</p>
+<blockquote>
+<p>请输入一个整数:  aaa</p>
+</blockquote>
+<ul>
+<li>执行结果<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">请输入正确的整数</span><br><span class="line">继续执行了下方代码</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="错误类型捕获"><a href="#错误类型捕获" class="headerlink" title="错误类型捕获"></a>错误类型捕获</h3><ul>
+<li><p>针对不同类型的异常，作出不同的相应</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment">#尝试执行的代码</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> 错误类型<span class="number">1</span>:</span><br><span class="line">    <span class="comment">#针对类型1处理</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> (错误类型<span class="number">2</span>, 错误类型<span class="number">3</span>):</span><br><span class="line">    <span class="comment">#针对类型2和3处理</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="comment"># 捕获未知错误，可以改变result的名字</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> result:</span><br><span class="line">    print(<span class="string">"未知错误 %s"</span> % result)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取错误类型：出错时，控制台提示的最后一行就是错误类型，找到错误类型就可针对不同的错误进行不同的操作</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num = int(input(<span class="string">"请输入一个整数:  "</span>))</span><br><span class="line">result = <span class="number">10</span>/num</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>执行程序，用户输入0</p>
+<blockquote>
+<p>请输入一个整数:  0</p>
+</blockquote>
+<ul>
+<li>执行结果<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"/home/duguosheng/PycharmProjects/190902/d2_excpt.py"</span>, line <span class="number">3</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    result = <span class="number">10</span>/num</span><br><span class="line">ZeroDivisionError: division by zero</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>则<strong>ZeroDivisionError</strong>就是输入零时的错误类型，同理可得，输入字母时的错误类型是<strong>ValueError</strong></p>
+</blockquote>
+<ul>
+<li><p>针对不同错误类型的处理</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	num = int(input(<span class="string">"请输入一个整数:  "</span>))</span><br><span class="line">	result = <span class="number">10</span> / num</span><br><span class="line">	print(result)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">	print(<span class="string">"请不要输入0作为除数"</span>)</span><br><span class="line"><span class="keyword">except</span> ValueError:</span><br><span class="line">	print(<span class="string">"请输入数字"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>捕获未知异常:假设未能预计到输入零的情况</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	num = int(input(<span class="string">"请输入一个整数:  "</span>))</span><br><span class="line">	result = <span class="number">10</span> / num</span><br><span class="line">	print(result)</span><br><span class="line"><span class="keyword">except</span> ValueError:</span><br><span class="line">	print(<span class="string">"请输入数字"</span>)</span><br><span class="line"><span class="comment"># 捕获未知异常</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> result:</span><br><span class="line">	print(<span class="string">"未知错误 %s"</span> % result)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>用户输入0</p>
+<blockquote>
+<p>请输入一个整数:  0</p>
+</blockquote>
+<ul>
+<li>执行结果<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">未知错误 division by zero</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="异常捕获完整语法"><a href="#异常捕获完整语法" class="headerlink" title="异常捕获完整语法"></a>异常捕获完整语法</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> 错误类型<span class="number">1</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> (错误类型<span class="number">2</span>, 错误类型<span class="number">3</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> result:</span><br><span class="line">    print(result)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment">#没有异常才会执行的代码</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="comment">#无论是否有异常，都会执行的代码</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="异常的传递"><a href="#异常的传递" class="headerlink" title="异常的传递"></a>异常的传递</h2><ul>
+<li>当函数/方法执行出现异常，会将异常传递给函数/方法的调用一方</li>
+<li>如果<strong>传递到主程序</strong>，仍然<strong>没有异常处理</strong>，程序才会终止<blockquote>
+<p>开发中可以在主函数中增加异常捕获，这样就可以大大减少异常捕获代码，使代码整洁</p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test1</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span>/int(input(<span class="string">"请输入一个整数：  "</span>))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test2</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">return</span> test1()</span><br><span class="line"></span><br><span class="line"><span class="comment">#只在主函数中增加异常捕获</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	print(test2())</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> result:</span><br><span class="line">	print(<span class="string">"未知错误 %s"</span> % result)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>输入0</p>
+<blockquote>
+<p>请输入一个整数：  0</p>
+</blockquote>
+<ul>
+<li><p>执行结果</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">未知错误 division by zero</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>成功捕获异常并处理</p>
+</li>
+</ul>
+<h2 id="主动抛出异常"><a href="#主动抛出异常" class="headerlink" title="主动抛出异常"></a>主动抛出异常</h2><blockquote>
+<p>当前函数只负责某项功能，主动抛出异常后，让其他函数再处理</p>
+</blockquote>
+<ul>
+<li><p>主动抛出异常的方法</p>
+<ul>
+<li>创建一个<code>Exception</code>对象</li>
+<li>使用<code>raise</code>关键字抛出异常对象</li>
+</ul>
+</li>
+<li><p>实例</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">	num = int(input(<span class="string">"请输入一个整数：  "</span>))</span><br><span class="line">	<span class="keyword">if</span> num &gt; <span class="number">0</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="number">10</span>/num</span><br><span class="line">        </span><br><span class="line">    <span class="comment">#主动抛出异常</span></span><br><span class="line">	exception = Exception(<span class="string">"请不要输入0"</span>)</span><br><span class="line">	<span class="keyword">raise</span> exception</span><br><span class="line"></span><br><span class="line"><span class="comment">#只在主函数中增加异常捕获</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	print(test())</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> result:</span><br><span class="line">	print(result)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>输入0</p>
+<blockquote>
+<p>请输入一个整数：  0</p>
+</blockquote>
+<ul>
+<li>执行结果<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请不要输入<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 
     </div>
 
@@ -352,6 +478,15 @@
     </div>
 
       <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/python面向对象/" rel="tag"><i class="fa fa-tag"></i> python面向对象</a>
+            
+          </div>
+        
 
         
 
@@ -415,6 +550,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#捕获异常"><span class="nav-number">1.</span> <span class="nav-text">捕获异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单捕获"><span class="nav-number">1.1.</span> <span class="nav-text">简单捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误类型捕获"><span class="nav-number">1.2.</span> <span class="nav-text">错误类型捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常捕获完整语法"><span class="nav-number">1.3.</span> <span class="nav-text">异常捕获完整语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常的传递"><span class="nav-number">2.</span> <span class="nav-text">异常的传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主动抛出异常"><span class="nav-number">3.</span> <span class="nav-text">主动抛出异常</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
@@ -530,12 +667,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">40k</span>
+    <span title="站点总字数">42k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">36 分钟</span>
+    <span title="站点阅读时长">38 分钟</span>
 </div>
 
         
