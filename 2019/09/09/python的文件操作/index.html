@@ -70,19 +70,16 @@
     })();
 </script>
 
-  <meta name="description" content="多态：不同的对象调用相同的方法，产生不同的执行结果，增加代码灵活度">
-<meta name="keywords" content="python面向对象">
+  <meta name="keywords" content="solidworks, java, 编程, 嵌入式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python--面向对象_多态">
-<meta property="og:url" content="http://yoursite.com/2019/09/05/python-面向对象-多态/index.html">
+<meta property="og:title" content="python的文件操作">
+<meta property="og:url" content="http://yoursite.com/2019/09/09/python的文件操作/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
-<meta property="og:description" content="多态：不同的对象调用相同的方法，产生不同的执行结果，增加代码灵活度">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-05T02:50:26.473Z">
+<meta property="og:updated_time" content="2019-09-09T11:56:50.181Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python--面向对象_多态">
-<meta name="twitter:description" content="多态：不同的对象调用相同的方法，产生不同的执行结果，增加代码灵活度">
-  <link rel="canonical" href="http://yoursite.com/2019/09/05/python-面向对象-多态/">
+<meta name="twitter:title" content="python的文件操作">
+  <link rel="canonical" href="http://yoursite.com/2019/09/09/python的文件操作/">
 
 
 <script id="page-configurations">
@@ -96,7 +93,7 @@
   };
 </script>
 
-  <title>python--面向对象_多态 | Duguosheng的博客</title>
+  <title>python的文件操作 | Duguosheng的博客</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -261,7 +258,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/python-面向对象-多态/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/09/python的文件操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Duguosheng">
@@ -273,7 +270,7 @@
       <meta itemprop="name" content="Duguosheng的博客">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">python--面向对象_多态
+        <h1 class="post-title" itemprop="name headline">python的文件操作
 
           
         </h1>
@@ -289,24 +286,7 @@
                 
               
 
-              <time title="创建时间：2019-09-05 10:19:12 / 修改时间：10:50:26" itemprop="dateCreated datePublished" datetime="2019-09-05T10:19:12+08:00">2019-09-05</time>
-            </span>
-          
-            
-
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
-
-                
-                
-              
+              <time title="创建时间：2019-09-09 19:56:50" itemprop="dateCreated datePublished" datetime="2019-09-09T19:56:50+08:00">2019-09-09</time>
             </span>
           
 
@@ -327,7 +307,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>455</span>
+              <span>0</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -350,18 +330,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <ul>
-<li>多态：不同的对象调用相同的方法，产生不同的执行结果，增加代码灵活度</li>
-</ul>
-<a id="more"></a>
-
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">play</span><span class="params">(self)</span>:</span></span><br><span class="line">		print(<span class="string">"跑跑跳跳"</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Xtq</span><span class="params">(Dog)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">play</span><span class="params">(self)</span>:</span>     <span class="comment">#重写父类方法</span></span><br><span class="line">		print(<span class="string">"飞到天上"</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">play_with_dog</span><span class="params">(self, dog)</span>:</span></span><br><span class="line">		print(<span class="string">"快乐玩耍"</span>)</span><br><span class="line">		dog.play()</span><br><span class="line"></span><br><span class="line">wangcai = Dog() <span class="comment">#普通狗旺财</span></span><br><span class="line">xiaotian = Xtq() <span class="comment">#哮天犬</span></span><br><span class="line">xiaoming = Person()</span><br><span class="line">xiaoming.play_with_dog(wangcai)	</span><br><span class="line">print(<span class="string">"*"</span>*<span class="number">30</span>)</span><br><span class="line">xiaoming.play_with_dog(xiaotian)	<span class="comment">#使用方法不变，传入另一个对象</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>执行结果<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">快乐玩耍</span><br><span class="line">跑跑跳跳</span><br><span class="line">******************************</span><br><span class="line">快乐玩耍</span><br><span class="line">飞到天上</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
+        <a id="more"></a>
 
     </div>
 
@@ -383,23 +352,14 @@
     </div>
 
       <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/python面向对象/" rel="tag"><i class="fa fa-tag"></i> python面向对象</a>
-            
-          </div>
-        
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/09/05/python-面向对象-继承/" rel="next" title="python--面向对象_继承">
-                  <i class="fa fa-chevron-left"></i> python--面向对象_继承
+                <a href="/2019/09/06/python的模块和包/" rel="next" title="python的模块和包">
+                  <i class="fa fa-chevron-left"></i> python的模块和包
                 </a>
               
             </div>
@@ -407,10 +367,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/09/05/类属性，类方法，静态方法/" rel="prev" title="类属性，类方法，静态方法">
-                  类属性，类方法，静态方法 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -459,8 +415,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#演示"><span class="nav-number">1.</span> <span class="nav-text">演示</span></a></li></ol></div>
-        
       </div>
       <!--/noindex-->
 
