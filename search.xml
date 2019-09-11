@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[@property装饰器]]></title>
+    <url>%2F2019%2F09%2F11%2Fproperty%E8%A3%85%E9%A5%B0%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[功能 @property装饰器可以让方法像属性一样进行调用 演示不使用@property装饰器1234567891011121314class Person(object): def __init__(self, age): self.__age = age def set_age(self, age): self.__age = age def get_age(self): return self.__agejack = Person(18)print(jack.get_age())jack.set_age(20)print(jack.get_age()) 运行结果121820 使用装饰器12345678910111213141516171819class Person: def __init__(self, age): self.__age = age @property def age(self): return self.__age # 注意这里是age.setter @age.setter def age(self, age): self.__age = agejack = Person(18)# 像属性一样调用方法print(jack.age)# 像属性一样调用方法jack.age = 20print(jack.age) 运行结果121820]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>property装饰器</tag>
+        <tag>python基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[eval()函数]]></title>
+    <url>%2F2019%2F09%2F10%2Feval-%E5%87%BD%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[功能描述123456789101112131415# 数学计算input: eval("1+1")output: 2# 字符串重复input: eval("'*' * 10")output: **********# 将字符串转化为列表input: type(eval("[1, 2, 3, 4]"))output: list# 将字符串转换为字典input: type(eval("&#123;'name': 'xiaoming', 'age': 18&#125;"))output: dict 演示案例：计算器1print(eval(input("请输入计算式: "))) 执行12请输入计算式: 5+2*5**255 不要滥用eval 使用eval()直接转换输入结果可能导致安全漏洞，如上例中用户输入__import__(&#39;os&#39;).system(&#39;ls&#39;) 等价于 12import osos.system("ls") 运行 1234请输入计算式: __import__('os').system('ls')test1.pytest2.py0 输出了当前目录下文件列表，同理也可执行其他增删改的终端命令，很不安全 执行成功，返回0 执行失败，返回错误信息]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>eval</tag>
+        <tag>python进阶</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[python的文件操作]]></title>
     <url>%2F2019%2F09%2F09%2Fpython%E7%9A%84%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%2F</url>
-    <content type="text"><![CDATA[]]></content>
+    <content type="text"><![CDATA[文件基本操作操作文件的函数/方法 函数/方法 功能 open 打开文件，并返回操作对象 read 将文件读取到内存 write 将指定内容写入文件 close 关闭文件 read write close三者都要通过文件对象来进行调用 read方法 open()第一个参数是要打开的文件名(区分大小写) 打开后操作完成要使用close()关闭，否则会消耗系统资源，影响后续对文件的访问 通常先编写打开和关闭文件代码，在编写中间的读写操作 1234567# 打开file = open("文件名")# 读取text = file.read()print(text)# 关闭file.close() 关于文件指针 python中读取完内容后会将指针移动到读取内容的末尾，默认是文件末尾 连续两次读取文件，由于第一次读完指针已经在末尾，因而第二次读不到内容 打开文件的方式 open()默认以只读打开 1file = open("文件名", "访问方式") 访问方式 说明 r 只读，指针在文件开头，不存在会抛出异常 w 只写，若文件存在则覆盖，不存在则创建 a 追加，文件存在，指针就放在文件末尾，不存在，抛出异常 r+ 读写，文件指针在开头，若不存在，抛出异常 w+ 读写，文件存在则覆盖，不存在就创建 a+ 读写，文件存在则指针放在末尾，文件不存在，创建新文件 使用读写方式打开，会影响文件读写效率，开发中更多的是以只读，只写的方式打开 按行读取 read()方法默认读取全部，读取大文件对于系统内存占用会非常严重 readLine方法 一次读取一行，方法执行后，指针向下移动一行 读取大文件123456789101112131415file = open("test")while True: # 读取一行 text = file.readLine() #判断是否读取到内容 if not text: break #每读到一行末尾已经有"\n" print(text, end="") # 关闭文件file.close() 复制文件1234567891011file_r = open("test")file_w = open("test_copy")while True: text = file_r.readLine() if not text: break file_w.write(text)file_r.close()file_w.close() 执行后打开file_w文件，发现已经复制了file_r的内容 文件/目录的常用管理操作文件操作 方法 说明 示例 rename 重命名文件 os.rename(“源文件名”, “目标文件名”) remove 删除文件 os.remove(“文件名”) 目录操作12# 导入os模块import os 方法 说明 示例 listdir 目录列表 os.listdir(“目录名”) mkdir 创建目录 os.mkdir(“目录名”) rmdir 删除目录 os.rmdir(“目录名”) getcwd 获取当前目录 os.getcwd() chdir 修改工作目录 os.chdir(“目标目录”) path.isdir 判断是否为目录 os.path.isdir(“文件路径”) python编码 python2默认使用ascii编码，不支持中文 python3默认使用utf-8编码，支持中文 改变python2的编码格式，使支持中文，将下句代码写在文件开头1# *-* coding:utf-8 *-* 或者 1# coding = utf-8 另外，使用python2输出中文时，会出现乱码，这是因为解释器会一个字节一个字节的输出，而中文一般是三个字节 12345678#!/usr/bin/python2# *-* coding: utf-8 *-*my_str = "hello, 你好"print(my_str)for letter in my_str: print(letter) 运行结果 12345678910111213hello, 你好hello,�� 输出乱码 解决方法：定义字符串时，前面加上字母u，说明这是utf-8格式的字符串 1my_str = u"hello, 你好" 再次运行 12345678910hello, 你好hello,你好 不再乱码]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -69,7 +93,7 @@
   <entry>
     <title><![CDATA[python--面向对象_继承]]></title>
     <url>%2F2019%2F09%2F05%2Fpython-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1-%E7%BB%A7%E6%89%BF%2F</url>
-    <content type="text"><![CDATA[继承：实现代码的重用，相同的代码不需要重复编写 继承语法12class 子类(父类): ... 继承的传递性：A继承自B，B继承自C，则A也拥有C的属性和方法 子类不能访问父类的私有属性或方法，但可以在父类方法中访问自身私有内容，子类调用该方法来间接访问 多继承 语法 12class 子类(父类1, 父类2): ... 注意：如果多继承中，不同的父类方法重名，则会优先使用继承顺序靠前的父类方法 123456789101112131415161718192021222324252627class A: def test(self): print("A--test") def demo(self): print("A--demo")class B: def test(self): print("B--test") def demo(self): print("B--demo")class C(A, B): passclass D(B, A): passprint("继承顺序是先A后B")cc = C()cc.test()cc.demo()print("继承顺序是先B后A")dd = D()dd.test()dd.demo() 运行结果 123456继承顺序是先A后BA--testA--demo继承顺序是先B后AB--testB--demo 尽管不会报错，但不利于程序的阅读和理解，所以尽量不要使用多继承，使用时，也尽量保证属性方法不重名 __mro__ 用于查看方法搜索顺序类名.__mro__ 如在上例中使用 12print(C.__mro__)print(D.__mro__) 输出结果 12(&lt;class '__main__.C'&gt;, &lt;class '__main__.A'&gt;, &lt;class '__main__.B'&gt;, &lt;class 'object'&gt;)(&lt;class '__main__.D'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.A'&gt;, &lt;class 'object'&gt;) 重写方法override 在子类中直接编写与父类中同名的方法即可 12345678910111213class Animal: def voice(self): print("叫") def eat(self): print("吃")class Cat(Animal): def voice(self): print("喵喵喵")tom = Cat()tom.eat()tom.voice() 运行结果 12吃喵喵喵 对父类方法进行扩展 调用父类方法 super().方法名 父类名.方法(self) 不推荐使用，因为当父类名改变时，语句也要改变 将上例中Cat 类中voice方法改成 12345class Cat(Animal): def voice(self): super().voice() #第一种方法调用父类方法 Animal.voice(self) #第二种方法 print("喵喵喵") 执行结果 1234吃叫叫喵喵喵 新式类和旧式类 新式类：以object 为基类的类，推荐使用 旧式类：不以object 为基类的类，不推荐使用 python3中默认使用object类作为基类，即python3中定义的类全部是新式类 python2中如果没有指定父类，不会使用object类作为基类 新旧类会影响方法搜索顺序保证python2与python3的统一，可以写作 12class 类名(object): ...]]></content>
+    <content type="text"><![CDATA[继承：实现代码的重用，相同的代码不需要重复编写 继承语法12class 子类(父类): ... 继承的传递性：A继承自B，B继承自C，则A也拥有C的属性和方法 子类不能访问父类的私有属性或方法，但可以在父类方法中访问自身私有内容，子类调用该方法来间接访问 多继承 语法 12class 子类(父类1, 父类2): ... 注意：如果多继承中，不同的父类方法重名，则会优先使用继承顺序靠前的父类方法 123456789101112131415161718192021222324252627class A: def test(self): print("A--test") def demo(self): print("A--demo")class B: def test(self): print("B--test") def demo(self): print("B--demo")class C(A, B): passclass D(B, A): passprint("继承顺序是先A后B")cc = C()cc.test()cc.demo()print("继承顺序是先B后A")dd = D()dd.test()dd.demo() 运行结果 123456继承顺序是先A后BA--testA--demo继承顺序是先B后AB--testB--demo 尽管不会报错，但不利于程序的阅读和理解，所以尽量不要使用多继承，使用时，也尽量保证属性方法不重名 __mro__ 用于查看方法搜索顺序类名.__mro__ 如在上例中使用 12print(C.__mro__)print(D.__mro__) 输出结果 12(&lt;class '__main__.C'&gt;, &lt;class '__main__.A'&gt;, &lt;class '__main__.B'&gt;, &lt;class 'object'&gt;)(&lt;class '__main__.D'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.A'&gt;, &lt;class 'object'&gt;) 重写方法override 在子类中直接编写与父类中同名的方法即可 12345678910111213class Animal: def voice(self): print("叫") def eat(self): print("吃")class Cat(Animal): def voice(self): print("喵喵喵")tom = Cat()tom.eat()tom.voice() 运行结果 12吃喵喵喵 对父类方法进行扩展 调用父类方法 super().方法名 父类名.方法(self) 不推荐使用，因为当父类名改变时，语句也要改变 将上例中Cat 类中voice方法改成 12345class Cat(Animal): def voice(self): super().voice() #第一种方法调用父类方法 Animal.voice(self) #第二种方法 print("喵喵喵") 执行结果 1234吃叫叫喵喵喵 新式类和旧式类 新式类：以object 为基类的类，推荐使用 旧式类：不以object 为基类的类，不推荐使用 python3中默认使用object类作为基类，即python3中定义的类全部是新式类 python2中如果没有指定父类，不会使用object类作为基类 新旧类会影响方法搜索顺序保证python2与python3的统一，可以写作 12class 类名(object): ... 构造函数的继承 旧式类：父类名称.init(self,参数1，参数2，…) 新式类：super(子类，self).init(参数1，参数2，….) 123456789101112class A(object): def __init__(self, name): self.name = nameclass B(A): def __init__(self, name, age): #调用父类初始化方法 super(B, self).__init__(name) self.age = agebb = B("das", 17)print(bb.name)]]></content>
       <categories>
         <category>python</category>
       </categories>
