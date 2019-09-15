@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[udp网络编程]]></title>
+    <url>%2F2019%2F09%2F15%2Fudp%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[创建udp套接字123import socketudp_socket = socket.socket(socket.AF_INET, socket.DGRAM) 发送数据使用sendto()方法 123send_data = input("please input:")# 发送的数据(utf-8编码) (ip地址, 端口)udp_socket.sendto(send_data.encode("utf-8"), ("X.X.X.X", port)) # 如果发送方未绑定端口，系统会随机分配1024-65535 获取端口1234# 创建元组，ip地址和端口号local_addr = ("", 7788) # ip地址一般不用写，表示本机的任意一个ip# 绑定udp_socket.bind(local_addr) 程序实例12345678910111213141516171819202122232425import socketdef main(): # 创建套接字 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # 绑定本地信息 local_addr = ("", 7788) udp_socket.bind(local_addr) # 接收数据,1024是本次接收的最大字节数 recv_data = udp_socket.recvfrom(1024) # 会接收到数据和发送方的ip地址和端口 recv_msg = recv_data[0] send_addr = recv_data[1] # 打印接收到的数据, 需要指定解码，如果是windows发送，应当使用gbk解码 print("接收到的数据是：%s 来源于：%s" % (recv_msg.decode("utf-8"), str(send_addr))) # 关闭套接字 udp_socket.close()if __name__ == "__main__": main()]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>udp</tag>
+        <tag>python网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[网络的一些基本概念]]></title>
+    <url>%2F2019%2F09%2F12%2F%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%2F</url>
+    <content type="text"><![CDATA[ip地址的分类ipv4(百度百科) internet protocol version 4指互联网协议的第四种版本，ipv1，ipv2，ipv3是实验版本 特点： 由四组数字组成：如127.168.8.32，其中每组最大值是255ipv6 internet protocol version 6指第六种版本，ipv5是实验版本 表示方法：(引自百度百科) 冒分十六进制表示法 格式为X:X:X:X:X:X:X:X，其中每个X表示地址中的16b，以十六进制表示，例如：ABCD:EF01:2345:6789:ABCD:EF01:2345:6789这种表示法中，每个X的前导0是可以省略的，例如：2001:0DB8:0000:0023:0008:0800:200C:417A→ 2001:DB8:0:23:8:800:200C:417A 0位压缩表示法 在某些情况下，一个IPv6地址中间可能包含很长的一段0，可以把连续的一段0压缩为::。但为保证地址解析的唯一性，地址中::只能出现一次，例如：FF01:0:0:0:0:0:0:1101 → FF01::1101，0:0:0:0:0:0:0:1 → ::1，0:0:0:0:0:0:0:0 → :: 内嵌IPv4地址表示法 为了实现IPv4-IPv6互通，IPv4地址会嵌入IPv6地址中，此时地址常表示为：X:X:X:X:X:X:d.d.d.d，前96b采用冒分十六进制表示，而最后32b地址则使用IPv4的点分十进制表示，例如::192.168.0.1与::FFFF:192.168.0.1就是两个典型的例子，注意在前96b中，压缩0位的方法依旧适用 端口 ip用来标识主机，端口(port)用来指定数据传输的主机程序 知名端口(Well Known Ports) 知名端口是众所周知的端口号，范围从0到1023，如： 80端口分配给HTTP服务 21端口分配给FTP服务动态端口(Dynamic Ports) 动态端口范围是1024-65535 之所以称为动态端口，是因为它一般不固定分配某种服务，而是动态分配 动态分配：程序需要网络通信时，它向主机申请一个端口，主机从可用的端口中为它分配一个，当这个程序关闭时，同时也就释放了它所占用的端口 套接字(socket) 网络套接字是IP地址与端口的组合。套接字（socket）是一个抽象层，应用程序可以通过它发送或接收数据，可对其进行像对文件一样的打开、读写和关闭等操作。套接字允许应用程序将I/O插入到网络中，并与网络中的其他应用程序进行通信. 在python中使用socket 在python中使用socket模块即可12import socketsocket.socket(AddressFamily, Type) 参数说明 AddressFamily: 可以选择AF_INET(用于Internet进程间通讯)或者AF_UNIX(用于同一台机器进程间通讯)，实际工作中常用AF_INETType: 套接字类型，可以是SOCK_STREAM(流式套接字，主要用于TCP协议)，或者SOCK_DGRAM(数据报套接字，主要用于UDP协议) 创建一个tcp套接字12345678910import socket# 创建tcp的套接字s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)# 使用套接字的功能... ...# 关闭套接字s.close() 可以发现，它的基本流程与文件的操作大致相同 创建一个udp套接字123456789101112131415161718import socket def main(): """测试udp发送数据""" # 创建udp套接字 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # 接收要发送的数据 send_data = input("请输入发送的数据：") # 发送数据 使用utf-8编码，后接元组(ip地址，端口) udp_socket.sendto(send_data.encode("utf-8"), ("192.168.32.32", 8080)) # 关闭套接字 udp_socket.close()if __name__ == "__main__": main()]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[@property装饰器]]></title>
     <url>%2F2019%2F09%2F11%2Fproperty%E8%A3%85%E9%A5%B0%E5%99%A8%2F</url>
     <content type="text"><![CDATA[功能 @property装饰器可以让方法像属性一样进行调用 演示不使用@property装饰器1234567891011121314class Person(object): def __init__(self, age): self.__age = age def set_age(self, age): self.__age = age def get_age(self): return self.__agejack = Person(18)print(jack.get_age())jack.set_age(20)print(jack.get_age()) 运行结果121820 使用装饰器12345678910111213141516171819class Person: def __init__(self, age): self.__age = age @property def age(self): return self.__age # 注意这里是age.setter @age.setter def age(self, age): self.__age = agejack = Person(18)# 像属性一样调用方法print(jack.age)# 像属性一样调用方法jack.age = 20print(jack.age) 运行结果121820]]></content>
@@ -8,8 +31,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>property装饰器</tag>
         <tag>python基础</tag>
+        <tag>property装饰器</tag>
       </tags>
   </entry>
   <entry>
