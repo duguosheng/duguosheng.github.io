@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[udp网络编程]]></title>
-    <url>%2F2019%2F09%2F15%2Fudp%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%2F</url>
-    <content type="text"><![CDATA[创建udp套接字123import socketudp_socket = socket.socket(socket.AF_INET, socket.DGRAM) 发送数据使用sendto()方法 123send_data = input("please input:")# 发送的数据(utf-8编码) (ip地址, 端口)udp_socket.sendto(send_data.encode("utf-8"), ("X.X.X.X", port)) # 如果发送方未绑定端口，系统会随机分配1024-65535 获取端口1234# 创建元组，ip地址和端口号local_addr = ("", 7788) # ip地址一般不用写，表示本机的任意一个ip# 绑定udp_socket.bind(local_addr) 程序实例123456789101112131415161718192021222324252627282930313233343536373839404142434445import socketdef send_msg(udp_socket): """发送数据""" dest_ip = input("请输入对方的ip：") dest_port = input("请输入对方的port：") send_data = input("请输入发送的消息：") udp_socket.sendto(send_data.encode("utf-8"), (dest_ip, int(dest_port)))def recv_msg(udp_socket): """接收数据""" # 接收数据,1024是本次接收的最大字节数，如果未接收到会进入阻塞状态 recv_data = udp_socket.recvfrom(1024) # 会接收到数据和发送方的ip地址和端口 recv_msge = recv_data[0] send_addr = recv_data[1] # 打印接收到的数据, 需要指定解码，如果是windows发送，应当使用gbk解码 print("接收到的数据是：%s 来源于：%s" % (recv_msge.decode("utf-8"), str(send_addr)))def main(): # 创建套接字 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # 绑定信息 udp_socket.bind(("", 7788)) while True: print("0退出，1发送，2接收") option = input("请输入指令：") if option == "0": break elif option == "1": # 发送 send_msg(udp_socket) elif option == "2": # 接收并显示 recv_msg(udp_socket) else: print("输入错误，请重新输入")if __name__ == "__main__": main() socket套接字是全双工工作模式，即可以同时收发]]></content>
+    <title><![CDATA[小兄弟点进来呀]]></title>
+    <url>%2F2019%2F09%2F17%2F%E7%82%B9%E8%BF%9B%E6%9D%A5%E5%91%80%2F</url>
+    <content type="text"><![CDATA[哈哈，常晔大沙雕]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>haha</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[__call__方法]]></title>
+    <url>%2F2019%2F09%2F17%2Fcall-%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[Python中，如果在创建类的时候写了__call__()方法， 那么该类实例化出实例后， 实例名()就是调用__call__()方法。 123456789101112class SalaryAccount: """工资计算类""" def __call__(self, salary): print("发工资") year_salary = salary*12 day_salary = salary//22.5 hour_salary = day_salary//8 return dict(year_salary=year_salary, month_salary=salary, day_salary=day_salary, hour_salary=hour_salary)s = SalaryAccount()print(s(3000)) 执行结果 12发工资&#123;'year_salary': 36000, 'month_salary': 3000, 'day_salary': 133.0, 'hour_salary': 16.0&#125;]]></content>
       <categories>
         <category>python</category>
       </categories>
       <tags>
-        <tag>udp</tag>
+        <tag>python面向对象</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[tcp网络编程]]></title>
+    <url>%2F2019%2F09%2F16%2Ftcp%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[TCP百度百科 简介 TCP通信需要经过创建链接，数据传送，终止连接三个步骤 通信双方都必须先建立连接才能进行通讯，双方都要为连接分配必要的系统内核资源，以管理连接的状态和传输 TCP的连接是一对一的，因此，基于广播的应用程序应使用UDP，]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
         <tag>python网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[udp网络编程]]></title>
+    <url>%2F2019%2F09%2F15%2Fudp%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[UDP百度百科 创建udp套接字123import socketudp_socket = socket.socket(socket.AF_INET, socket.DGRAM) 发送数据使用sendto()方法 123send_data = input("please input:")# 发送的数据(utf-8编码) (ip地址, 端口)udp_socket.sendto(send_data.encode("utf-8"), ("X.X.X.X", port)) # 如果发送方未绑定端口，系统会随机分配1024-65535 获取端口1234# 创建元组，ip地址和端口号local_addr = ("", 7788) # ip地址一般不用写，表示本机的任意一个ip# 绑定udp_socket.bind(local_addr) 程序实例123456789101112131415161718192021222324252627282930313233343536373839404142434445import socketdef send_msg(udp_socket): """发送数据""" dest_ip = input("请输入对方的ip：") dest_port = input("请输入对方的port：") send_data = input("请输入发送的消息：") udp_socket.sendto(send_data.encode("utf-8"), (dest_ip, int(dest_port)))def recv_msg(udp_socket): """接收数据""" # 接收数据,1024是本次接收的最大字节数，如果未接收到会进入阻塞状态 recv_data = udp_socket.recvfrom(1024) # 会接收到数据和发送方的ip地址和端口 recv_msge = recv_data[0] send_addr = recv_data[1] # 打印接收到的数据, 需要指定解码，如果是windows发送，应当使用gbk解码 print("接收到的数据是：%s 来源于：%s" % (recv_msge.decode("utf-8"), str(send_addr)))def main(): # 创建套接字 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # 绑定信息 udp_socket.bind(("", 7788)) while True: print("0退出，1发送，2接收") option = input("请输入指令：") if option == "0": break elif option == "1": # 发送 send_msg(udp_socket) elif option == "2": # 接收并显示 recv_msg(udp_socket) else: print("输入错误，请重新输入")if __name__ == "__main__": main() socket套接字是全双工工作模式，即可以同时收发]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络编程</tag>
+        <tag>udp</tag>
       </tags>
   </entry>
   <entry>

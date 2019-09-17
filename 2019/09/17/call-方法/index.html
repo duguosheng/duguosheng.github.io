@@ -55,19 +55,19 @@
   };
 </script>
 
-  <meta name="description" content="我的博客源文件这里存放我的博客文章和引用文件">
-<meta name="keywords" content="solidworks, java, 编程, 嵌入式">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Duguosheng的博客">
-<meta property="og:url" content="http://yoursite.com/README.html">
+  <meta name="description" content="使对象可以像函数一样被调用">
+<meta name="keywords" content="python面向对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__call__方法">
+<meta property="og:url" content="http://yoursite.com/2019/09/17/call-方法/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
-<meta property="og:description" content="我的博客源文件这里存放我的博客文章和引用文件">
+<meta property="og:description" content="使对象可以像函数一样被调用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-04T10:25:03.502Z">
+<meta property="og:updated_time" content="2019-09-17T01:50:59.697Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Duguosheng的博客">
-<meta name="twitter:description" content="我的博客源文件这里存放我的博客文章和引用文件">
-  <link rel="canonical" href="http://yoursite.com/README">
+<meta name="twitter:title" content="__call__方法">
+<meta name="twitter:description" content="使对象可以像函数一样被调用">
+  <link rel="canonical" href="http://yoursite.com/2019/09/17/call-方法/">
 
 
 <script id="page-configurations">
@@ -75,13 +75,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title> | Duguosheng的博客</title>
+  <title>__call__方法 | Duguosheng的博客</title>
   
 
 
@@ -236,63 +236,191 @@
         <div class="content-wrap">
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      <header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">
-
-</h1>
-
-<div class="post-meta">
+      <article itemscope itemtype="http://schema.org/Article">
   
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/17/call-方法/">
 
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Duguosheng">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duguosheng的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">__call__方法
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-17 09:06:28 / 修改时间：09:50:59" itemprop="dateCreated datePublished" datetime="2019-09-17T09:06:28+08:00">2019-09-17</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>519</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>1 分钟</span>
+            </span>
+          
+            <div class="post-description">使对象可以像函数一样被调用</div>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <a id="more"></a>
+
+<ul>
+<li>Python中，如果在创建类的时候写了<code>__call__()</code>方法， 那么该类实例化出实例后， <code>实例名()</code>就是调用<code>__call__()</code>方法。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SalaryAccount</span>:</span></span><br><span class="line">    <span class="string">"""工资计算类"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, salary)</span>:</span></span><br><span class="line">        print(<span class="string">"发工资"</span>)</span><br><span class="line">        year_salary = salary*<span class="number">12</span></span><br><span class="line">        day_salary = salary//<span class="number">22.5</span></span><br><span class="line">        hour_salary = day_salary//<span class="number">8</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dict(year_salary=year_salary, month_salary=salary, day_salary=day_salary, hour_salary=hour_salary)</span><br><span class="line"></span><br><span class="line">s = SalaryAccount()</span><br><span class="line">print(s(<span class="number">3000</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>执行结果</p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">发工资</span><br><span class="line">&#123;<span class="string">'year_salary'</span>: <span class="number">36000</span>, <span class="string">'month_salary'</span>: <span class="number">3000</span>, <span class="string">'day_salary'</span>: <span class="number">133.0</span>, <span class="string">'hour_salary'</span>: <span class="number">16.0</span>&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="Duguosheng 微信支付">
+        <p>微信支付</p>
+      </div>
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/alipay.png" alt="Duguosheng 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
 </div>
 
-</header>
+      
 
-      
-      
-      
-      <div class="post-body">
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/python面向对象/" rel="tag"># python面向对象</a>
+            
+          </div>
         
-          <h1 id="我的博客源文件"><a href="#我的博客源文件" class="headerlink" title="我的博客源文件"></a>我的博客源文件</h1><p><strong>这里存放我的博客文章和引用文件</strong> </p>
 
         
-      </div>
-      
-      
-      
-    </div>
-    
 
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/16/tcp网络编程/" rel="next" title="tcp网络编程">
+                  <i class="fa fa-chevron-left"></i> tcp网络编程
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/17/点进来呀/" rel="prev" title="小兄弟点进来呀">
+                  小兄弟点进来呀 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
     
-    
-    
+  </div>
+  
+  
+  
+  </article>
+
   </div>
 
 
@@ -329,8 +457,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#我的博客源文件"><span class="nav-number">1.</span> <span class="nav-text">我的博客源文件</span></a></li></ol></div>
-        
       </div>
       <!--/noindex-->
 
