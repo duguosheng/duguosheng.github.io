@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[小兄弟点进来呀]]></title>
-    <url>%2F2019%2F09%2F17%2F%E7%82%B9%E8%BF%9B%E6%9D%A5%E5%91%80%2F</url>
-    <content type="text"><![CDATA[哈哈，常晔大沙雕]]></content>
-      <categories>
-        <category>随笔</category>
-      </categories>
-      <tags>
-        <tag>haha</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[__call__方法]]></title>
     <url>%2F2019%2F09%2F17%2Fcall-%E6%96%B9%E6%B3%95%2F</url>
     <content type="text"><![CDATA[Python中，如果在创建类的时候写了__call__()方法， 那么该类实例化出实例后， 实例名()就是调用__call__()方法。 123456789101112class SalaryAccount: """工资计算类""" def __call__(self, salary): print("发工资") year_salary = salary*12 day_salary = salary//22.5 hour_salary = day_salary//8 return dict(year_salary=year_salary, month_salary=salary, day_salary=day_salary, hour_salary=hour_salary)s = SalaryAccount()print(s(3000)) 执行结果 12发工资&#123;'year_salary': 36000, 'month_salary': 3000, 'day_salary': 133.0, 'hour_salary': 16.0&#125;]]></content>
@@ -64,8 +53,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>python基础</tag>
         <tag>property装饰器</tag>
+        <tag>python基础</tag>
       </tags>
   </entry>
   <entry>
