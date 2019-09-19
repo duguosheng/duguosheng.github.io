@@ -56,14 +56,14 @@
 </script>
 
   <meta name="description" content="在计算机中操作文件分为三步骤：打开，读写，关闭">
-<meta name="keywords" content="python进阶">
+<meta name="keywords" content="python文件操作">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python的文件操作">
 <meta property="og:url" content="http://yoursite.com/2019/09/09/python的文件操作/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
 <meta property="og:description" content="在计算机中操作文件分为三步骤：打开，读写，关闭">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-10T07:44:13.300Z">
+<meta property="og:updated_time" content="2019-09-17T10:52:09.292Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python的文件操作">
 <meta name="twitter:description" content="在计算机中操作文件分为三步骤：打开，读写，关闭">
@@ -284,7 +284,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-09-10 15:44:13" itemprop="dateModified" datetime="2019-09-10T15:44:13+08:00">2019-09-10</time>
+                <time title="修改时间：2019-09-17 18:52:09" itemprop="dateModified" datetime="2019-09-17T18:52:09+08:00">2019-09-17</time>
               </span>
             
           
@@ -319,7 +319,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>1.8k</span>
+              <span>1.9k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -366,8 +366,16 @@
 <td>将指定内容写入文件</td>
 </tr>
 <tr>
+<td>writeLines</td>
+<td>将指定内容写入文件，不填加换行符</td>
+</tr>
+<tr>
+<td>fiush</td>
+<td>把缓冲区的内容写入文件，但不关闭文件</td>
+</tr>
+<tr>
 <td>close</td>
-<td>关闭文件</td>
+<td>把缓冲区的内容写入文件，并关闭文件</td>
 </tr>
 </tbody></table>
 <blockquote>
@@ -423,9 +431,14 @@
 <td>a+</td>
 <td>读写，文件存在则指针放在末尾，文件不存在，创建新文件</td>
 </tr>
+<tr>
+<td>b</td>
+<td>二进制模式，可与其他模式组合</td>
+</tr>
 </tbody></table>
 <ul>
 <li>使用<strong>读写方式</strong>打开，会影响文件读写效率，开发中更多的是<strong>以只读，只写的方式</strong>打开</li>
+<li>对于二进制文件需要加<code>b</code>，如打开模式为<code>wb</code>，<code>rb</code></li>
 </ul>
 <h3 id="按行读取"><a href="#按行读取" class="headerlink" title="按行读取"></a>按行读取</h3><ul>
 <li><code>read()</code>方法默认读取全部，读取大文件对于系统内存占用会非常严重</li>
@@ -577,7 +590,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/python进阶/" rel="tag"># python进阶</a>
+              <a href="/tags/python文件操作/" rel="tag"># python文件操作</a>
             
           </div>
         
@@ -666,7 +679,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -692,7 +705,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -727,12 +740,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">51k</span>
+    <span title="站点总字数">60k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">47 分钟</span>
+    <span title="站点阅读时长">54 分钟</span>
 </div>
 
         
