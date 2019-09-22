@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[wordPress文章版本]]></title>
+    <url>%2F2019%2F09%2F22%2FwordPress%E6%96%87%E7%AB%A0%E7%89%88%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[修改站点的wp-config.php文件，在其中添加如下代码 12define('WP_POST_REVISIONS', 0); //不启用修订版本define('WP_POST_REVISIONS', 3); //共保存3个版本]]></content>
+      <categories>
+        <category>wordPress</category>
+      </categories>
+      <tags>
+        <tag>文章版本</tag>
+        <tag>wordPress配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[wordPress的文章和页面]]></title>
+    <url>%2F2019%2F09%2F22%2FwordPress-1%2F</url>
+    <content type="text"><![CDATA[文章和页面 文章：是网站的主要内容页面：是网站的其他一些信息 以哔哩哔哩网为例 它的主要内容是视频，所以打开它的网站可以看到许多视频推送，这就是它的文章 而下拉到末尾，可以看到其他一些次要信息，这些就是页面 由于文章内容繁杂，所以可以创建分类便于管理和用户查询，而页面没有分类功能]]></content>
+      <categories>
+        <category>wordPress</category>
+      </categories>
+      <tags>
+        <tag>wordpress一些基础概念</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[时域分析]]></title>
+    <url>%2F2019%2F09%2F22%2F%E6%97%B6%E5%9F%9F%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[一阶动态性能指标]]></content>
+      <categories>
+        <category>自动控制原理</category>
+      </categories>
+      <tags>
+        <tag>时域分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python多任务——进程]]></title>
+    <url>%2F2019%2F09%2F20%2Fpython%E5%A4%9A%E4%BB%BB%E5%8A%A1%E2%80%94%E2%80%94%E8%BF%9B%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[进程及其状态进程 程序：例如xxx.py这是程序，是静态的 进程：程序运行起来后，代码+用到的资源称为进程 进程的状态任务数往往大于CPU核数，因而一定有一些任务正在进行，另一些任务等待，这样就导致了进程有不同的状态 就绪态：运行条件都满足，等待CPU调度 执行态：CPU正在执行 等待态：等待某些条件满足，例如一个程序sleep中 创建进程使用multiprocessing模块123456789101112131415161718192021# 导入模块import multiprocessingimport timedef testProcess(): for i in range(5): print("process------") time.sleep(1)def main(): # 创建进程 my_pro = multiprocessing.Process(target=testProcess) # 启动进程 my_pro.start() time.sleep(10)if __name__ == "__main__": main() 进程间通信 线程间资源共享进程间资源不共享，是独立的 举例说明 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647import multiprocessingimport threadingimport timeg_num = 0def test1(): global g_num for i in range(10): g_num += 1 print("test1-----%d" % g_num)def test2(): global g_num for i in range(10): g_num += 1 print("test2-----%d" % g_num)def test_pro(): print("测试进程") p1 = multiprocessing.Process(target=test1) p2 = multiprocessing.Process(target=test2) p1.start() time.sleep(0.01) p2.start()def test_thr(): print("测试线程") t1 = threading.Thread(target=test1) t2 = threading.Thread(target=test2) t1.start() time.sleep(0.01) t2.start()def main(): # test_pro() test_thr()if __name__ == "__main__": main() 结果 123测试线程test1-----10test2-----20 改变main()函数123def main(): test_pro() # test_thr() 再次执行 123测试进程test1-----10test2-----10 实现进程间通信：Queue Queue是队列的意思，遵循先进先出的原则一个进程向Queue中写入数据，另一个进程从Queue中取出，就可实现通信这是一种比较低端的方式，还可使用socket，redis等实现 代码1234567891011121314151617181920212223242526272829303132333435363738394041import multiprocessingimport timedef download_from_web(queue): """模拟从网上下载数据""" data = [11, 22, 33, 44] # 向对列中写入数据 for temp in data: queue.put(temp) print("已全部存入队列")def analysis_data(queue): """数据处理""" d_data = list() # 获取数据 while not queue.empty(): data = queue.get() d_data.append(data) print("接收完成--%s" % d_data)def main(): # 创建一个队列 queue = multiprocessing.Queue() # 创建多个进程，将队列的引用当作实参传递到里面 p1 = multiprocessing.Process(target=download_from_web, args=(queue, )) p2 = multiprocessing.Process(target=analysis_data, args=(queue, )) p1.start() time.sleep(0.01) p2.start()if __name__ == "__main__": main() 运行结果 12已全部存入队列接收完成--[11, 22, 33, 44] 成功实现了进程间的通讯 进程池 进程不多时可以直接使用Process动态生成多个进程，但如果所需进程过多，手动创建进程工作量太大，且不利于cpu的运行，因而可以使用进程池Pool进程池是资源进程、管理进程组成的技术的应用(引自百度百科) 资源进程：预先创建好的空闲进程，管理进程会把工作分发到空闲进程来处理。管理进程：管理进程负责创建资源进程，把工作交给空闲资源进程处理，回收已经处理完工作的资源进程。这样进程使有进有出，有序管理 代码 1234567891011121314# 导包from multiprocessing import Pool# 定义进程池po = Pool(3) # 3指最多同时执行3个进程# 添加进程队列，target指进程地址，args是进程函数的参数，是一个元组po.apply_asyns(target, args)# 关闭进程池po.close()# 等待po中所有子进程完成，必须在close()语句之后，没有这句代码，可以使主进程先结束，子进程也无法继续进行po.join() 案例123456789101112131415161718192021222324252627from multiprocessing import Poolimport osimport timeimport randomdef worker(msg): t_start = time.time() print("&#123;0&#125;开始执行，进程号&#123;1&#125;".format(msg, os.getpid())) time.sleep(random.random()) t_stop = time.time() print(msg, "执行完毕，耗时%f" % (t_stop-t_start))def main(): po = Pool(3) for i in range(10): po.apply_async(worker, (i+1, )) print("---start---") po.close() po.join() print("----end----")if __name__ == "__main__": main() 运行结果 12345678910111213141516171819202122---start---1开始执行，进程号220442开始执行，进程号220453开始执行，进程号220461 执行完毕，耗时0.1752324开始执行，进程号220443 执行完毕，耗时0.2172865开始执行，进程号220465 执行完毕，耗时0.1872886开始执行，进程号220464 执行完毕，耗时0.6135127开始执行，进程号220442 执行完毕，耗时0.8605068开始执行，进程号220457 执行完毕，耗时0.4708759开始执行，进程号220446 执行完毕，耗时0.96947610开始执行，进程号220469 执行完毕，耗时0.3128298 执行完毕，耗时0.90982510 执行完毕，耗时0.897377----end---- 可以从进程号看出一直在重复利用22044, 22045, 22046三个pid从输出来看，可以看出来同一时间最多只有三个进程执行 注意：在进程池间使用队列通信，不能使用multiprocessing.Queue()，而要使用multiprocessing.Manager().Queue() 综合案例 实现文件复制功能123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657import osimport multiprocessingdef copy_file(queue, file_name, src_dir, dest_dir): src_file = open(src_dir+"/"+file_name, "rb") # print("正在复制%s" % src_file) content = src_file.read() dest_file = open(dest_dir+"/"+file_name, "wb") dest_file.write(content) # 如果拷贝完了文件，就向队列写入数据，表示下载完成 queue.put(file_name)def main(): # 获取用户需要copy的文件名 src_dir = input("请输入要复制的文件夹：") # 创建一个新的文件夹 try: dest_dir = src_dir+"_copy" os.mkdir(dest_dir) except: print("该文件夹已存在") # 获取文件夹中所有的待copy的文件名字listdir() file_names = os.listdir(src_dir) total_num = len(file_names) current_num = 0 # 创建进程池 po = multiprocessing.Pool(5) # 创建一个队列 queue = multiprocessing.Manager().Queue() # 向进程池添加复制任务 for file_name in file_names: po.apply_async(copy_file, (queue, file_name, src_dir, dest_dir)) po.close() # po.join() # 显示执行进度 while True: file_name = queue.get() current_num += 1 now_step = current_num/total_num print("\r已拷贝%s-------进度%.2f %% " % (file_name, 100*now_step), end="") if now_step == 1: break print()if __name__ == "__main__": main()]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python多任务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[python多任务——线程]]></title>
     <url>%2F2019%2F09%2F19%2Fpython%E5%A4%9A%E4%BB%BB%E5%8A%A1%E2%80%94%E2%80%94%E7%BA%BF%E7%A8%8B%2F</url>
-    <content type="text"><![CDATA[]]></content>
+    <content type="text"><![CDATA[Thread创建线程使用Threading模块 语法格式 1234567# 导入threading模块import threading# 创建线程my_thread = threading.Thread(target=函数名)# 开启线程my_thread.start() 代码示例 1234567891011121314151617import threadingimport timedef testThread(): while True: print("hello") time.sleep(1)def main(): thrd = threading.Thread(target=testThread) thrd.start()if __name__ == "__main__": main() 运行结果： 每隔一秒打印一次hello 继承Thread类创建线程 步骤 创建类，继承Thread类 在这个类中重写run()方法 示例123456789101112131415161718192021import timefrom threading import *class MyThread(Thread): """继承Thread类""" def run(self): """重写run()方法""" for i in range(3): time.sleep(1) print("hello")def main(): mythread = MyThread() # 调用start()方法后会自动调用run()方法 mythread.start()if __name__ == "__main__": main() 执行结果：每隔一秒打印一次hello 查看线程数量 使用Threading模块中的enumerate()方法 1print(threading.enumerate()) 示例 1234567891011121314151617181920212223242526272829import threadingimport timedef testThread1(): for i in range(3): print("thread---1") time.sleep(0.1)def testThread2(): for i in range(3): print("thread---2") time.sleep(0.1)def main(): thrd1 = threading.Thread(target=testThread1) thrd2 = threading.Thread(target=testThread2) thrd1.start() thrd2.start() print(threading.enumerate()) time.sleep(1) print(threading.enumerate())if __name__ == "__main__": main() 运行结果 123456789thread---1thread---2[&lt;_MainThread(MainThread, started 140351833364096)&gt;, &lt;Thread(Thread-1, started 140351824549632)&gt;, &lt;Thread(Thread-2, started 140351746602752)&gt;]thread---1thread---2thread---1thread---2[&lt;_MainThread(MainThread, started 140351833364096)&gt;] 注意： 只有调用了start()方法时才会创建线程并开始执行，而使用Thread(target=)只是创建一个对象，所以只有放在start()后和线程结束前才可以使用enumerate()查看 由运行结果可见，当一个线程结束后，不会再打印它的信息，即列表中不再存在，由此可以判断其他线程是否都结束123# 当只有主线程的时候if len(threading.enumerate()) == 1: break 线程中传递参数args 线程中传递的参数使用args指定，必须是一个元组123456789101112131415161718192021222324252627282930313233import threadingimport timeg_list1 = [11, 22]g_list2 = [11, 22]def test1(list1): list1.append(33) print("在test1中，list1=%s" % list1)def test2(list1, list2): list1.append(44) list2.append(33) print("在test2中，list1=%s" % list1) print("在test2中，list2=%s" % list2)def main(): # target指定函数地址 # args指定参数，必须是一个元组 t1 = threading.Thread(target=test1, args=(g_list1, )) # 当参数只有一个时，使用args=(temp, )的方式 t2 = threading.Thread(target=test2, args=(g_list1, g_list2)) t1.start() time.sleep(0.1) t2.start() time.sleep(0.1)if __name__ == "__main__": main() 运行结果 123在test1中，list1=[11, 22, 33]在test2中，list1=[11, 22, 33, 44]在test2中，list2=[11, 22, 33] 互斥锁解决资源竞争资源竞争 由于多线程共用资源，会产生资源竞争的问题，如下面的代码，让两个线程同时对全局变量执行加一的操作，若不存在资源竞争，应当结果为二者循环次数之和，而结果往往小于此 这是因为当一个线程拿到数据加一后，可能还未存放结果，这个数据就被另一个线程调用，这样就会使数值低于预期12345678910111213141516171819202122232425262728293031323334import timeimport threadingg_num = 0def add_1(times): global g_num for i in range(times): g_num += 1 print("thread2-----%d" % g_num)def add_2(times): global g_num for i in range(times): g_num += 1 print("thread2-----%d" % g_num)def main(): t1 = threading.Thread(target=add_1, args=(1000000, )) t2 = threading.Thread(target=add_2, args=(1000000, )) t1.start() t2.start() while True: # 确保执行完毕,每隔1s判断一次 time.sleep(1) if len(threading.enumerate()) == 1: print("main-----%d" % g_num) breakif __name__ == "__main__": main() 运行结果 123thread2-----1197292thread2-----1253537main-----1253537 # 这个结果不一定，但往往小于预期的2000000 互斥锁 当对象被线程调用时给对象上锁，只有使用完成后才释放，保证同一资源只有一个线程在调用 12345678# 创建锁，默认未锁定mutex = threading.Lock()# 锁定mutex.acquire()# 释放mutex.release() 以上例中的add_1()为例 12345678910111213# 创建互斥锁mutex = threading.Lock()def add_1(times): global g_num mutex.acquire() for i in range(times): g_num += 1 mutex.release() print("thread1-----%d" % g_num)# add_2()改变的格式同add_1() 执行结果 123thread1-----1000000thread2-----2000000main-----2000000 上面的改动中将锁放在了循环之外，因而当一个线程抢到资源后后全部执行结束后才释放，在实际开发中，应当尽量减小锁的范围，本例中可将锁置于循环之中1234567def add_1(times): global g_num for i in range(times): mutex.acquire() g_num += 1 mutex.release() print("thread1-----%d" % g_num) 执行结果 123thread1-----1971999 # 两个线程交替拿到资源thread2-----2000000main-----2000000 死锁 死锁是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，如123456789101112131415mutexA = threading.Lock()mutexB = threading.Lock()def test1(): mutexA.acquire() time.sleep(1) mutexB.acquire() mutexA.release()def test2(): mutexB.acquire() time.sleep(1) mutexA.acquire() mutexB.release() 上例中，test1()先将mutexA上锁，test2()先将mutexB上锁当休眠结束后，test1()要给mutexB上锁，之后才能释放mutexA，而mutexB已经被test2()上锁占用，因而要等待test2()释放mutexB而test2()要释放mutexB，又要等待test1()释放mutexA，这样两者都不会进行到下一步，从而产生了死锁 避免： 程序设计中避免 添加超时算法等]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -238,7 +283,7 @@
   <entry>
     <title><![CDATA[python中关于全局变量]]></title>
     <url>%2F2019%2F09%2F03%2Fpython%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%2F</url>
-    <content type="text"><![CDATA[python中不允许直接修改全局变量的值 1234567891011num = 1 #定义全局变量def test1(): num = 2 print(num)def test2(): print(num)test1()test2() 按照其他语言的逻辑，全局变量在test1()中被修改为2，则在test2()中也输出2，而最终的输出结果是 1221 并未如所想，其原因是python不允许直接修改全局变量的值，如果使用赋值语句，会在函数内部创建一个同名局部变量，而此局部变量在函数执行完成后就会被系统回收 全局变量的修改 使用global 声明变量即可 123456789101112num = 1 #定义全局变量def test1(): global num num = 2 print(num)def test2(): print(num)test1()test2() 输出结果 1222 全局变量的命名 可以在全局变量前加g_ 或gl_ 的前缀]]></content>
+    <content type="text"><![CDATA[python中不允许直接修改全局变量的值 1234567891011num = 1 #定义全局变量def test1(): num = 2 print(num)def test2(): print(num)test1()test2() 按照其他语言的逻辑，全局变量在test1()中被修改为2，则在test2()中也输出2，而最终的输出结果是 1221 并未如所想，其原因是python不允许直接修改全局变量的值，如果使用赋值语句，会在函数内部创建一个同名局部变量，而此局部变量在函数执行完成后就会被系统回收 全局变量的修改 使用global 声明变量即可 123456789101112num = 1 #定义全局变量def test1(): global num num = 2 print(num)def test2(): print(num)test1()test2() 输出结果 1222 什么时候使用global 当对全局变量的指向进行修改的时候，需要使用global修饰，如果指向没有改变，则不需要，如：123456789101112131415161718num = 10num_list1 = [11, 22]num_list2 = [11, 22]def main(): global num global num_list2 num = 20 # 改变指向，需要声明 num_list1.append(33) # 不改变指向，不需声明 num_list2 += [33, 44] # 执行+=必须要声明global，因为这也是需要改变指向的操作，如果未声明程序就会崩溃if __name__ == "__main__": main() print(num) print(num_list1) print(num_list2) 运行结果 12320[11, 22, 33] # 使用append()方法没有改变指向，成功达到预期执行结果[11, 22, 33, 44] 全局变量的命名 可以在全局变量前加g_ 或gl_ 的前缀]]></content>
       <categories>
         <category>python</category>
       </categories>
