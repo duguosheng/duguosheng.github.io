@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python中range与xrange]]></title>
+    <url>%2F2019%2F09%2F24%2Fpython%E4%B8%ADrange%E4%B8%8Exrange%2F</url>
+    <content type="text"><![CDATA[在python2中存在xrange()，python3中range()的实现方式与xrange()相同，所以就不再有xrange() 用法 range(start, stop, step)与xrange(start, stop, step)用法相同 start：起始数字，可不填，默认0 stop：结束数字，必须填 step：步长，可不填，默认1 区别 range()直接生成一个列表，需要立即开辟内存空间 xrange()生成一个可以迭代的对象，即用即取 要生成很大的数字序列的时候，用xrange会比range性能优很多，因为不需要一上来就开辟一块很大的内存空间 12345678#! /usr/bin/python2# *-* coding: utf-8 *-*print("测试range")my_range = range(10)print(my_range)print("测试xrange")my_xrange = xrange(10)print(my_xrange) 运行结果 1234测试range[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]测试xrangexrange(10) 而使用for循环输出结果一致12345for i in range(3): print(i)for i in xrange(3): print(i) 输出结果 123456012012]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python基础</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[迭代器与生成器]]></title>
     <url>%2F2019%2F09%2F23%2F%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8%2F</url>
-    <content type="text"><![CDATA[迭代器 迭代是访问集合元素的一种方式，迭代器是一种可以记住遍历的位置的对象，从集合的第一个元素开始访问知道所有的元素访问完结束 查看是否可以迭代 可迭代的对象可以使用isinstance验证与Iterable的关系，返回True则可以迭代 迭代器可以使用isinstance验证与Iterator的关系，返回True则可以迭代12from collections import Iterableprint(isinstance([11, 22], Iterable)) 定义可以迭代的类 如果想让创建的对象可以迭代，必须实现__iter__()方法，且需要返回一个迭代器 返回的迭代器也是一个对象，这个对象要包含__iter__()方法和__next__()，方法，其中__next__()方法的返回值就是迭代的内容 可以重新写一个迭代器的类，用于返回值可以直接返回self，并在本类中实现__next__() 两个类实现迭代 123456789101112131415161718192021222324252627282930313233343536class my_iter(): def __init__(self): self.names = list() def my_iterator(self, name): self.names.append(name) def __iter__(self): # 返回一个迭代器对象 return my_itor(self)class my_itor(): def __init__(self, obj): self.obj = obj self.current_num = 0 def __iter__(self): pass def __next__(self): if self.current_num &lt; len(self.obj.names): ret = self.obj.names[self.current_num] self.current_num += 1 return ret else: # 超过容量抛出StopIteration来终止迭代 raise StopIterationmy_iterator = my_iter()my_iterator.my_iterator("张三")my_iterator.my_iterator("李四")my_iterator.my_iterator("王五")for temp in my_iterator: print(temp) 运行结果 123张三李四王五 实现了迭代功能 一个类实现迭代12345678910111213141516171819202122232425262728class my_iter(): def __init__(self): self.names = list() self.current_num = 0 def my_iterator(self, name): self.names.append(name) def __iter__(self): # 返回自身,会自动调用__next__()方法 return self def __next__(self): if self.current_num &lt; len(self.names): ret = self.names[self.current_num] self.current_num += 1 return ret else: # 超过容量抛出StopIteration来终止迭代 raise StopIterationmy_iterator = my_iter()my_iterator.my_iterator("张三")my_iterator.my_iterator("李四")my_iterator.my_iterator("王五")for temp in my_iterator: print(temp) 运行结果 123张三李四王五 也实现了迭代功能]]></content>
+    <content type="text"><![CDATA[迭代器 迭代是访问集合元素的一种方式，迭代器是一种可以记住遍历的位置的对象，从集合的第一个元素开始访问知道所有的元素访问完结束 查看是否可以迭代 可迭代的对象可以使用isinstance验证与Iterable的关系，返回True则可以迭代 迭代器可以使用isinstance验证与Iterator的关系，返回True则可以迭代12from collections import Iterableprint(isinstance([11, 22], Iterable)) 定义可以迭代的类 如果想让创建的对象可以迭代，必须实现__iter__()方法，且需要返回一个迭代器 返回的迭代器也是一个对象，这个对象要包含__iter__()方法和__next__()，方法，其中__next__()方法的返回值就是迭代的内容 可以重新写一个迭代器的类，用于返回值可以直接返回self，并在本类中实现__next__() 两个类实现迭代 123456789101112131415161718192021222324252627282930313233343536class my_iter(): def __init__(self): self.names = list() def my_iterator(self, name): self.names.append(name) def __iter__(self): # 返回一个迭代器对象 return my_itor(self)class my_itor(): def __init__(self, obj): self.obj = obj self.current_num = 0 def __iter__(self): pass def __next__(self): if self.current_num &lt; len(self.obj.names): ret = self.obj.names[self.current_num] self.current_num += 1 return ret else: # 超过容量抛出StopIteration来终止迭代 raise StopIterationmy_iterator = my_iter()my_iterator.my_iterator("张三")my_iterator.my_iterator("李四")my_iterator.my_iterator("王五")for temp in my_iterator: print(temp) 运行结果 123张三李四王五 实现了迭代功能 一个类实现迭代12345678910111213141516171819202122232425262728class my_iter(): def __init__(self): self.names = list() self.current_num = 0 def my_iterator(self, name): self.names.append(name) def __iter__(self): # 返回自身,会自动调用__next__()方法 return self def __next__(self): if self.current_num &lt; len(self.names): ret = self.names[self.current_num] self.current_num += 1 return ret else: # 超过容量抛出StopIteration来终止迭代 raise StopIterationmy_iterator = my_iter()my_iterator.my_iterator("张三")my_iterator.my_iterator("李四")my_iterator.my_iterator("王五")for temp in my_iterator: print(temp) 运行结果 123张三李四王五 也实现了迭代功能 迭代器在类型转换中的作用123my_list = [ 11, 22, 33 ]my_tuple = tuple(my_list)print(my_tuple) 运行结果 1(11, 22, 33) 实质上是先生成一个空的元组，然后调用my_list中的迭代方法，向my_tuple中添加内容 生成器 生成器是一种特殊的迭代器创建生成器方法一 将列表生成式的[]换成()123456&gt;&gt;&gt; l = [x for x in range(5)]&gt;&gt;&gt; l[0, 1, 2, 3, 4]&gt;&gt;&gt; g = (x for x in range(5))&gt;&gt;&gt; g&lt;generator object &lt;genexpr&gt; at 0x7f924b6088d0&gt; 方法二]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -86,8 +97,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>tcp</tag>
         <tag>python网络编程</tag>
+        <tag>tcp</tag>
       </tags>
   </entry>
   <entry>
