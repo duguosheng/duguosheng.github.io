@@ -63,7 +63,7 @@
 <meta property="og:site_name" content="Duguosheng的博客">
 <meta property="og:description" content="python中的迭代器与生成器">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-24T04:24:46.670Z">
+<meta property="og:updated_time" content="2019-09-24T08:19:51.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="迭代器与生成器">
 <meta name="twitter:description" content="python中的迭代器与生成器">
@@ -284,7 +284,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-09-24 12:24:46" itemprop="dateModified" datetime="2019-09-24T12:24:46+08:00">2019-09-24</time>
+                <time title="修改时间：2019-09-24 16:19:51" itemprop="dateModified" datetime="2019-09-24T16:19:51+08:00">2019-09-24</time>
               </span>
             
           
@@ -319,7 +319,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>2.3k</span>
+              <span>4.6k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -329,7 +329,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>2 分钟</span>
+              <span>4 分钟</span>
             </span>
           
             <div class="post-description">python中的迭代器与生成器</div>
@@ -403,13 +403,63 @@
 <blockquote>
 <p>实质上是先生成一个空的元组，然后调用<code>my_list</code>中的迭代方法，向<code>my_tuple</code>中添加内容</p>
 </blockquote>
+<h3 id="iter-和next-方法"><a href="#iter-和next-方法" class="headerlink" title="iter()和next()方法"></a><code>iter()</code>和<code>next()</code>方法</h3><ul>
+<li><code>iter()</code>用于获取可迭代对象的迭代器，实质上是调用了可迭代对象的<code>__iter__()</code>方法</li>
+<li><code>next()</code>方法用于获取迭代对象的下一条数据，迭代完成后抛出<code>StopIteration</code>的异常终止迭代<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1 = [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1_iter = iter(l1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(l1_iter)</span><br><span class="line"><span class="number">11</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(l1_iter)</span><br><span class="line"><span class="number">22</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(l1_iter)</span><br><span class="line"><span class="number">33</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(l1_iter)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 <h2 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h2><ul>
 <li>生成器是一种特殊的迭代器<h3 id="创建生成器"><a href="#创建生成器" class="headerlink" title="创建生成器"></a>创建生成器</h3><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4></li>
 <li>将列表生成式的<code>[]</code>换成<code>()</code><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">5</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g = (x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">5</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at <span class="number">0x7f924b6088d0</span>&gt;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4>
+<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><ul>
+<li>使用<code>yield</code>创建</li>
+<li><code>yield</code>会返回它后面的值，并将程序停留于此，等待下一次调用从当前位置开始执行</li>
+<li>示例<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出斐波纳奇数列</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_num</span><span class="params">(all_num)</span>:</span></span><br><span class="line">    print(<span class="string">"---1---"</span>)</span><br><span class="line">    a, b = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    current_num = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> current_num &lt; all_num:</span><br><span class="line">        print(<span class="string">"---2---"</span>)</span><br><span class="line">        <span class="comment"># 如果一个函数中有yield语句，那么这个就不再是函数，而是一个生成器的模板</span></span><br><span class="line">        <span class="keyword">yield</span> a</span><br><span class="line">        print(<span class="string">"---3---"</span>)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">        current_num += <span class="number">1</span></span><br><span class="line">        print(<span class="string">"---4---"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果在调用create_num的时候，发现这个函数中有yield，那么此时不是调用函数，而是创建一个生成器对象</span></span><br><span class="line">obj = create_num(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> obj:</span><br><span class="line">    print(num)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">---1---</span><br><span class="line">---2---</span><br><span class="line">0</span><br><span class="line">---3---</span><br><span class="line">---4---</span><br><span class="line">---2---</span><br><span class="line">1</span><br><span class="line">---3---</span><br><span class="line">---4---</span><br><span class="line">---2---</span><br><span class="line">1</span><br><span class="line">---3---</span><br><span class="line">---4---</span><br><span class="line">---2---</span><br><span class="line">2</span><br><span class="line">---3---</span><br><span class="line">---4---</span><br><span class="line">---2---</span><br><span class="line">3</span><br><span class="line">---3---</span><br><span class="line">---4---</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可见只输出了一次<code>---1---</code>，而当第二次循环的时候没有进行初始化，直接在<code>while</code>循环中的<code>yield</code>下面继续执行，即<code>yield</code>返回后面的<code>a</code>后，停留在当前位置，等待下一次执行</p>
+</blockquote>
+<blockquote>
+<p>另外，当使用同一个模板创建了多个生成器时，相互之间互不影响</p>
+<ul>
+<li>当生成器执行完成后有返回值时，可以使用异常获取</li>
+</ul>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_num</span><span class="params">(all_num)</span>:</span></span><br><span class="line">    a, b = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    current_num = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> current_num &lt; all_num:</span><br><span class="line">        <span class="keyword">yield</span> a</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">        current_num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"遍历结束"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj = create_num(<span class="number">5</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 使用next()启用生成器</span></span><br><span class="line">        ret = next(obj)</span><br><span class="line">        print(ret)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 获取返回值</span></span><br><span class="line">        print(e.value)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行结果</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">遍历结束</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动生成器"><a href="#启动生成器" class="headerlink" title="启动生成器"></a>启动生成器</h3><h4 id="使用next-启动"><a href="#使用next-启动" class="headerlink" title="使用next()启动"></a>使用<code>next()</code>启动</h4><blockquote>
+<p>上面的例子中都是使用<code>next()</code>启动的，这里不再介绍</p>
+</blockquote>
+<h4 id="使用send-启动"><a href="#使用send-启动" class="headerlink" title="使用send()启动"></a>使用<code>send()</code>启动</h4><ul>
+<li><code>send()</code>中可以填入参数作为<code>yield</code>执行后的返回值<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_num</span><span class="params">(all_num)</span>:</span></span><br><span class="line">    a, b = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    current_num = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> current_num &lt; all_num:</span><br><span class="line">        res = <span class="keyword">yield</span> a</span><br><span class="line">        print(res)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">        current_num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"遍历结束"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj = create_num(<span class="number">5</span>)</span><br><span class="line">ret = next(obj)</span><br><span class="line">print(ret)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        ret = obj.send(<span class="string">"哈哈"</span>)</span><br><span class="line">        print(ret)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(e.value)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">你好</span><br><span class="line">1</span><br><span class="line">你好</span><br><span class="line">1</span><br><span class="line">你好</span><br><span class="line">2</span><br><span class="line">你好</span><br><span class="line">3</span><br><span class="line">你好</span><br><span class="line">遍历结束</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可见，<code>send()</code>将<code>&quot;你好&quot;</code>作为参数传递给了<code>yield</code>执行后的结果<code>res</code>，并且，它是下一次进入函数才传递的，这点可以从结果中先输出<code>0</code>(<code>print(ret)</code>)，后输出<code>你好</code>(<code>print(res)</code>)可以看出来<br>因此，<code>send()</code>如果作为第一次启动生成器时，必须使用<code>obj.send(None)</code>，即不传入参数，或使用<code>next(obj)</code>来第一次启动</p>
+</blockquote>
+
     </div>
 
     
@@ -518,7 +568,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器"><span class="nav-number">1.</span> <span class="nav-text">迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看是否可以迭代"><span class="nav-number">1.1.</span> <span class="nav-text">查看是否可以迭代</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义可以迭代的类"><span class="nav-number">2.</span> <span class="nav-text">定义可以迭代的类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器"><span class="nav-number">3.</span> <span class="nav-text">生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建生成器"><span class="nav-number">3.1.</span> <span class="nav-text">创建生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法一"><span class="nav-number">3.1.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法二"><span class="nav-number">3.1.2.</span> <span class="nav-text">方法二</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器"><span class="nav-number">1.</span> <span class="nav-text">迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看是否可以迭代"><span class="nav-number">1.1.</span> <span class="nav-text">查看是否可以迭代</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义可以迭代的类"><span class="nav-number">2.</span> <span class="nav-text">定义可以迭代的类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#iter-和next-方法"><span class="nav-number">2.1.</span> <span class="nav-text">iter()和next()方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器"><span class="nav-number">3.</span> <span class="nav-text">生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建生成器"><span class="nav-number">3.1.</span> <span class="nav-text">创建生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法一"><span class="nav-number">3.1.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法二"><span class="nav-number">3.1.2.</span> <span class="nav-text">方法二</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动生成器"><span class="nav-number">3.2.</span> <span class="nav-text">启动生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用next-启动"><span class="nav-number">3.2.1.</span> <span class="nav-text">使用next()启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用send-启动"><span class="nav-number">3.2.2.</span> <span class="nav-text">使用send()启动</span></a></li></ol></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -597,12 +647,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">73k</span>
+    <span title="站点总字数">76k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:07</span>
+    <span title="站点阅读时长">1:09</span>
 </div>
 
         
