@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[安装谷歌访问助手]]></title>
+    <url>%2F2019%2F10%2F06%2F%E5%AE%89%E8%A3%85%E8%B0%B7%E6%AD%8C%E8%AE%BF%E9%97%AE%E5%8A%A9%E6%89%8B%2F</url>
+    <content type="text"><![CDATA[&emsp;&emsp;众所周知，谷歌浏览器最牛逼的地方就是在于插件众多，而插件可以提供丰富的用法，从而造就谷歌丰富的功能。一般来说，谷歌插件（也叫扩展）可以在谷歌应用商店下载安装，但是emmmm没办法直接上应用商店下载，但是有一个谷歌插件完美解决了这个问题，那就是谷歌访问助手。 &emsp;&emsp;本篇文章要讲的就是如何安装谷歌访问助手，然后利用这个插件登上应用商店，下载各种各样的谷歌插件，走向人生巅峰！ 1.下载谷歌访问助手的安装包链接：https://pan.baidu.com/s/1gjbVfFjDRQvUcKjNfYeAXQ 提取码：x9ox 首先就是下载这个安装包，然后解压，解压后是一个文件夹，而不是一个单纯的.crx文件，现在单纯的.crx文件已经不能直接安装在浏览器上了。 解压后打开谷歌浏览器，点击浏览器右上角的三个竖点点，点击更多工具—&gt;扩展程序（当然，也可以直接在地址栏中输入chrome://extensions/，和这些操作结果是一样的。） 如下图 进入这个扩展程序页面（即插件页面） 记得打开开发者模式。 将刚才解压好的文件夹里的文件夹直接拖进来。 拖进来就直接安装了（因为我之前安装过，为了演示删掉重装，没安装过得应该可能会弹出提示，点击确定就行了） 点击永久免费激活，进入如下图页面，再点击往选项页面 勾选网址 安装好了就是这个样子 温馨提示：有时候这个插件是灰色的，不能用就刷新重启，不然就把浏览器关了再来。 接下去就是去谷歌应用商店愉快地下载插件了，点击应用，我的是在浏览器左上角 转自：https://www.jianshu.com/p/ca06b16613cc]]></content>
+      <categories>
+        <category>problems</category>
+      </categories>
+      <tags>
+        <tag>chrome</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[arch下PKGBUILD包的安装]]></title>
     <url>%2F2019%2F10%2F04%2Farch%E4%B8%8BPKGBUILD%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85%2F</url>
     <content type="text"><![CDATA[cd到有PKGBUILD文件的目录下1234# 生成后缀.pkg.tar.xz的压缩文件makepkg# 使用pacman安装sudo pacman -U *.pkg.tar.xz]]></content>
@@ -26,7 +37,7 @@
   <entry>
     <title><![CDATA[html表格表单]]></title>
     <url>%2F2019%2F10%2F03%2Fhtml%E8%A1%A8%E6%A0%BC%E8%A1%A8%E5%8D%95%2F</url>
-    <content type="text"><![CDATA[表格 &lt;table&gt;标签：声明一个表格，它的常用属性如下 border：定义表格的边框，设置值是数值 width：表格宽度 height：表格高度 cellpadding：定义单元格内容与边框之间的间距，设置值是数值 cellspacing：定义单元格与单元格之间的间距，设置值是数值 align：设置整体表格相对于浏览器窗口的水平对齐方式，设置值有left，center，right &lt;tr&gt;标签：定义表格中的一行 &lt;td&gt;和&lt;th&gt;标签：定义一行中的一个单元格，&lt;td&gt;表示普通单元格，&lt;th&gt;表示表头单元格，常用属性如下 align：设置单元格中的内容水平对齐方式，设置值有left，center，right valign：设置单元格中内容垂直对齐方式：设置值有top，middle，bottom colspan：设置单元格水平合并，设置值是数值 rowspan：设置单元格垂直合并，设置值是数值]]></content>
+    <content type="text"><![CDATA[表格 &lt;table&gt;标签：声明一个表格，它的常用属性如下 border：定义表格的边框，设置值是数值 width：表格宽度 height：表格高度 cellpadding：定义单元格内容与边框之间的间距，设置值是数值 cellspacing：定义单元格与单元格之间的间距，设置值是数值 align：设置整体表格相对于浏览器窗口的水平对齐方式，设置值有left，center，right &lt;tr&gt;标签：定义表格中的一行 &lt;td&gt;和&lt;th&gt;标签：定义一行中的一个单元格，&lt;td&gt;表示普通单元格，&lt;th&gt;表示表头单元格，常用属性如下 align：设置单元格中的内容水平对齐方式，设置值有left，center，right valign：设置单元格中内容垂直对齐方式：设置值有top，middle，bottom colspan：设置单元格水平合并，设置值是数值 rowspan：设置单元格垂直合并，设置值是数值 bgcolor：设置背景色]]></content>
       <categories>
         <category>html</category>
       </categories>
@@ -288,8 +299,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>udp</tag>
         <tag>python网络编程</tag>
+        <tag>udp</tag>
       </tags>
   </entry>
   <entry>
