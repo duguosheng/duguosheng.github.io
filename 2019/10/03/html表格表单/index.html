@@ -63,12 +63,15 @@
 <meta property="og:site_name" content="Duguosheng的博客">
 <meta property="og:description" content="表单表格">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/03/html表格表单/ht_3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/03/html表格表单/ht_4.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/03/html表格表单/ht_1.png">
-<meta property="og:updated_time" content="2019-10-07T15:58:35.145Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/03/html表格表单/ht_2.png">
+<meta property="og:updated_time" content="2019-10-10T03:07:36.222Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="html表格表单">
 <meta name="twitter:description" content="表单表格">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/03/html表格表单/ht_1.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/03/html表格表单/ht_3.png">
   <link rel="canonical" href="http://yoursite.com/2019/10/03表格表单/">
 
 
@@ -297,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-07 23:58:35" itemprop="dateModified" datetime="2019-10-07T23:58:35+08:00">2019-10-07</time>
+                <time title="修改时间：2019-10-10 11:07:36" itemprop="dateModified" datetime="2019-10-10T11:07:36+08:00">2019-10-10</time>
               </span>
             
           
@@ -332,7 +335,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>2.3k</span>
+              <span>3.9k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -342,7 +345,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>2 分钟</span>
+              <span>4 分钟</span>
             </span>
           
             <div class="post-description">表单表格</div>
@@ -360,8 +363,12 @@
         <a id="more"></a>
 
 <h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><ul>
+<li><code>&lt;caption&gt;</code>标签：表格标题</li>
 <li><code>&lt;table&gt;</code>标签：声明一个表格，它的常用属性如下<ul>
+<li><code>bgcolor</code>：定义背景色</li>
+<li><code>background</code>：背景图片</li>
 <li><code>border</code>：定义表格的边框，设置值是数值</li>
+<li><code>bordercolor</code>：定义表格的边框的颜色</li>
 <li><code>width</code>：表格宽度</li>
 <li><code>height</code>：表格高度</li>
 <li><code>cellpadding</code>：定义单元格内容与边框之间的间距，设置值是数值</li>
@@ -383,14 +390,79 @@
 <p>用于收集不同类型的用户输入</p>
 </blockquote>
 <h4 id="form标签"><a href="#form标签" class="headerlink" title="form标签"></a>form标签</h4><ul>
-<li>定义整体的表单区域</li>
-<li><code>action</code>属性定义表单数据提交地址</li>
-<li><code>method</code>属性定义表单提交的方式，一般有<code>get</code>和<code>post</code>方式</li>
+<li>定义整体的表单区域<blockquote>
+<p> <code>action</code>属性定义表单数据提交地址</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>登陆界面<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"success.html"</span>&gt;</span>    <span class="tag">&lt;<span class="name">p</span>&gt;</span>请输入帐号：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">placeholder</span>=<span class="string">"请输入手机号或者邮箱"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>请输入密码：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"登录"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"reset"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
+<p>另外在当前目录下新建一个<code>success.html</code>显示内容为<strong>欢迎你</strong></p>
+<blockquote>
+<p>运行</p>
+</blockquote>
+<p><img src="ht_3.png" alt="action"><br>点击登录<br><img src="ht_4.png" alt="登录"></p>
+<p>成功跳转</p>
+<blockquote>
+<p><code>method</code>属性定义表单提交的方式，一般有<code>get</code>和<code>post</code>方式<br><code>post</code>方法通常用于提交数据，数据的内容不会显示在浏览器的地址栏中，且对数据的长度没有限制。<br><code>get</code>方法会将你的数据在浏览器地址栏中显示出来，而且由于URL长度有限，所以传递的数据长度也受限制。</p>
+</blockquote>
+<h4 id="lt-input-gt-标签："><a href="#lt-input-gt-标签：" class="headerlink" title="&lt;input&gt;标签："></a><code>&lt;input&gt;</code>标签：</h4><blockquote>
+<p><code>type</code>属性：<br>  type=”text”：输入文本<br>  type=”password”：输入密码<br>  type=”submit”：提交表单，显示文字默认是<strong>提交</strong>，可以使用<code>value=&quot;&quot;</code>更改<br>  type=”reset”：清空数据，显示文字默认是<strong>重置</strong>，可以使用<code>value=&quot;&quot;</code>更改<br>  type=”botton”：自定义按键<br>  type=”checkbox”：多选框<br>  type=”radio”：单选框，必须有<code>name</code>属性，且<code>name</code>值必须相同<br>  type=”hidden”：隐藏<br>  type=”file”：上传文件<br>h5新增：<br>  type=”date”：输入日期<br>  type=”week”：输入第几周<br>  type=”url”：输入网址<br>  type=”email”：输入邮箱<br>  type=”cloor”：输入颜色<br>  type=”range”：还需要设定最小值，最大值，是一个拖动条<br>  type=”search”：搜索内容</p>
+</blockquote>
+<blockquote>
+<p><code>name</code>属性：为输入内容定义名字</p>
+</blockquote>
+<blockquote>
+<p><code>checked</code>属性：布尔类型，在某个单选或复选框内加入表示默认选择</p>
+</blockquote>
+<blockquote>
+<p><code>required</code>属性：布尔类型，加上它表示此项必须要填</p>
+</blockquote>
+<blockquote>
+<p><code>readonly</code>属性：布尔类型，只读，表示只能查看，不能修改</p>
+</blockquote>
+<blockquote>
+<p><code>value</code>属性：<br>存储填入的值</p>
+<ul>
+<li><code>placeholder</code>：提示信息</li>
+</ul>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>请输入帐号：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">placeholder</span>=<span class="string">"请输入手机号或者邮箱"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行结果<br><img src="ht_1.png" alt="提示信息"></p>
+</blockquote>
+<h4 id="下拉列表"><a href="#下拉列表" class="headerlink" title="下拉列表"></a>下拉列表</h4><ul>
+<li><code>&lt;select&gt;</code>标签：定义下拉框区域<blockquote>
+<p><code>size</code>属性：定义显示的下拉菜单中的数量</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p><code>name</code>属性：定义名称</p>
+<ul>
+<li><code>&lt;option&gt;</code>标签：下拉框中的选项<br><code>selected</code>属性：布尔类型，表示缺省选择这个选项</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>&lt;optgroup&gt;</code>标签：定义下拉框组，里面继续嵌套<code>&lt;option&gt;</code></li>
+</ul>
+<h4 id="文本框"><a href="#文本框" class="headerlink" title="文本框"></a>文本框</h4><ul>
+<li><code>&lt;textarea&gt;</code>标签:<blockquote>
+<p><code>rows</code>：定义行数<br><code>cols</code>：定义列数</p>
+</blockquote>
+</li>
+<li><code>placeholder</code>：提示信息</li>
+</ul>
+<h4 id="label标签"><a href="#label标签" class="headerlink" title="label标签"></a>label标签</h4><blockquote>
+<p>一般可以给如上面的<em>请输入帐号</em>加一个<code>&lt;label&gt;</code>标签，无实际效果，只是为了后面加样式</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span>&gt;</span>请输入帐号<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"id"</span> <span class="attr">type</span>=<span class="string">"text"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>注册表单<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>用户名：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">""</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>密&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;码：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">""</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>性&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;别：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"gender"</span> /&gt;</span> 男</span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"gender"</span> /&gt;</span> 女</span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>爱&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;好：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"hobby"</span> /&gt;</span> 看电影</span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"hobby"</span> /&gt;</span> 学习</span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"hobby"</span> /&gt;</span> 读书</span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>照&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;片：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"photo"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>描&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;述：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">name</span>=<span class="string">""</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">cols</span>=<span class="string">"30"</span> <span class="attr">rows</span>=<span class="string">"5"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>籍&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;贯：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">select</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">option</span>&gt;</span>北京<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">option</span>&gt;</span>上海<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">option</span>&gt;</span>天津<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">option</span>&gt;</span>重庆<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"reset"</span> <span class="attr">value</span>=<span class="string">"重置"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>运行结果<br><img src="ht_1.png" alt="表单"></p>
+<p>运行结果<br><img src="ht_2.png" alt="表单"></p>
 </blockquote>
 
     </div>
@@ -440,7 +512,7 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/10/02/html的段落/" rel="next" title="html基本标签">
+                <a href="/2019/10/02/html的基本标签/" rel="next" title="html基本标签">
                   <i class="fa fa-chevron-left"></i> html基本标签
                 </a>
               
@@ -498,7 +570,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#表格"><span class="nav-number">1.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表单"><span class="nav-number">2.</span> <span class="nav-text">表单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#form标签"><span class="nav-number">2.0.1.</span> <span class="nav-text">form标签</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#表格"><span class="nav-number">1.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表单"><span class="nav-number">2.</span> <span class="nav-text">表单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#form标签"><span class="nav-number">2.0.1.</span> <span class="nav-text">form标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lt-input-gt-标签："><span class="nav-number">2.0.2.</span> <span class="nav-text">&lt;input&gt;标签：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下拉列表"><span class="nav-number">2.0.3.</span> <span class="nav-text">下拉列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文本框"><span class="nav-number">2.0.4.</span> <span class="nav-text">文本框</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#label标签"><span class="nav-number">2.0.5.</span> <span class="nav-text">label标签</span></a></li></ol></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -517,7 +589,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -530,7 +602,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -543,7 +615,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -579,12 +651,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">93k</span>
+    <span title="站点总字数">102k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:25</span>
+    <span title="站点阅读时长">1:33</span>
 </div>
 
         
