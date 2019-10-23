@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C语言中数据类型扩展]]></title>
+    <url>%2F2019%2F10%2F23%2FC%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%A9%E5%B1%95%2F</url>
+    <content type="text"><![CDATA[整型进制表示 输入 123456//二进制使用‘0b’或者‘0B’int b_num = 0b101;//八进制使用‘0‘int b_num = 0706;//十六进制使用‘0x‘或’0X‘int b_num = 0xabc; 输出 常用库函数 以下库函数包含在stdlib.h中1234int atoi(const char +nptr); //将字符串转化为int整数long atol(const char *nptr); // 把字符串nptr转换为long整数int abs(const int j); // 求int整数的绝对值long labs(const long int j); // 求long整数的绝对值 生成随机数12void srand(unsigned int seed); //随机数生成器的初始化函数int rand(); //获得一个随机数 srand函数初始化随机数发生器（俗称种子），在实际开发中，我们可以用时间作为参数，只要每次播种的时间不同，那么生成的种子就不同，最终的随机数也就不同，通常我们采用&lt;time.h&gt;头文件中的time函数即可得到一个精确到秒的时间作为种子。rand函数会随机生成一个位于0 ~ RAND_MAX之间的整数。而对RAND_MAX是&lt;stdlib.h&gt;头文件中的一个宏，它用来指明rand所能返回的随机数的最大值 示例123456789101112#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;time.h&gt;int main()&#123; srand(time(0)); for(char i=0; i&lt;5; i++) &#123; printf("%d\n", rand()); &#125;&#125; 运行结果 生成一定范围的随机数12int a = rand() % 50; // 产生0~49 int a = rand() % 51 + 100; // 产生100~150的随机数 字符 常用的库函数123456789#include &lt;ctype.h&gt;int isalpha(int ch); //若ch是字母（'A'-'Z','a'-'z'）返回非0值，否则返回0。int isalnum(int ch); //若ch是字母（'A'-'Z','a'-'z'）或数字（'0'-'9'），返回非0值,否则返回0。int isdigit(int ch); //若ch是数字（'0'-'9'）返回非0值，否则返回0。int islower(int ch); //若ch是小写字母（'a'-'z'）返回非0值，否则返回0。int isupper(int ch); //若ch是大写字母（'A'-'Z'）返回非0值，否则返回0。int tolower(int ch); //若ch是大写字母（'A'-'Z'）返回相应的小写字母（'a'-'z'）。int toupper(int ch); //若ch是小写字母（'a'-'z'）返回相应的大写字母（'A'-'Z'） 浮点型1234567891011121314151617#include &lt;stdio.h&gt;int main()&#123; float num1 = 111.1; double num2 = 111.1; printf("num1=%f\n",num1); printf("num2=%lf\n",num2); if(num1==111.1) &#123; printf("11111"); &#125; if(num2==111.1) &#123; printf("22222"); &#125;&#125; 运行结果 123num1=111.099998num2=111.10000022222 可见 float数据类型表达的是一个近似的数，不是准确的，小数点后的n位有误差，浮点数的位数越大，误差越大double数据类型表达的也是一个近似的数，不是准确的，小数点后的n位有误差，浮点数的位数越大，误差越大float不可以用来比较是否相等，double可以 常用库函数12345678double atof(const char *nptr); // 把字符串nptr转换为doubledouble fabs(double x); // 求双精度实数x的绝对值double pow(double x, double y); // 求 x 的 y 次幂（次方）double round(double x); // double四舍五入double ceil(double x); // double向上取整数double floor(double x); // double向下取整数double fmod(double x,double y); // 求x/y整除后的双精度余数double modf(double val,double *ip); // 把双精度val分解成整数部分和小数部分，整数部分存放在ip所指的变量中，返回小数部分。]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C数据类型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[css伪类标签]]></title>
     <url>%2F2019%2F10%2F12%2Fcss%E4%BC%AA%E7%B1%BB%E6%A0%87%E7%AD%BE%2F</url>
     <content type="text"><![CDATA[伪类标签 含义 a:link 普通的、未被访问的链接 a:visited 用户已访问的链接 a:hover, p:hover, #id:hover 鼠标指针位于链接的上方 a:active, p:active, #id:active 链接被点击的时刻 E:not(#p1) 所有的&lt;E&gt;标签，除了id为p1的 E:first-child 父类的第一个子级，如li:first-child表示选择所有作为第一个子级的li E:last-child 父类的最后一个子级，如li:last-child表示选择所有作为最后一个子级的li E:only-child 只有一个子级，如li:only-child表示选择li，且它的同级必须只有一个li E:empty 匹配为空的&lt;E&gt;标签 E:checked 匹配用户界面上处于选中状态的元素&lt;E&gt;，用于input type为radio与checkbox时，或&lt;option&gt; 伪对象标签 作用 E::before 在&lt;E&gt;前面添加内容 E::after 在&lt;E&gt;后面添加内容 当为链接的不同状态设置样式时，请按照以下次序规则： a:hover 必须位于 a:link 和 a:visited 之后a:active 必须位于 a:hover 之后 first-child实例 12345678910111213141516&lt;head&gt; &lt;style&gt; /*注意不是ul:first-child*/ li:first-child&#123; background-color: gold; &#125; &lt;/style&gt;&lt;/head&gt;&lt;body&gt; &lt;ul&gt; &lt;li&gt;abc1&lt;/li&gt; &lt;li&gt;abc2&lt;/li&gt; &lt;li&gt;abc3&lt;/li&gt; &lt;li&gt;abc4&lt;/li&gt; &lt;/ul&gt;&lt;/body&gt; 效果 checked实例123456789101112&lt;head&gt; &lt;style&gt; option:checked&#123; background-color: red; &#125; /* +表示同级 */ input:checked+span&#123; color: red; &#125; &lt;/style&gt;&lt;/head&gt;&lt;/body /&gt; 效果 伪对象标签123456789101112&lt;head&gt; &lt;style&gt; p::before&#123; content: "你好"; color: red; &#125; &lt;/style&gt;&lt;/head&gt;&lt;body&gt; &lt;p&gt;世界&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; 效果]]></content>
@@ -366,8 +377,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>udp</tag>
         <tag>python网络编程</tag>
+        <tag>udp</tag>
       </tags>
   </entry>
   <entry>
@@ -389,8 +400,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>python基础</tag>
         <tag>property装饰器</tag>
+        <tag>python基础</tag>
       </tags>
   </entry>
   <entry>
