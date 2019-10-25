@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="格式化输出的函数有printf、sprintf和snprintf等">
+<meta name="keywords" content="格式化输出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言格式化输出">
+<meta property="og:url" content="http://yoursite.com/2019/10/23/C语言格式化输出/index.html">
+<meta property="og:site_name" content="Duguosheng的博客">
+<meta property="og:description" content="格式化输出的函数有printf、sprintf和snprintf等">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-25T05:43:49.067Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C语言格式化输出">
+<meta name="twitter:description" content="格式化输出的函数有printf、sprintf和snprintf等">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/23/C语言格式化输出/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C语言格式化输出 | Duguosheng的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duguosheng的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习记录，点滴成长</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/duguosheng" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/23/C语言格式化输出/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+      <meta itemprop="name" content="Duguosheng">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duguosheng的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言格式化输出
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-23 23:06:18" itemprop="dateCreated datePublished" datetime="2019-10-23T23:06:18+08:00">2019-10-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-25 13:43:49" itemprop="dateModified" datetime="2019-10-25T13:43:49+08:00">2019-10-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C语言/" itemprop="url" rel="index">
+                    <span itemprop="name">C语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+            <div class="post-description">格式化输出的函数有printf、sprintf和snprintf等</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <a id="more"></a>
+
+
+<h2 id="格式说明符"><a href="#格式说明符" class="headerlink" title="格式说明符"></a>格式说明符</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%[flags][width][.prec]type</span><br></pre></td></tr></table></figure>
+
+<h3 id="类型符type"><a href="#类型符type" class="headerlink" title="类型符type"></a>类型符type</h3><table>
+<thead>
+<tr>
+<th>说明</th>
+<th>标识符</th>
+<th>含义</th>
+<th>标识符</th>
+<th>含义</th>
+<th>标识符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>十进制有符号</td>
+<td>%hd</td>
+<td>short</td>
+<td>%d</td>
+<td>int</td>
+<td>%ld</td>
+<td>long</td>
+</tr>
+<tr>
+<td>十进制无符号</td>
+<td>%hu</td>
+<td>short</td>
+<td>%u</td>
+<td>int</td>
+<td>%lu</td>
+<td>long</td>
+</tr>
+<tr>
+<td></td>
+<td>%c</td>
+<td>输出字符</td>
+<td>%f</td>
+<td>float</td>
+<td>%lf</td>
+<td>double</td>
+</tr>
+<tr>
+<td></td>
+<td>%s</td>
+<td>输出字符串</td>
+<td>%e</td>
+<td>科学计数法输出double</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="宽度width"><a href="#宽度width" class="headerlink" title="宽度width"></a>宽度width</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"=%5s=\n"</span>, <span class="string">"abc"</span>);  <span class="comment">//输出=  abc=</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="对齐标志flags"><a href="#对齐标志flags" class="headerlink" title="对齐标志flags"></a>对齐标志flags</h3><ul>
+<li><code>+</code> 左对齐</li>
+<li><code>-</code> 右对齐</li>
+<li>缺省为<code>+</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"=%-5s="</span>, <span class="string">"abc"</span>);  <span class="comment">//输出=abc  =</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果输出整数或浮点数可在左补0<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"=%05d="</span>, <span class="number">123</span>);  <span class="comment">//输出=00123=</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="精度prec"><a href="#精度prec" class="headerlink" title="精度prec"></a>精度prec</h3><ul>
+<li>如果输出是浮点数，它用于控制输出内容的精度，即保留位数，后面的四舍五入<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"=%010.2lf="</span>, <span class="number">123.456</span>);  <span class="comment">//输出=0000123.46=</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="格式化输出到字符串"><a href="#格式化输出到字符串" class="headerlink" title="格式化输出到字符串"></a>格式化输出到字符串</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">snprintf</span><span class="params">(<span class="keyword">char</span> *str, <span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>是参数个数可变的函数</p>
+<p>功能：printf是把结果输出到屏幕，sprintf把格式化输出的内容保存到字符串str中，snprintf的n类似于strncpy中的n，意思是只获取输出结果的前n-1个字符，不是n个字符。</p>
+<p>在之前的章节中，介绍过把字符串转换为整数和浮点数据的库函数，C语言没有提供把整数和浮点数据转换为字符串的库函数，而是采用sprintf和snprintf函数格式化输出到字符串。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">300</span>];</span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"%s今年%d岁了\n"</span>, <span class="string">"小明"</span>, <span class="number">18</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br><span class="line"><span class="built_in">snprintf</span>(str, <span class="number">11</span>, <span class="string">"%s今年%d岁了"</span>, <span class="string">"小明"</span>, <span class="number">18</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>输出结果</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">小明今年18岁了</span><br><span class="line">小明今�</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>snprintf截取中文不当会乱码</p>
+</blockquote>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @func: 解析xml文件</span></span><br><span class="line"><span class="comment"> * @param: in_XMLBuffer所要查询的段落，in_FieldName所要查询的信息，out_Value获取内容存放的变量的指针</span></span><br><span class="line"><span class="comment"> * @return: 0-成功，-1-失败</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetXMLBuffer</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *in_XMLBuffer,<span class="keyword">const</span> <span class="keyword">char</span> *in_FieldName,<span class="keyword">char</span> *out_Value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> begin_filed_name[<span class="built_in">strlen</span>(in_FieldName)+<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">char</span> end_filed_name[<span class="built_in">strlen</span>(in_FieldName)+<span class="number">3</span>];</span><br><span class="line">    <span class="built_in">memset</span>(begin_filed_name, <span class="number">0</span>, <span class="keyword">sizeof</span>(begin_filed_name));</span><br><span class="line">    <span class="built_in">memset</span>(end_filed_name, <span class="number">0</span>, <span class="keyword">sizeof</span>(end_filed_name));</span><br><span class="line">    <span class="built_in">sprintf</span>(begin_filed_name, <span class="string">"&lt;%s&gt;"</span>, in_FieldName);</span><br><span class="line">    <span class="built_in">sprintf</span>(end_filed_name, <span class="string">"&lt;/%s&gt;"</span>, in_FieldName);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *start, *end;</span><br><span class="line">    start = end = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//寻找开始和结束地址</span></span><br><span class="line">    start = <span class="built_in">strstr</span>(in_XMLBuffer, begin_filed_name);</span><br><span class="line">    end = <span class="built_in">strstr</span>(in_XMLBuffer, end_filed_name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(start==<span class="number">0</span> || end==<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s:not found\n"</span>, in_FieldName);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> len = end-start;</span><br><span class="line">    <span class="built_in">strncpy</span>(out_Value, start+<span class="built_in">strlen</span>(begin_filed_name), end-start-<span class="built_in">strlen</span>(begin_filed_name));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">int main()</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    char str_XML_buffer[301], str_value[51], str_age[51];</span></span><br><span class="line"><span class="comment">    memset(str_XML_buffer, 0, sizeof(str_XML_buffer));</span></span><br><span class="line"><span class="comment">    memset(str_value, 0, sizeof(str_value));</span></span><br><span class="line"><span class="comment">    strcpy(str_XML_buffer, "&lt;name&gt;西施&lt;/name&gt;&lt;age&gt;18&lt;/age&gt;&lt;sc&gt;火辣&lt;/sc&gt;&lt;yz&gt;漂亮&lt;/yz&gt;");</span></span><br><span class="line"><span class="comment">    GetXMLBuffer(str_XML_buffer, "name", str_value);</span></span><br><span class="line"><span class="comment">    GetXMLBuffer(str_XML_buffer, "nme", str_value);</span></span><br><span class="line"><span class="comment">    GetXMLBuffer(str_XML_buffer, "age", str_age);</span></span><br><span class="line"><span class="comment">    printf("%s", str_value);</span></span><br><span class="line"><span class="comment">    printf("%s", str_age);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div></div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Duguosheng 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Duguosheng 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/格式化输出/" rel="tag"># 格式化输出</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/23/C语言中数据类型扩展/" rel="next" title="C语言中数据类型扩展">
+                  <i class="fa fa-chevron-left"></i> C语言中数据类型扩展
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/25/C语言main函数的参数/" rel="prev" title="C语言main函数的参数">
+                  C语言main函数的参数 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#格式说明符"><span class="nav-number">1.</span> <span class="nav-text">格式说明符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型符type"><span class="nav-number">1.1.</span> <span class="nav-text">类型符type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#宽度width"><span class="nav-number">1.2.</span> <span class="nav-text">宽度width</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对齐标志flags"><span class="nav-number">1.3.</span> <span class="nav-text">对齐标志flags</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#精度prec"><span class="nav-number">1.4.</span> <span class="nav-text">精度prec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式化输出到字符串"><span class="nav-number">2.</span> <span class="nav-text">格式化输出到字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个例子"><span class="nav-number">3.</span> <span class="nav-text">一个例子</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="Duguosheng"
+    src="/images/touxiang1.gif">
+  <p class="site-author-name" itemprop="name">Duguosheng</p>
+  <div class="site-description" itemprop="description">武汉大学17级，机械专业</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duguosheng</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">110k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:40</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":175,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>

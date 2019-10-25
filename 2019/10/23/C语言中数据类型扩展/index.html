@@ -60,7 +60,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/10/23/C语言中数据类型扩展/c1.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/23/C语言中数据类型扩展/c2.png">
-<meta property="og:updated_time" content="2019-10-23T11:55:11.323Z">
+<meta property="og:updated_time" content="2019-10-23T14:59:09.550Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C语言中数据类型扩展">
 <meta name="twitter:description" content="介绍一些C语言中数据类型的扩展知识以及常用库函数">
@@ -245,7 +245,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-10-23 18:30:22 / 修改时间：19:55:11" itemprop="dateCreated datePublished" datetime="2019-10-23T18:30:22+08:00">2019-10-23</time>
+              <time title="创建时间：2019-10-23 18:30:22 / 修改时间：22:59:09" itemprop="dateCreated datePublished" datetime="2019-10-23T18:30:22+08:00">2019-10-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,14 +272,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
+              <span>4.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>4 分钟</span>
             </span>
             <div class="post-description">介绍一些C语言中数据类型的扩展知识以及常用库函数</div>
 
@@ -294,6 +294,7 @@
       
         <a id="more"></a>
 
+<p>一大部分摘自<a href="https://blog.csdn.net/wucz122140729" target="_blank" rel="noopener">码农有道</a></p>
 <h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><h3 id="进制表示"><a href="#进制表示" class="headerlink" title="进制表示"></a>进制表示</h3><ul>
 <li><p>输入</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//二进制使用‘0b’或者‘0B’</span></span><br><span class="line"><span class="keyword">int</span> b_num = <span class="number">0b101</span>;</span><br><span class="line"><span class="comment">//八进制使用‘0‘</span></span><br><span class="line"><span class="keyword">int</span> b_num = <span class="number">0706</span>;</span><br><span class="line"><span class="comment">//十六进制使用‘0x‘或’0X‘</span></span><br><span class="line"><span class="keyword">int</span> b_num = <span class="number">0xabc</span>;</span><br></pre></td></tr></table></figure>
@@ -342,6 +343,60 @@
 </ul>
 <h3 id="常用库函数-1"><a href="#常用库函数-1" class="headerlink" title="常用库函数"></a>常用库函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">atof</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *nptr)</span></span>;       <span class="comment">// 把字符串nptr转换为double</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">fabs</span><span class="params">(<span class="keyword">double</span> x)</span></span>;               <span class="comment">// 求双精度实数x的绝对值</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">double</span> y)</span></span>;     <span class="comment">// 求 x 的 y 次幂（次方）</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">round</span><span class="params">(<span class="keyword">double</span> x)</span></span>;              <span class="comment">// double四舍五入</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">ceil</span><span class="params">(<span class="keyword">double</span> x)</span></span>;                 <span class="comment">// double向上取整数</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">floor</span><span class="params">(<span class="keyword">double</span> x)</span></span>;               <span class="comment">// double向下取整数</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">fmod</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>;     <span class="comment">// 求x/y整除后的双精度余数</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">modf</span><span class="params">(<span class="keyword">double</span> val,<span class="keyword">double</span> *ip)</span></span>; <span class="comment">// 把双精度val分解成整数部分和小数部分，整数部分存放在ip所指的变量中，返回小数部分。</span></span><br></pre></td></tr></table></figure>
 
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><h3 id="常用库函数-2"><a href="#常用库函数-2" class="headerlink" title="常用库函数"></a>常用库函数</h3><ul>
+<li>获取字符串的长度（strlen）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span>  <span class="built_in">strlen</span>( <span class="keyword">const</span> <span class="keyword">char</span>*  str);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功能：计算字符串长度，不包含\0<br>返回值：返回字符串的字符数<br>strlen 函数计算的是字符串的实际长度，遇到第一个\0结束。<br>函数返回值一定是size_t，是无符号的整数，即typedef unsigned int size_t。<br>如果你只定义字符串没有初始化，结果是不定的，它会从首地址一直找下去，直到遇到\0停止。</p>
+<p>还有一个注意事项，sizeof返回的是变量所占的内存数，不是实际内容的长度。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> buf[<span class="number">10</span>] = <span class="string">"abc"</span>;</span><br><span class="line"><span class="keyword">sizeof</span>(buf)为<span class="number">10</span>。</span><br><span class="line"><span class="built_in">strlen</span>(buf)是<span class="number">3</span>。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>字符串复制或赋值（strcpy）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcpy</span><span class="params">(<span class="keyword">char</span>* dest, <span class="keyword">const</span> <span class="keyword">char</span>* src)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功 能: 将参数src字符串拷贝至参数dest所指的地址。<br>返回值: 返回参数dest的字符串起始地址。<br>复制完字符串后，在dest后追加0。<br>如果参数dest所指的内存空间不够大，可能会造成缓冲溢出的错误情况。</p>
+<ul>
+<li>字符串复制或赋值（strncpy）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">strncpy</span><span class="params">(<span class="keyword">char</span>* dest,<span class="keyword">const</span> <span class="keyword">char</span>* src, <span class="keyword">const</span> <span class="keyword">size_t</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功能：把src前n字符的内容复制到dest中<br>返回值：dest字符串起始地址。<br>如果src字符串长度小于n，则拷贝完字符串后，在dest后追加0，直到n个。<br>如果src的长度大于等于n，就截取src的前n个字符，不会在dest后追加0；<br>dest必须有足够的空间放置n个字符，否则可能会造成缓冲溢出的错误情况。</p>
+<ul>
+<li>字符串拼接（strcat）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span>* dest,<span class="keyword">const</span> <span class="keyword">char</span>* src)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功能：将src字符串拼接到dest所指的字符串尾部。<br>返回值：返回dest字符串起始地址。<br>dest最后原有的结尾字符\0会被覆盖掉，并在连接后的字符串的尾部再增加一个\0。<br>dest要有足够的空间来容纳要拼接的字符串，否则可能会造成缓冲溢出的错误情况。</p>
+<ul>
+<li>字符串拼接（strncat）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strncat</span> <span class="params">(<span class="keyword">char</span>* dest,<span class="keyword">const</span> <span class="keyword">char</span>* src, <span class="keyword">const</span> <span class="keyword">size_t</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功能：将src字符串的前n个字符拼接到dest所指的字符串尾部。<br>返回值：返回dest字符串的起始地址。<br>如果n大于等于字符串src的长度，那么将src全部追加到dest的尾部，如果n大于字符串src的长度，只追加src的前n个字符。<br>strncat会将dest字符串最后的\0覆盖掉，字符追加完成后，再追加\0。<br>dest要有足够的空间来容纳要拼接的字符串，否则可能会造成缓冲溢出的错误情况。</p>
+<ul>
+<li>字符串比较（strcmp、strncmp）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1, <span class="keyword">const</span> <span class="keyword">char</span> *str2 )</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功能：比较str1和str2的大小;返回值：相等返回0，str1大于str2返回1，str1小于str2返回-1；<br>int strncmp(const char *str1,const char *str2 ,const size_t n);<br>功能：比较str1和str2的大小;返回值：相等返回0，str1大于str2返回1，str1小于str2返回-1；<br>两个字符串比较的方法是比较字符的ASCII码的大小，从两个字符串的第一个字符开始，如果分不出大小，就比较第二个字符，如果全部的字符都分不出大小，就返回0，表示两个字符串相等。<br>在实际开发中，程序员一般只关心字符串是否相等，不关心哪个字符串更大或更小。</p>
+<ul>
+<li>字符查找（strchr、strrchr）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strchr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s,<span class="keyword">const</span> <span class="keyword">int</span> c)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>返回一个指向在字符串s中第一个出现c的位置，如果找不到，返回0。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strrchr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s,<span class="keyword">const</span> <span class="keyword">int</span> c)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回一个指向在字符串s中最后一个出现c的位置，如果找不到，返回0。</p>
+<ul>
+<li>字符串查找（strstr）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strstr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* str,<span class="keyword">const</span> <span class="keyword">char</span>* substr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>功能：检索子串在字符串中首次出现的位置。<br>返回值：返回字符串str中第一次出现子串substr的地址；如果没有检索到子串，则返回0。</p>
 
     </div>
 
@@ -387,6 +442,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/23/C语言格式化输出/" rel="prev" title="C语言格式化输出">
+                  C语言格式化输出 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -425,7 +483,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整型"><span class="nav-number">1.</span> <span class="nav-text">整型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进制表示"><span class="nav-number">1.1.</span> <span class="nav-text">进制表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用库函数"><span class="nav-number">1.2.</span> <span class="nav-text">常用库函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成随机数"><span class="nav-number">1.3.</span> <span class="nav-text">生成随机数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符"><span class="nav-number">2.</span> <span class="nav-text">字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点型"><span class="nav-number">3.</span> <span class="nav-text">浮点型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用库函数-1"><span class="nav-number">3.1.</span> <span class="nav-text">常用库函数</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整型"><span class="nav-number">1.</span> <span class="nav-text">整型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进制表示"><span class="nav-number">1.1.</span> <span class="nav-text">进制表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用库函数"><span class="nav-number">1.2.</span> <span class="nav-text">常用库函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成随机数"><span class="nav-number">1.3.</span> <span class="nav-text">生成随机数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符"><span class="nav-number">2.</span> <span class="nav-text">字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点型"><span class="nav-number">3.</span> <span class="nav-text">浮点型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用库函数-1"><span class="nav-number">3.1.</span> <span class="nav-text">常用库函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串"><span class="nav-number">4.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用库函数-2"><span class="nav-number">4.1.</span> <span class="nav-text">常用库函数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -441,7 +499,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -454,7 +512,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -492,12 +550,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">104k</span>
+    <span title="站点总字数">110k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:35</span>
+    <span title="站点阅读时长">1:40</span>
 </div>
 
         
