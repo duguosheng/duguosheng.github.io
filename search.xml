@@ -1,6 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C语言系统错误信息</title>
+    <url>/2019/11/05/C%E8%AF%AD%E8%A8%80%E7%B3%BB%E7%BB%9F%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p><a href="https://blog.csdn.net/wucz122140729/article/details/98437350" target="_blank" rel="noopener">原文链接</a></p>
+<p>为防止和正常的返回值混淆，库函数的调用一般并不直接返回错误码，而是将错误码（是一个整数值，不同的值代表不同的含义）存入一个名为 errno 的全局变量中，errno 不同数值所代表的错误消息定义在 &lt;errno.h&gt; 文件中。如果库函数调用失败，可以通过读出 errno 的值来确定问题所在，推测程序出错的原因，这也是调试程序的一个重要方法。</p>
+<p>配合 strerror和perror两个库函数，还可以很方便地查看出错的详细信息。</p>
+<h3 id="strerror函数"><a href="#strerror函数" class="headerlink" title="strerror函数"></a>strerror函数</h3><ul>
+<li>strerror 在 &lt;string.h&gt; 中声明，用于获取错误码对应的消息描述。</li>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strerror</span><span class="params">(<span class="keyword">int</span> errno)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>函数说明：strerror()用来依参数errno 的错误代码来查询其错误原因的描述字符串，然后将该字符串指针返回。<br>返回值：返回描述错误原因的字符串地址。<br>在gcc4.4.7版本中，定义了130多个错误代码，我们用程序把它们全部显示出来。</p>
+<ul>
+<li>示例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> errorno;</span><br><span class="line">    <span class="keyword">for</span>(errorno=<span class="number">0</span>; errorno&lt;<span class="number">150</span>; errorno++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d--&gt;%s\n"</span>, errorno, strerror(errorno));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>输出结果<br><img src="e1.png" alt="错误信息"> <img src="e2.png" alt="错误信息"></p>
+</blockquote>
+<p>一共有130多个错误代码和描述，上面的截图只显示了前5条和最后5条。这些错误代码和描述看一下就行了，不需要记住。</p>
+<h3 id="perror-在-lt-stdio-h-gt-中声明，用于在屏幕上最近一次系统错误码及其消息描述，在实际开发中，我们写的程序运行于后台，在屏幕上显示错误信息没有意义。"><a href="#perror-在-lt-stdio-h-gt-中声明，用于在屏幕上最近一次系统错误码及其消息描述，在实际开发中，我们写的程序运行于后台，在屏幕上显示错误信息没有意义。" class="headerlink" title="perror 在 &lt;stdio.h&gt; 中声明，用于在屏幕上最近一次系统错误码及其消息描述，在实际开发中，我们写的程序运行于后台，在屏幕上显示错误信息没有意义。"></a>perror 在 &lt;stdio.h&gt; 中声明，用于在屏幕上最近一次系统错误码及其消息描述，在实际开发中，我们写的程序运行于后台，在屏幕上显示错误信息没有意义。</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//这个文件不存在</span></span><br><span class="line">    <span class="keyword">if</span>(remove(<span class="string">"/abcd/efg.txt"</span>)!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"删除文件失败"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行结果<br><img src="e3.png" alt="运行"></p>
+</blockquote>
+<h3 id="errno的细节"><a href="#errno的细节" class="headerlink" title="errno的细节"></a>errno的细节</h3><ul>
+<li>调用库函数失败不一定会设置errno<br>如果库函数调用失败，库函数会设置errno的值，程序员通过 errno 的值来判断出错的具体原因，但是，并不是全部的库函数在调用失败时都会设置errno的值，那么，哪些库函数会设置errno的值呢，要看函数的说明，例如fopen函数，在命令行下输入man fopen，在诸多的文字中，有以下行说明文字。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">The fopen() function may also fail and set errno for any of the errors specified for the routine open(2).</span><br></pre></td></tr></table></figure>
+
+<p>不属于系统调用的函数不会设置errno，属于系统调用的函数才会设置errno。</p>
+<ul>
+<li><p>errno不能作为调用库函数失败的标志<br>在 C 语言中，如果库函数被正确地执行，那么 errno 的值不会被清零。换句话说，errno 的值只有在一个库函数调用发生错误时才会被设置，当库函数调用成功运行时，errno 的值不会被修改，当然也不会主动被置为 0。也正因为如此，在实际编程中，判断函数执行是否成功还得靠函数的返回值，只有在返回值是失败的情况下，才需要关注errno的值。</p>
+</li>
+<li><p>程序员可以不用errno<br>关注errno的目的是为了获取更详细错误信息，这些错误信息对程序员诊断程序可能会有帮助，但不是必须的。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>错误信息</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言目录操作补充</title>
+    <url>/2019/11/05/C%E8%AF%AD%E8%A8%80%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C%E8%A1%A5%E5%85%85/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p><a href="https://blog.csdn.net/wucz122140729/article/details/98437217" target="_blank" rel="noopener">原文链接</a></p>
+<h3 id="access库函数"><a href="#access库函数" class="headerlink" title="access库函数"></a>access库函数</h3><blockquote>
+<p>access函数用于判断当前操作系统用户对文件或目录的存取权限。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包含头文件：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">// 函数声明：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">access</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数说明：<br>pathname文件名或目录名，可以是当前目录的文件或目录，也可以列出全路径。<br>mode 需要判断的存取权限。在头文件unistd.h中的预定义如下：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> R_OK 4     <span class="comment">// R_OK 只判断是否有读权限</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> W_OK 2    <span class="comment">// W_OK 只判断是否有写权限</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> X_OK 1     <span class="comment">// X_OK 判断是否有执行权限</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> F_OK 0     <span class="comment">// F_OK 只判断是否存在</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>返回值：<br>当pathname满足mode的条件时候返回0，不满足返回-1。<br>在实际开发中，access函数主要用于判断文件或目录是否是存在。</p>
+<h3 id="stat库函数"><a href="#stat库函数" class="headerlink" title="stat库函数"></a>stat库函数</h3><h4 id="stat结构体"><a href="#stat结构体" class="headerlink" title="stat结构体"></a>stat结构体</h4><p>struct stat结构体用于存放文件和目录的状态信息，如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">dev_t</span> st_dev;   <span class="comment">// device 文件的设备编号</span></span><br><span class="line">    <span class="keyword">ino_t</span> st_ino;   <span class="comment">// inode 文件的i-node</span></span><br><span class="line">    <span class="keyword">mode_t</span> st_mode;   <span class="comment">// protection 文件的类型和存取的权限</span></span><br><span class="line">    <span class="keyword">nlink_t</span> st_nlink;   <span class="comment">// number of hard links 连到该文件的硬连接数目, 刚建立的文件值为1.</span></span><br><span class="line">    <span class="keyword">uid_t</span> st_uid;   <span class="comment">// user ID of owner 文件所有者的用户识别码</span></span><br><span class="line">    <span class="keyword">gid_t</span> st_gid;   <span class="comment">// group ID of owner 文件所有者的组识别码</span></span><br><span class="line">    <span class="keyword">dev_t</span> st_rdev;  <span class="comment">// device type 若此文件为设备文件, 则为其设备编号</span></span><br><span class="line">    <span class="keyword">off_t</span> st_size;  <span class="comment">// total size, in bytes 文件大小, 以字节计算</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> st_blksize;  <span class="comment">// blocksize for filesystem I/O 文件系统的I/O 缓冲区大小.</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> st_blocks;  <span class="comment">// number of blocks allocated 占用文件区块的个数, 每一区块大小为512 个字节.</span></span><br><span class="line">    <span class="keyword">time_t</span> st_atime;  <span class="comment">// time of lastaccess 文件最近一次被存取或被执行的时间, 一般只有在用mknod、 utime、read、write 与tructate 时改变.</span></span><br><span class="line">    <span class="keyword">time_t</span> st_mtime;  <span class="comment">// time of last modification 文件最后一次被修改的时间, 一般只有在用mknod、 utime 和write 时才会改变</span></span><br><span class="line">    <span class="keyword">time_t</span> st_ctime;  <span class="comment">// time of last change i-node 最近一次被更改的时间, 此参数会在文件所有者、组、 权限被更改时更新</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>struct stat结构体的成员变量比较多，对程序员来说，重点关注st_mode、st_size和st_mtime成员就可以了。注意st_mtime是一个整数表达的时间，需要程序员自己写代码转换格式。<br>st_mode成员的取值很多，或者使用如下两个宏来判断。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">S_ISREG (st_mode) 是否为一般文件</span><br><span class="line">S_ISDIR (st_mode) 是否为目录</span><br></pre></td></tr></table></figure>
+
+<h4 id="stat库函数-1"><a href="#stat库函数-1" class="headerlink" title="stat库函数"></a>stat库函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包含头文件：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">// 函数声明：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>stat函数获取path指定文件或目录的信息，并将信息保存到结构体buf中，执行成功返回0，失败返回-1。</p>
+<ul>
+<li>示例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(access(argv[<span class="number">1</span>], F_OK) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"文件或目录%s不存在"</span>, argv[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">st_stat</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取文件状态信息</span></span><br><span class="line">    <span class="keyword">if</span>(stat(argv[<span class="number">1</span>], &amp;st_stat) == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(S_ISREG(st_stat.st_mode))</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s是一个文件\n"</span>, argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">if</span>(S_ISDIR(st_stat.st_mode))</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s是一个目录\n"</span>, argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"文件名%s\n类型%d\n最终修改时间%ld\n大小%ld\n"</span> ,\</span><br><span class="line">            argv[<span class="number">1</span>], st_stat.st_mode, st_stat.st_mtime, st_stat.st_size);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果<br><img src="d1.png" alt="结果"></p>
+</blockquote>
+<h3 id="utime库函数"><a href="#utime库函数" class="headerlink" title="utime库函数"></a>utime库函数</h3><p>utime函数用于修改文件的存取时间和更改时间。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包含头文件：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;utime.h&gt;</span></span></span><br><span class="line"><span class="comment">// 函数声明：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">utime</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> struct utimbuf *times)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>函数说明：utime()用来修改参数filename 文件所属的inode 存取时间。如果参数times为空指针(NULL), 则该文件的存取时间和更改时间全部会设为目前时间。结构utimbuf 定义如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">utimbuf</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">time_t</span> actime;</span><br><span class="line">    <span class="keyword">time_t</span> modtime;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：执行成功则返回0，失败返回-1。</p>
+<h3 id="rename库函数"><a href="#rename库函数" class="headerlink" title="rename库函数"></a>rename库函数</h3><p>rename函数用于重命名文件或目录，相当于操作系统的mv命令，对程序员来说，在程序中极少重命名目录，但重命名文件是经常用到的功能。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包含头文件：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">// 函数声明：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rename</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *oldpath, <span class="keyword">const</span> <span class="keyword">char</span> *newpath)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">rename(<span class="string">"/home/user/aaa.txt"</span>, <span class="string">"/home/user/aaa_new.txt"</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数说明：<br>oldpath 文件或目录的原名。<br>newpath 文件或目录的新的名称。<br>返回值：0-成功，-1-失败。</p>
+<h3 id="remove库函数"><a href="#remove库函数" class="headerlink" title="remove库函数"></a>remove库函数</h3><p>remove函数用于删除文件或目录，相当于操作系统的rm命令。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包含头文件：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">// 函数声明：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">remove</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：<br>pathname 待删除的文件或目录名。<br>返回值：0-成功，-1-失败。</p>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>目录操作</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言时间操作</title>
+    <url>/2019/11/04/C%E8%AF%AD%E8%A8%80%E6%97%B6%E9%97%B4%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p><a href="https://blog.csdn.net/wucz122140729/article/details/98437007" target="_blank" rel="noopener">原文连接</a></p>
+<h3 id="time-t别名"><a href="#time-t别名" class="headerlink" title="time_t别名"></a>time_t别名</h3><p>在C语言中，用time_t来表示时间数据类型，它是一个long（长整数）类型的别名，在time.h文件中定义，表示一个日历时间，是从1970年1月1日0时0分0秒到现在的秒数。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">time_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以看出time_t其实是一个长整型。</p>
+<h3 id="time库函数"><a href="#time库函数" class="headerlink" title="time库函数"></a>time库函数</h3><p>time函数的用途是返回一个值，也就是从1970年1月1日0时0分0秒到现在的秒数。<br>time函数是C语言标准库中的函数，在time.h文件中声明。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">time_t</span> time(<span class="keyword">time_t</span> *t);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>time函数有两种调用方法：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">time_t</span> tnow;</span><br><span class="line">tnow =time(<span class="number">0</span>);     <span class="comment">// 将空地址传递给time函数，并将time返回值赋给变量tnow</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>或</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">time(&amp;tnow);       <span class="comment">// 将变量tnow的地址作为参数传递给time函数</span></span><br></pre></td></tr></table></figure>
+
+<p>各位可以写代码测试一下这两种方式，效果完全相同。</p>
+<h3 id="tm结构体"><a href="#tm结构体" class="headerlink" title="tm结构体"></a>tm结构体</h3><p>time_t只是一个长整型，不符合我们的使用习惯，需要转换成可以方便表示时间的结构体，即tm结构体，tm结构体在time.h中声明，如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tm</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">       <span class="keyword">int</span> tm_sec;     <span class="comment">/* 秒 – 取值区间为[0,59]  */</span></span><br><span class="line">       <span class="keyword">int</span> tm_min;    <span class="comment">/* 分 - 取值区间为[0,59]  */</span></span><br><span class="line">       <span class="keyword">int</span> tm_hour;   <span class="comment">/* 时 - 取值区间为[0,23] */</span></span><br><span class="line">       <span class="keyword">int</span> tm_mday;  <span class="comment">/* 一个月中的日期 - 取值区间为[1,31]  */</span></span><br><span class="line">       <span class="keyword">int</span> tm_mon;   <span class="comment">/* 月份（从一月开始，0代表一月） - 取值区间为[0,11]  */</span></span><br><span class="line">       <span class="keyword">int</span> tm_year;   <span class="comment">/* 年份，其值等于实际年份减去1900  */</span></span><br><span class="line">       <span class="keyword">int</span> tm_wday;   <span class="comment">/* 星期 – 取值区间为[0,6]，其中0代表星期天，1代表星期一，以此类推 */</span></span><br><span class="line">       <span class="keyword">int</span> tm_yday;   <span class="comment">/* 从每年的1月1日开始的天数 – 取值区间为[0,365]，其中0代表1月1日，1代表1月2日，以此类推 */</span></span><br><span class="line">       <span class="keyword">int</span> tm_isdst;   <span class="comment">/* 夏令时标识符，该字段意义不大，我们不用夏令时。 */</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个结构定义了年、月、日、时、分、秒、星期、当年中的某一天、夏令时。用这个结构体可以很方便的显示时间。</p>
+</blockquote>
+<h3 id="localtime库函数"><a href="#localtime库函数" class="headerlink" title="localtime库函数"></a>localtime库函数</h3><p>localtime函数用于把time_t表示的时间转换为struct tm表示的时间，函数返回struct tm结构体的地址。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">struct tm * <span class="title">localtime</span><span class="params">(<span class="keyword">const</span> <span class="keyword">time_t</span> *)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>struct tm结构体包含了时间的各要素，但还不是我们习惯的时间表达方式，我们可以用格式化输出printf、sprintf或fprintf等函数，把struct tm结构体转换为我们想要的结果。</p>
+<ul>
+<li>示例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> *<span class="title">st_tm</span>;</span></span><br><span class="line">    <span class="keyword">time_t</span> tnow, tnow1;</span><br><span class="line">    tnow = time(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"now=%ld\n"</span>, tnow);</span><br><span class="line">    st_tm = localtime(&amp;tnow);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d年%d月%d日 星期%d %02d:%02d:%02d\n"</span>, \</span><br><span class="line">            st_tm-&gt;tm_year+<span class="number">1900</span>, st_tm-&gt;tm_mon+<span class="number">1</span>, st_tm-&gt;tm_mday, \</span><br><span class="line">            st_tm-&gt;tm_wday, st_tm-&gt;tm_hour, st_tm-&gt;tm_min, st_tm-&gt;tm_sec);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<blockquote>
+<p>输出结果<br><img src="t1.png" alt="结果"></p>
+</blockquote>
+<h3 id="mktime库函数"><a href="#mktime库函数" class="headerlink" title="mktime库函数"></a>mktime库函数</h3><p>mktime函数的功能与localtime函数相反。</p>
+<blockquote>
+<p>localtime函数用于把time_t表示的时间转换为struct tm表示的时间。<br>mktime  函数用于把struct tm表示的时间转换为time_t表示的时间,函数返回time_t的值。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">time_t</span> mktime(struct tm *tm);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> <span class="title">st_tm</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;st_tm, <span class="number">0</span>, <span class="keyword">sizeof</span>(st_tm));</span><br><span class="line">    st_tm.tm_year = <span class="number">2019</span><span class="number">-1900</span>;</span><br><span class="line">    st_tm.tm_mon = <span class="number">11</span><span class="number">-1</span>;</span><br><span class="line">    st_tm.tm_mday = <span class="number">4</span>;</span><br><span class="line">    st_tm.tm_hour = <span class="number">20</span>;</span><br><span class="line">    st_tm.tm_min = <span class="number">18</span>;</span><br><span class="line">    st_tm.tm_sec = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"the long num is %lu\n"</span>, mktime(&amp;st_tm));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果<br><img src="t2.png" alt="结果"></p>
+</blockquote>
+<h3 id="程序睡眠"><a href="#程序睡眠" class="headerlink" title="程序睡眠"></a>程序睡眠</h3><p>在实际开发中，我们经常需要把程序挂起一段时间，可以使用sleep和usleep两个库函数，需要包含unistd.h头文件中。函数的声明如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">sleep</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> seconds)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">usleep</span><span class="params">(<span class="keyword">useconds_t</span> usec)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>sleep函数的参数是秒，usleep函数的参数是微秒，1秒=1000000微秒。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">sleep(<span class="number">1</span>);           <span class="comment">// 程序睡眠1秒。</span></span><br><span class="line">sleep(<span class="number">10</span>);          <span class="comment">// 程序睡眠10秒。</span></span><br><span class="line">usleep(<span class="number">100000</span>);    <span class="comment">// 程序睡眠十分之一秒。</span></span><br><span class="line">usleep(<span class="number">1000000</span>);   <span class="comment">// 程序睡眠一秒。</span></span><br></pre></td></tr></table></figure>
+
+<p>程序员不关心sleep和usleep函数的返回值。</p>
+<h3 id="精确到微秒的计时器"><a href="#精确到微秒的计时器" class="headerlink" title="精确到微秒的计时器"></a>精确到微秒的计时器</h3><h4 id="timeval结构体"><a href="#timeval结构体" class="headerlink" title="timeval结构体"></a>timeval结构体</h4><p>timeval结构体在sys/time.h文件中定义，声明为：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span>  <span class="title">timeval</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">long</span>  tv_sec;            <span class="comment">// 1970年1月1日到现在的秒。</span></span><br><span class="line">    <span class="keyword">long</span>  tv_usec;         <span class="comment">// 当前秒的微妙，即百万分之一秒。</span></span><br><span class="line">&#125;；</span><br></pre></td></tr></table></figure>
+
+<h4 id="timezone-结构体"><a href="#timezone-结构体" class="headerlink" title="timezone 结构体"></a>timezone 结构体</h4><p>timezone 结构体在sys/time.h文件中定义，声明为：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span>  <span class="title">timezone</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> tz_minuteswest;     <span class="comment">// 和greenwich 时间差了多少分钟。</span></span><br><span class="line">    <span class="keyword">int</span> tz_dsttime;           <span class="comment">// type of DST correction。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="gettimeofday库函数"><a href="#gettimeofday库函数" class="headerlink" title="gettimeofday库函数"></a>gettimeofday库函数</h4><p>gettimeofday是获得当前的秒和微秒的时间，其中的秒是指1970年1月1日到现在的秒，微秒是指当前秒已逝去的微秒数，可以用于程序的计时。调用gettimeofday函数需要包含sys/time.h头文件。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gettimeofday</span><span class="params">(struct  timeval *tv, struct  timezone *tz )</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>当前的时间存放在tv 结构体中，当地时区的信息则放到tz所指的结构中。<br>函数执行成功后返回0，失败后返回-1。</p>
+<blockquote>
+<p>在使用gettimeofday()函数时，第二个参数一般都为空，我们一般都只是为了获得当前时间，不关心时区的信息。</p>
+</blockquote>
+<ul>
+<li>示例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">begin</span>, <span class="title">end</span>;</span></span><br><span class="line">    gettimeofday(&amp;begin, <span class="number">0</span>);  <span class="comment">//第二个参数一般固定填0</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"begin time(0)=%lu tv_sec=%lu, tv_usec=%lu\n"</span>,\</span><br><span class="line">            time(<span class="number">0</span>), begin.tv_sec, begin.tv_usec);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"开始睡眠1000000us\n"</span>);</span><br><span class="line">    usleep(<span class="number">1000000</span>);</span><br><span class="line">    gettimeofday(&amp;end, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"end time(0)=%lu tv_sec=%lu, tv_usec=%lu\n"</span>,\</span><br><span class="line">            time(<span class="number">0</span>), end.tv_sec, end.tv_usec);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"计时过去了%luus\n"</span>, \</span><br><span class="line">            (end.tv_sec-begin.tv_sec)*<span class="number">1000000</span>+(end.tv_usec-begin.tv_usec));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果<br><img src="t3.png" alt="结果"></p>
+</blockquote>
+<p>程序采用usleep睡眠十分之一秒，但是计时器显示的实际时间大于十分之一秒，为何？原因很简单，因为程序执行需要时间，虽然这个时间很短，在千分之一秒内，那也是需要时间。</p>
+<p>还有一个要注意的问题，time.h 是ISO C99 标准日期时间头文件。sys/time.h 是Linux 系统的日期时间头文件，也就是说，timeval、timezone结构体和gettimeofday函数在windows平台中不能使用。</p>
+<blockquote>
+<p>应用经验<br>在实际开发中，除了当前的时间，还经常需要一个偏移量的时间，例如获取十分钟之后的时间，做法是采用time函数得到一个整数后，再加上<code>10*60</code>秒，再用localtime函数转换为结构体。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>时间操作</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言目录操作</title>
     <url>/2019/10/31/C%E8%AF%AD%E8%A8%80%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<a id="more"></a>
