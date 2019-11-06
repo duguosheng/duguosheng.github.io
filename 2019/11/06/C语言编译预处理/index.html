@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="C语言由源代码生成可执行程序的过程如下：1C源程序－&amp;gt;编译预处理－&amp;gt;编译－&amp;gt;优化程序－&amp;gt;汇编程序－&amp;gt;链接程序－&amp;gt;可执行文件    其中编译预处理阶段，读取C源程序，对其中的预处理指令（以#开头的指令）和特殊符号进行处理。或者说是扫描源代码，对其进行初步的转换，产生新的源代码提供给编译器。 预处理过程先于编译器对源代码进行处理，读入源代码，检查包含预处理指令">
+<meta name="keywords" content="预处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言编译预处理">
+<meta property="og:url" content="http://yoursite.com/2019/11/06/C语言编译预处理/index.html">
+<meta property="og:site_name" content="Duguosheng的博客">
+<meta property="og:description" content="C语言由源代码生成可执行程序的过程如下：1C源程序－&amp;gt;编译预处理－&amp;gt;编译－&amp;gt;优化程序－&amp;gt;汇编程序－&amp;gt;链接程序－&amp;gt;可执行文件    其中编译预处理阶段，读取C源程序，对其中的预处理指令（以#开头的指令）和特殊符号进行处理。或者说是扫描源代码，对其进行初步的转换，产生新的源代码提供给编译器。 预处理过程先于编译器对源代码进行处理，读入源代码，检查包含预处理指令">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-06T15:30:44.950Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C语言编译预处理">
+<meta name="twitter:description" content="C语言由源代码生成可执行程序的过程如下：1C源程序－&amp;gt;编译预处理－&amp;gt;编译－&amp;gt;优化程序－&amp;gt;汇编程序－&amp;gt;链接程序－&amp;gt;可执行文件    其中编译预处理阶段，读取C源程序，对其中的预处理指令（以#开头的指令）和特殊符号进行处理。或者说是扫描源代码，对其进行初步的转换，产生新的源代码提供给编译器。 预处理过程先于编译器对源代码进行处理，读入源代码，检查包含预处理指令">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/06/C语言编译预处理/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C语言编译预处理 | Duguosheng的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duguosheng的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习记录，点滴成长</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/duguosheng" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/C语言编译预处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+      <meta itemprop="name" content="Duguosheng">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duguosheng的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言编译预处理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-06 22:35:32 / 修改时间：23:30:44" itemprop="dateCreated datePublished" datetime="2019-11-06T22:35:32+08:00">2019-11-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C语言/" itemprop="url" rel="index">
+                    <span itemprop="name">C语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <a id="more"></a>
+
+<ul>
+<li>C语言由源代码生成可执行程序的过程如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C源程序－&gt;编译预处理－&gt;编译－&gt;优化程序－&gt;汇编程序－&gt;链接程序－&gt;可执行文件</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>其中编译预处理阶段，读取C源程序，对其中的预处理指令（以#开头的指令）和特殊符号进行处理。或者说是扫描源代码，对其进行初步的转换，产生新的源代码提供给编译器。</p>
+<p>预处理过程先于编译器对源代码进行处理，读入源代码，检查包含预处理指令的语句和宏定义，并对源代码进行转换。预处理过程还会删除程序中的注释和多余的空白字符。</p>
+<h3 id="预处理指令"><a href="#预处理指令" class="headerlink" title="预处理指令"></a>预处理指令</h3><p>在C语言的程序中可包括各种以符号#开头的编译指令，这些指令称为预处理命令。预处理命令属于C语言编译器，而不是C语言的组成部分。通过预处理命令可扩展C语言程序设计的环境。</p>
+<p>预处理指令是以#号开头的代码行。#号必须是该行除了任何空白字符外的第一个字符。#后是指令关键字，在关键字和#号之间允许存在任意个数的空白字符。整行语句构成了一条预处理指令，该指令将在编译器进行编译之前对源代码做某些转换。</p>
+<ul>
+<li>预处理指令主要有以下三种：</li>
+</ul>
+<ul>
+<li><input disabled type="checkbox"> 包含文件：将源文件中以#include格式包含的文件复制到编译的源文件中，可以是头文件，也可以是其它的程序文件。</li>
+<li><input disabled type="checkbox"> 宏定义指令：#define 指令定义一个宏，#undef指令删除一个宏定义。</li>
+<li><input disabled type="checkbox"> 条件编译：根据#ifdef和#ifndef后面的条件决定需要编译的代码。</li>
+</ul>
+<h3 id="包含文件"><a href="#包含文件" class="headerlink" title="包含文件"></a>包含文件</h3><p>当一个C语言程序由多个文件模块组成时，主模块中一般包含main函数和一些当前程序专用的函数。程序从main函数开始执行，在执行过程中，可调用当前文件中的函数，也可调用其他文件模块中的函数。</p>
+<p>如果在模块中要调用其他文件模块中的函数，首先必须在主模块中声明该函数原型。一般都是采用文件包含的方法，包含其他文件模块的头文件。</p>
+<p>文件包含中指定的文件名即可以用引号括起来，也可以用尖括号括起来，格式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;文件名&gt;</span></span></span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"文件名"</span></span></span><br></pre></td></tr></table></figure>
+
+<p>如果使用尖括号&lt;&gt;括起文件名，则编译程序将到C语言开发环境中设置好的 include文件中去找指定的文件。</p>
+<p>因为C语言的标准头文件都存放在include文件夹中，所以一般对标准头文件采用尖括号；对编程自己编写的文件，则使用双引号。</p>
+<p>如果自己编写的文件不是存放在当前工作文件夹，可以在#include命令后面加在路径。</p>
+<p><code>#include</code>命令的作用是把指定的文件模块内容插入到#include所在的位置，当程序编译链接时，系统会把所有#include指定的文件链接生成可执行代码。文件包含必须以#开头，表示这是编译预处理命令，行尾不能用分号结束。</p>
+<p><code>#include</code>所包含的文件，其扩展名可以是“.c”,表示包含普通C语言源程序。也可以是 “.h”,表示C语言程序的头文件。C语言系统中大量的定义与声明是以头文件形式提供的。</p>
+<h3 id="宏定义指令"><a href="#宏定义指令" class="headerlink" title="宏定义指令"></a>宏定义指令</h3><p>使用#define命令并不是真正的定义符号常量，而是定义一个可以替换的宏。被定义为宏的标识符称为“宏名”。在编译预处理过程时，对程序中所有出现的“宏名”，都用宏定义中的字符串去代换，这称为“宏替换”或“宏展开”。</p>
+<p>在C语言中，宏分为有参数和无参数两种。</p>
+<h4 id="无参数的宏"><a href="#无参数的宏" class="headerlink" title="无参数的宏"></a>无参数的宏</h4><p>其定义格式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> 宏名  字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>在以上宏定义语句中，各部分的含义如下：</p>
+<blockquote>
+<p><code>#</code>表示这是一条预处理命令(凡是以“#”开始的均为预处理命令)。<br>define 关键字“define”为宏定义命令。<br>宏名 是一个标示符，必须符合C语言标示符的规定，一般以大写字母标识宏名。<br>字符串 可以是常数，表达式，格式串等。在前面使用的符号常量的定义就是一个无参数宏定义。</p>
+</blockquote>
+<p>注意：预处理命令语句后面一般不会添加分号，如果在#define最后有分号，在宏替换时分号也将替换到源代码中去。在宏名和字符串之间可以有任意个空格。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PI 3.141592</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例（pre1.c）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PI 3.14</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"PI=%f\n"</span>, PI);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>执行预编译指令<code>gcc -E -o pre1.E pre1.c</code>，得到预处理<code>pre1.E</code>文件，如下：</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">5</span> <span class="string">"pre1.c"</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"PI=%f\n"</span>, <span class="number">3.14</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可见<code>PI</code>被替换为了3.14</p>
+</blockquote>
+<ul>
+<li>在使用宏定义时，还需要注意以下几点：</li>
+</ul>
+<p>宏定义是宏名来表示一个字符串，在宏展开时又以该字符串取代宏名。这只是一种简单的代换，字符串中可以含任何字符，可以是常数，也可以是表达式，预处理程序对它不作任何检查。如有错误，只能在编译已被宏展开后的源程序时发现。</p>
+<p>宏定义允许嵌套，在宏定义的字符串中可以使用已经定义的宏名。在宏展开时由预处理程序层层替换。</p>
+<p>习惯上宏名用大写字母表示，以方便与变量区别。但也可以用小写字母。</p>
+<h4 id="带参数的宏"><a href="#带参数的宏" class="headerlink" title="带参数的宏"></a>带参数的宏</h4><p><code>#define</code>命令定义宏时，还可以为宏设置参数。与函数中的参数类似，在宏定义中的参数为形式参数，在宏调用中的参数称为实际参数。对带参数的宏，在调用中，不仅要宏展开，还要用实参去代换形参。</p>
+<p>带参宏定义的一般形式为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> 宏名(形参表) 字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>在定义带参数的宏时，宏名和形参表之间不能有空格出现，否则，就将宏定义成为无参数形式，而导致程序出错。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX(x,y)  ((x)&gt;(y)?(x):(y))</span></span><br></pre></td></tr></table></figure>
+
+<p>以上的宏定义中，如果x的值大于y，得到x，否则得到y。</p>
+<ul>
+<li>示例（pre2.c）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX(a,b) ((a&gt;b)?a:b)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"PI=%f\n"</span>, MAX(<span class="number">5</span>,<span class="number">6</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<blockquote>
+<p>运行gcc -E -o pre2.E pre2.c并查看</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">5</span> <span class="string">"pre2.c"</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"PI=%f\n"</span>, ((<span class="number">5</span>&gt;<span class="number">6</span>)?<span class="number">5</span>:<span class="number">6</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>带参的宏和带参的函数相似，但其本质是不同的。使用带参宏时，在预处理时将程序源代码替换到相应的位置，编译时得到完整的目标代码，而不进行函数调用，因此程序执行效率要高些。而函数调用只需要编译一次函数，代码量较少，一般情况下，对于简单的功能，可使用宏替换的形式来使用。</p>
+<p>带参数的宏不容易理解，所以，在实际开发中，我不建议使用带参数的宏。</p>
+<h3 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h3><p>条件编译有多种格式，在这里我只介绍最常用的两种格式#ifdef和#ifndef。</p>
+<h4 id="ifdef"><a href="#ifdef" class="headerlink" title="#ifdef"></a>#ifdef</h4><ul>
+<li>#ifdef命令的使用格式如下：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> 标识符</span></span><br><span class="line">    程序段 <span class="number">1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    程序段 <span class="number">2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>其意义是，如果#ifdef后面的标识符已被定义过，则对“程序段1”进行编译；如果没有定义标识符，则编译“程序段2”。一般不使用#else及后面的“程序2”。</p>
+<ul>
+<li><p>示例（pre3.c）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LINUX</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> LINUX</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"这是linux操作系统\n"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">elif</span></span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"其他操作系统\n"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行预编译指令gcc -E -o pre3.E pre3.c，得到pre3.E文件，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">5</span> <span class="string">"pre3.c"</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"这是linux操作系统\n"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="ifndef"><a href="#ifndef" class="headerlink" title="#ifndef"></a>#ifndef</h4><p>而#ifndef的意义与#ifdef相反，其格式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> 标识符</span></span><br><span class="line">    程序段 <span class="number">1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    程序段 <span class="number">2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>其意义是，如果未定义标识符，则编译“程序段1”；否则编译“程序段2”</p>
+<p>在实际开发中，程序员用#ifndef来防止头文件被重复包含。</p>
+<p>打开<code>/usr/include/stdio.h</code>，第一条有效行的代码是<code>#ifndef _STDIO_H</code>，接下来是<code>#define _STDIO_H 1</code>，最后一行是<code>#endif</code>。</p>
+<p>程序员自定义的头文件，我们也会这么写，如：</p>
+<p>如果头文件被包含多次，就表示头文件中的函数被多次声明，全局变量被多次定义，在以前的C语言编译器中，这是不允许的，编译时会报错，但是，现在的部分编译器比较智能，多次定义全局变量或多次声明函数也不会报错。这些新的特征让我这个老家伙很不适应。</p>
+<h4 id="undef"><a href="#undef" class="headerlink" title="#undef"></a>#undef</h4><p><code>#undef</code>取消已定义的标识符。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div></div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Duguosheng 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Duguosheng 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/预处理/" rel="tag"># 预处理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/05/C语言系统错误信息/" rel="next" title="C语言系统错误信息">
+                  <i class="fa fa-chevron-left"></i> C语言系统错误信息
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/06/gdb调试/" rel="prev" title="gdb调试">
+                  gdb调试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#预处理指令"><span class="nav-number">1.</span> <span class="nav-text">预处理指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包含文件"><span class="nav-number">2.</span> <span class="nav-text">包含文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#宏定义指令"><span class="nav-number">3.</span> <span class="nav-text">宏定义指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#无参数的宏"><span class="nav-number">3.1.</span> <span class="nav-text">无参数的宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#带参数的宏"><span class="nav-number">3.2.</span> <span class="nav-text">带参数的宏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件编译"><span class="nav-number">4.</span> <span class="nav-text">条件编译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifdef"><span class="nav-number">4.1.</span> <span class="nav-text">#ifdef</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ifndef"><span class="nav-number">4.2.</span> <span class="nav-text">#ifndef</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undef"><span class="nav-number">4.3.</span> <span class="nav-text">#undef</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="Duguosheng"
+    src="/images/touxiang1.gif">
+  <p class="site-author-name" itemprop="name">Duguosheng</p>
+  <div class="site-description" itemprop="description">武汉大学17级，机械专业</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duguosheng</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">118k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:47</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":175,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
