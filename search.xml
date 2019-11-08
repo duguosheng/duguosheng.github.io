@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>从C到C++</title>
+    <url>/2019/11/07/%E4%BB%8EC%E5%88%B0C/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/wucz122140729/article/details/98477483" target="_blank" rel="noopener">https://blog.csdn.net/wucz122140729/article/details/98477483</a></p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++简介</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>makefile文件</title>
     <url>/2019/11/07/makefile%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<a id="more"></a>
