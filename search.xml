@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++函数重载</title>
+    <url>/2019/11/08/C-%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD/</url>
+    <content><![CDATA[<a id="more"></a>
+<h3 id="重载概念"><a href="#重载概念" class="headerlink" title="重载概念"></a>重载概念</h3><p>重载函数是函数的一种特殊情况，为方便使用，C++允许在同一范围中声明几个功能类似的同名函数，但是这些同名函数的形式参数（指参数的个数、类型或者顺序）必须不同，也就是说用同一个函数完成不同的功能。这就是重载函数。重载函数常用来实现功能类似而所处理的数据类型不同的问题。不能只有函数返回值类型不同。</p>
+<h3 id="C-实现函数重载原理"><a href="#C-实现函数重载原理" class="headerlink" title="C++实现函数重载原理"></a>C++实现函数重载原理</h3><p>C++代码在编译时会根据参数列表对函数进行重命名，例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">writetofile</span><span class="params">(<span class="keyword">char</span> *filename,<span class="keyword">int</span> value)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>重命名为</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> _writetofile_char_int(<span class="keyword">char</span> *filename,<span class="keyword">int</span> value);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">writetofile</span><span class="params">(<span class="keyword">char</span> *filename,<span class="keyword">long</span> value)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>重命名为</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> _writetofile_char_long(<span class="keyword">char</span> *filename,<span class="keyword">long</span> value);</span><br></pre></td></tr></table></figure>
+
+<p>函数被调用时，编译器会根据传入的实参去逐个匹配，以选择对应的函数，如果匹配失败，编译器就会报错，这叫做重载决议（Overload Resolution）。</p>
+<blockquote>
+<p>不同的编译器有不同的重命名方式，这里仅仅举例说明，实际情况可能并非如此。</p>
+</blockquote>
+<p>从这个角度讲，函数重载仅仅是语法层面的，本质上它们还是不同的函数，占用不同的内存，入口地址也不一样。</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>重载</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>从C到C++</title>
     <url>/2019/11/07/%E4%BB%8EC%E5%88%B0C/</url>
     <content><![CDATA[<p><a href="https://blog.csdn.net/wucz122140729/article/details/98477483" target="_blank" rel="noopener">https://blog.csdn.net/wucz122140729/article/details/98477483</a></p>

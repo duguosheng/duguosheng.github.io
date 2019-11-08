@@ -50,20 +50,20 @@
   };
 </script>
 
-  <meta name="description" content="在python2中存在`xrange()`，python3中`range()`的实现方式与`xrange()`相同，所以就不再有`xrange()`">
-<meta name="keywords" content="python基础">
+  <meta name="description" content="即同名而功能类似的函数">
+<meta name="keywords" content="重载">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python中range与xrange">
-<meta property="og:url" content="http://yoursite.com/2019/09/24/python中range与xrange/index.html">
+<meta property="og:title" content="C++函数重载">
+<meta property="og:url" content="http://yoursite.com/2019/11/08/C-函数重载/index.html">
 <meta property="og:site_name" content="Duguosheng的博客">
-<meta property="og:description" content="在python2中存在`xrange()`，python3中`range()`的实现方式与`xrange()`相同，所以就不再有`xrange()`">
+<meta property="og:description" content="即同名而功能类似的函数">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-24T08:31:49.742Z">
+<meta property="og:updated_time" content="2019-11-08T16:07:31.564Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python中range与xrange">
-<meta name="twitter:description" content="在python2中存在`xrange()`，python3中`range()`的实现方式与`xrange()`相同，所以就不再有`xrange()`">
+<meta name="twitter:title" content="C++函数重载">
+<meta name="twitter:description" content="即同名而功能类似的函数">
 
-<link rel="canonical" href="http://yoursite.com/2019/09/24/python中range与xrange/">
+<link rel="canonical" href="http://yoursite.com/2019/11/08/C-函数重载/">
 
 
 <script id="page-configurations">
@@ -77,7 +77,7 @@
   };
 </script>
 
-  <title>python中range与xrange | Duguosheng的博客</title>
+  <title>C++函数重载 | Duguosheng的博客</title>
   
 
 
@@ -218,7 +218,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/python中range与xrange/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/08/C-函数重载/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang1.gif">
@@ -231,7 +231,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          python中range与xrange
+          C++函数重载
         </h1>
 
         <div class="post-meta">
@@ -240,18 +240,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-09-24 10:32:57 / 修改时间：16:31:49" itemprop="dateCreated datePublished" datetime="2019-09-24T10:32:57+08:00">2019-09-24</time>
+              <time title="创建时间：2019-11-08 23:45:04" itemprop="dateCreated datePublished" datetime="2019-11-08T23:45:04+08:00">2019-11-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 00:07:31" itemprop="dateModified" datetime="2019-11-09T00:07:31+08:00">2019-11-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
             </span>
@@ -269,7 +275,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>487</span>
+              <span>547</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -278,7 +284,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
-            <div class="post-description">在python2中存在`xrange()`，python3中`range()`的实现方式与`xrange()`相同，所以就不再有`xrange()`</div>
+            <div class="post-description">即同名而功能类似的函数</div>
 
         </div>
       </header>
@@ -290,37 +296,23 @@
 
       
         <a id="more"></a>
+<h3 id="重载概念"><a href="#重载概念" class="headerlink" title="重载概念"></a>重载概念</h3><p>重载函数是函数的一种特殊情况，为方便使用，C++允许在同一范围中声明几个功能类似的同名函数，但是这些同名函数的形式参数（指参数的个数、类型或者顺序）必须不同，也就是说用同一个函数完成不同的功能。这就是重载函数。重载函数常用来实现功能类似而所处理的数据类型不同的问题。不能只有函数返回值类型不同。</p>
+<h3 id="C-实现函数重载原理"><a href="#C-实现函数重载原理" class="headerlink" title="C++实现函数重载原理"></a>C++实现函数重载原理</h3><p>C++代码在编译时会根据参数列表对函数进行重命名，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">writetofile</span><span class="params">(<span class="keyword">char</span> *filename,<span class="keyword">int</span> value)</span></span>;</span><br></pre></td></tr></table></figure>
 
-<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ul>
-<li><code>range(start, stop, step)</code>与<code>xrange(start, stop, step)</code>用法相同<ul>
-<li>start：起始数字，可不填，默认0</li>
-<li>stop：结束数字，必须填</li>
-<li>step：步长，可不填，默认1</li>
-</ul>
-</li>
-</ul>
-<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><ul>
-<li><code>range()</code>直接生成一个列表，需要立即开辟内存空间</li>
-<li><code>xrange()</code>生成一个可以迭代的对象，即用即取</li>
-<li>要生成很大的数字序列的时候，用xrange会比range性能优很多，因为不需要一上来就开辟一块很大的内存空间</li>
-</ul>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/python2</span></span><br><span class="line"><span class="comment"># *-* coding: utf-8 *-*</span></span><br><span class="line">print(<span class="string">"测试range"</span>)</span><br><span class="line">my_range = range(<span class="number">10</span>)</span><br><span class="line">print(my_range)</span><br><span class="line">print(<span class="string">"测试xrange"</span>)</span><br><span class="line">my_xrange = xrange(<span class="number">10</span>)</span><br><span class="line">print(my_xrange)</span><br></pre></td></tr></table></figure>
+<p>重命名为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> _writetofile_char_int(<span class="keyword">char</span> *filename,<span class="keyword">int</span> value);</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">writetofile</span><span class="params">(<span class="keyword">char</span> *filename,<span class="keyword">long</span> value)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>重命名为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> _writetofile_char_long(<span class="keyword">char</span> *filename,<span class="keyword">long</span> value);</span><br></pre></td></tr></table></figure>
+
+<p>函数被调用时，编译器会根据传入的实参去逐个匹配，以选择对应的函数，如果匹配失败，编译器就会报错，这叫做重载决议（Overload Resolution）。</p>
 <blockquote>
-<p>运行结果</p>
+<p>不同的编译器有不同的重命名方式，这里仅仅举例说明，实际情况可能并非如此。</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">测试range</span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span><br><span class="line">测试xrange</span><br><span class="line">xrange(10)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>而使用for循环输出结果一致<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for i in range(3):</span><br><span class="line">    print(i)</span><br><span class="line"></span><br><span class="line">for i in xrange(3):</span><br><span class="line">    print(i)</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<blockquote>
-<p>输出结果</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
-
+<p>从这个角度讲，函数重载仅仅是语法层面的，本质上它们还是不同的函数，占用不同的内存，入口地址也不一样。</p>
 
     </div>
 
@@ -351,24 +343,21 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/python基础/" rel="tag"># python基础</a>
+              <a href="/tags/重载/" rel="tag"># 重载</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/09/23/迭代器与生成器/" rel="next" title="迭代器与生成器">
-                  <i class="fa fa-chevron-left"></i> 迭代器与生成器
+                <a href="/2019/11/07/从C到C/" rel="next" title="从C到C++">
+                  <i class="fa fa-chevron-left"></i> 从C到C++
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/09/26/解决idea-pycharm-clion等菜单中文乱码小方框/" rel="prev" title="manjaro解决idea,pycharm,clion等菜单中文乱码小方框">
-                  manjaro解决idea,pycharm,clion等菜单中文乱码小方框 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -407,7 +396,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#用法"><span class="nav-number">1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区别"><span class="nav-number">2.</span> <span class="nav-text">区别</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#重载概念"><span class="nav-number">1.</span> <span class="nav-text">重载概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-实现函数重载原理"><span class="nav-number">2.</span> <span class="nav-text">C++实现函数重载原理</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
