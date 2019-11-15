@@ -1,6 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>socket通信二</title>
+    <url>/2019/11/14/socket%E9%80%9A%E4%BF%A1%E4%BA%8C/</url>
+    <content><![CDATA[<a id="more"></a>
+<h3 id="C语言socket编程说明"><a href="#C语言socket编程说明" class="headerlink" title="C语言socket编程说明"></a>C语言socket编程说明</h3><h4 id="服务端程序绑定地址"><a href="#服务端程序绑定地址" class="headerlink" title="服务端程序绑定地址"></a>服务端程序绑定地址</h4><p>一般情况下，服务器有多个网卡，多个IP地址，socket通信可以指定用哪个地址来进行通信，对于程序员有两种选择</p>
+<ul>
+<li><p>任意IP地址</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">m_servaddr.sin_addr.s_addr = htonl(INADDR_ANY);  <span class="comment">//本主机的任意IP地址</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定IP地址</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">m_servaddr.sin_addr.s_addr = inet_addr(<span class="string">"100.100.100.100"</span>);  <span class="comment">//指定IP地址</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="绑定通信端口"><a href="#绑定通信端口" class="headerlink" title="绑定通信端口"></a>绑定通信端口</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">m_servaddr.sin_port = htons(<span class="number">6789</span>);  <span class="comment">//绑定端口</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="客户端程序指定服务端的IP地址"><a href="#客户端程序指定服务端的IP地址" class="headerlink" title="客户端程序指定服务端的IP地址"></a>客户端程序指定服务端的IP地址</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span>* <span class="title">hptr</span>;</span>  <span class="comment">//IP地址的结构体指针</span></span><br><span class="line"><span class="keyword">if</span>((hptr=gethostbyname(<span class="string">"100.100.100.100"</span>))==<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    perror(<span class="string">"gethostbyname"</span>);</span><br><span class="line">    close(sockfd);  <span class="comment">//sockfd指客户端的套接字</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="send函数"><a href="#send函数" class="headerlink" title="send函数"></a>send函数</h4><p>send函数用于把数据通过socket发送给对端。不论是客户端还是服务端，应用程序都用send函数来向TCP连接的另一端发送数据。客户程序一般用send函数向服务器发送请求，而服务器则通常用send函数来向客户程序发送应答。</p>
+<ul>
+<li><p>包含头文件</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数声明</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> send (<span class="keyword">int</span> sockfd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> len, <span class="keyword">int</span> flags);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>sockfd为已建立好连接的socket。<br>buf为需要发送的数据的内存地址，可以是C语言基本数据类型变量的地址，也可以数组、结构体、字符串，内存中有什么就发送什么。<br>len需要发送的数据的长度，为buf中有效数据的长度。<br>flags填0, 其他数值意义不大。<br>函数返回已发送的字符数。出错时返回-1，错误信息errno被标记。<br>注意，就算是网络断开，或socket已被对端关闭，send函数不会立即报错，要过几秒才会报错。<br>如果send函数返回的错误（&lt;=0），表示通信链路已不可用。</p>
+<h4 id="recv函数"><a href="#recv函数" class="headerlink" title="recv函数"></a>recv函数</h4><p>recv函数用于接收对端socket发送过来的数据。</p>
+<ul>
+<li><p>包含头文件</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数声明</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> recv (<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>sockfd为已建立好连接的socket。<br>buf为用于接收数据的内存地址，可以是C语言基本数据类型变量的地址，也可以数组、结构体、字符串，只要是一块内存就行了。<br>len需要接收数据的长度，不能超过buf的大小，否则内存溢出。<br>flags填0, 其他数值意义不大。<br>如果socket的对端没有发送数据，recv函数就会等待，如果对端发送了数据，函数返回接收到的字符数。出错时返回-1，错误信息errno被标记。如果socket被对端关闭，返回值为0。<br>如果recv函数返回的错误（&lt;=0），表示通信链路已不可用。</p>
+<h4 id="服务端有多个socket"><a href="#服务端有多个socket" class="headerlink" title="服务端有多个socket"></a>服务端有多个socket</h4><p>对服务端来说，有多个socket，一个是用于监听的socket，还有一个就是客户端连接成功后，由<strong>accept函数创建的</strong>用于与客户端收发报文的socket。如果有多个客户端连接，就会有多个socket。</p>
+<h4 id="程序退出时先关闭socket"><a href="#程序退出时先关闭socket" class="headerlink" title="程序退出时先关闭socket"></a>程序退出时先关闭socket</h4><p>socket是系统资源，操作系统打开的socket数量是有限的，在程序退出之前必须关闭已打开的socket，就像关闭文件指针一样，就像delete已分配的内存一样，极其重要。<br>值得注意的是，关闭socket的代码不能只在main函数的最后，那是程序运行的理想状态，还应该在main函数的每个return之前关闭。</p>
+<h3 id="相关的库函数"><a href="#相关的库函数" class="headerlink" title="相关的库函数"></a>相关的库函数</h3><h4 id="socket函数"><a href="#socket函数" class="headerlink" title="socket函数"></a>socket函数</h4><p>socket函数用于创建一个新的socket，也就是向系统申请一个socket资源。socket函数用户客户端和服务端。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数说明：</p>
+<p>domain：协议域，又称协议族（family）。常用的协议族有AF_INET、AF_INET6、AF_LOCAL（或称AF_UNIX，Unix域Socket）、AF_ROUTE等。协议族决定了socket的地址类型，在通信中必须采用对应的地址，如AF_INET决定了要用ipv4地址（32位的）与端口号（16位的）的组合、AF_UNIX决定了要用一个绝对路径名作为地址。</p>
+<p>type：指定socket类型。常用的socket类型有SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_PACKET、SOCK_SEQPACKET等。流式socket（SOCK_STREAM）是一种面向连接的socket，针对于面向连接的TCP服务应用。数据报式socket（SOCK_DGRAM）是一种无连接的socket，对应于无连接的UDP服务应用。</p>
+<p>protocol：指定协议。常用协议有IPPROTO_TCP、IPPROTO_UDP、IPPROTO_STCP、IPPROTO_TIPC等，分别对应TCP传输协议、UDP传输协议、STCP传输协议、TIPC传输协议。</p>
+<blockquote>
+<p>说了一大堆废话，第一个参数只能填AF_INET，第二个参数只能填SOCK_STREAM，第三个参数只能填0。</p>
+</blockquote>
+<p>除非系统资料耗尽，socket函数一般不会返回失败。</p>
+<h4 id="gethostbyname函数"><a href="#gethostbyname函数" class="headerlink" title="gethostbyname函数"></a>gethostbyname函数</h4><p>把ip地址或域名转换为hostent 结构体表达的地址。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数name，域名或者主机名，例如”192.168.1.3”、”<a href="http://www.google.com&quot;等。" target="_blank" rel="noopener">www.google.com&quot;等。</a><br>返回值：如果成功，返回一个hostent结构指针，失败返回NULL。<br>gethostbyname只用于客户端。</p>
+<p>gethostbyname只是把字符串的ip地址转换为结构体的ip地址，只要地址格式没错，一般不会返回错误。函数失败不会设置errno的值。</p>
+<h4 id="connect函数"><a href="#connect函数" class="headerlink" title="connect函数"></a>connect函数</h4><p>向服务器发起连接请求。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr * serv_addr, <span class="keyword">int</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>函数说明：connect函数用于将参数sockfd 的socket 连至参数serv_addr 指定的服务端，参数addrlen为sockaddr的结构长度。<br>返回值：成功则返回0, 失败返回-1, 错误原因存于errno 中。<br>connect函数只用于客户端。<br>如果服务端的地址错了，或端口错了，或服务端没有启动，connect一定会失败。</p>
+<h4 id="bind函数"><a href="#bind函数" class="headerlink" title="bind函数"></a>bind函数</h4><p>服务端把用于通信的地址和端口绑定到socket上。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数sockfd，需要绑定的socket。<br>参数addr，存放了服务端用于通信的地址和端口。<br>参数addrlen表示addr结构体的大小。<br>如果绑定的地址错误，或端口已被占用，bind函数一定会报错，否则一般不会返回错误。</p>
+<h4 id="listen函数"><a href="#listen函数" class="headerlink" title="listen函数"></a>listen函数</h4><p>listen函数把主动连接套接口变为被连接套接口，使得这个socket可以接受其它socket的连接请求，从而成为一个服务端的socket。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">int</span> backlog)</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>返回：0──成功， -1──失败</p>
+<p>参数sockfd是已经被bind过的套接字。socket函数返回的套接字是一个主动连接的套接字，在服务端的编程中，程序员希望这个套接字可以接受外来的连接请求，也就是被动等待客户端来连接。由于系统默认时认为一个套接字是主动连接的，所以需要通过某种方式来告诉系统，程序员通过调用listen函数来完成这件事。</p>
+<p>参数backlog，这个参数涉及到一些网络的细节，比较麻烦，填5、10都行，一般不超过30。<br>当调用listen之后，服务端的套接字就可以调用accept来接受客户端的连接请求。<br>listen函数一般不会返回错误。</p>
+<h4 id="accept函数"><a href="#accept函数" class="headerlink" title="accept函数"></a>accept函数</h4><p>服务端接受客户端的连接。</p>
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> sockfd,struct sockaddr *addr,<span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数sockfd是已经被listen过的套接字。<br>参数addr用于存放客户端的地址信息，用sockaddr结构体表达，如果不需要客户端的地址，可以填0。<br>参数addrlen用于存放addr参数的长度，如果addr为0，addrlen也填0。<br>accept函数等待客户端的连接，如果没有客户端连上来，它就一直等待，这种方式称之为<strong>阻塞</strong>。<br>accept等待到客户端的连接后，创建<strong>一个新的套接字</strong>，函数返回值就是这个新的套接字，服务端使用这个新的套接字和客户端进行报文的收发。<br>accept在等待的过程中，如果被中断或其它的原因，函数返回-1，表示失败，如果失败，可以重新accept。</p>
+<h3 id="函数小结"><a href="#函数小结" class="headerlink" title="函数小结"></a>函数小结</h3><p>服务端函数调用的流程是：socket-&gt;bind-&gt;listen-&gt;accept-&gt;recv/send-&gt;close<br>客户端函数调用的流程是：socket-&gt;connect-&gt;send/recv-&gt;close</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>socket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>socket通信一</title>
+    <url>/2019/11/13/socket%E9%80%9A%E4%BF%A1/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p><a href="http://www.duguosheng.xyz/2019/09/12/%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" target="_blank" rel="noopener">一些基本概念</a></p>
+<p><a href>C语言中需要注意的socket编程知识</a></p>
+<ul>
+<li>C语言实现socket通信<blockquote>
+<p><code>_public.h</code></p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __PUBLIC_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __PUBLIC_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netdb.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IP_ADDR <span class="meta-string">"100.100.100.100"</span>  <span class="comment">//这里填写本机IP</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IP_PORT 7890  <span class="comment">//指定端口</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketClient</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketServe</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p><code>socket_serve.cpp</code><br>这是服务器的程序，服务器的流程包括</p>
+<ul>
+<li>服务端要先启动，准备好一个通信通道，表示可以在某地址和端口上可以接收客户连接。</li>
+<li>等待客户端的连接请求。</li>
+<li>等待并接收客户端发过来的数据，处理该客户的数据，处理完成后，向客户端返回处理结果。</li>
+<li>不断的重复第上一步，直到客户端断开连接。</li>
+<li>关闭服务端</li>
+</ul>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_public.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(SocketServe()==<span class="literal">false</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketServe</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> listenfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);  <span class="comment">// 创建服务器用于监听的socket</span></span><br><span class="line">    <span class="comment">//把服务端用于通信的地址和端口绑定到socket上</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>;</span>  <span class="comment">//服务器地址信息的数据结构</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;servaddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line">    servaddr.sin_family = AF_INET;  <span class="comment">//协议族，在socket编程中只能是AF_INET</span></span><br><span class="line">    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);  <span class="comment">//本主机的任意IP</span></span><br><span class="line">    <span class="comment">//servaddr.sin_addr.s_addr = inet_addr(IP_ADDR);  //绑定指定的地址</span></span><br><span class="line">    servaddr.sin_port = htons(IP_PORT);  <span class="comment">//绑定通信端口</span></span><br><span class="line">    <span class="keyword">if</span>(bind(listenfd, (struct sockaddr *)&amp;servaddr, <span class="keyword">sizeof</span>(servaddr))!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"bind"</span>);</span><br><span class="line">        close(listenfd);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//把socket设定为监听模式</span></span><br><span class="line">    <span class="keyword">if</span>(listen(listenfd, <span class="number">5</span>)!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"listen"</span>);</span><br><span class="line">        close(listenfd);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//接收客户端的连接</span></span><br><span class="line">    <span class="keyword">int</span> clientfd;  <span class="comment">//客户端的socket</span></span><br><span class="line">    <span class="keyword">int</span> socklen = <span class="keyword">sizeof</span>(struct sockaddr_in);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span>  <span class="comment">//客户端的地址信息</span></span><br><span class="line">    clientfd = accept(listenfd, (struct sockaddr *)&amp;clientaddr, (<span class="keyword">socklen_t</span> *)&amp;socklen);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"客户端%s已连接\n"</span>, inet_ntoa(clientaddr.sin_addr));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//与客户端通信，接收客户端发过来的报文后，回复OK</span></span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="keyword">if</span>(recv(clientfd, buffer, <span class="keyword">sizeof</span>(buffer), <span class="number">0</span>)&lt;=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"接收：%s\n"</span>, buffer);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">strcpy</span>(buffer, <span class="string">"OK"</span>);</span><br><span class="line">        <span class="keyword">if</span>(send(clientfd, buffer, <span class="built_in">strlen</span>(buffer), <span class="number">0</span>)&lt;=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"发送：%s\n"</span>, buffer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    close(listenfd);</span><br><span class="line">    close(clientfd);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>serve_client.cpp</code><br>这是客户端的程序，客户端的流程为</p>
+<ul>
+<li>打开一个通信通道，连接到服务端已准备好的端口。</li>
+<li>向服务端发送数据，等待并接收服务端处理结果。</li>
+<li>不断的重复第上一步，直到全部的数据被处理完。</li>
+<li>关闭与服务器的连接。</li>
+</ul>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_public.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(SocketClient()==<span class="literal">false</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketClient</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sockfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);  <span class="comment">//创建客户端的socket</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> *<span class="title">hptr</span>;</span>  <span class="comment">//ip地址的结构体</span></span><br><span class="line">    <span class="keyword">if</span>((hptr=gethostbyname(IP_ADDR))==<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"gethostbyname"</span>);</span><br><span class="line">        close(sockfd);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//把服务器的地址和端口转换为结构体</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;servaddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_port = htons(IP_PORT);</span><br><span class="line">    <span class="built_in">memcpy</span>(&amp;servaddr.sin_addr, hptr-&gt;h_addr, hptr-&gt;h_length);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//项服务器发起连接请求</span></span><br><span class="line">    <span class="keyword">if</span>(connect(sockfd, (struct sockaddr *)&amp;servaddr, <span class="keyword">sizeof</span>(servaddr))!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"connect"</span>);</span><br><span class="line">        close(sockfd);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> str_buffer[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//与服务段通讯，发送一个报文后等待回复，然后发送下一个报文</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(str_buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(str_buffer));</span><br><span class="line">        <span class="built_in">sprintf</span>(str_buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(str_buffer));</span><br><span class="line">        <span class="built_in">sprintf</span>(str_buffer, <span class="string">"这是第%d个报文"</span>, i);</span><br><span class="line">        <span class="keyword">if</span>(send(sockfd, str_buffer, <span class="built_in">strlen</span>(str_buffer), <span class="number">0</span>)&lt;=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"发送：%s\n"</span>, str_buffer);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">memset</span>(str_buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(str_buffer));</span><br><span class="line">        <span class="keyword">if</span>(recv(sockfd, str_buffer, <span class="keyword">sizeof</span>(str_buffer), <span class="number">0</span>)&lt;=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"接收：%s\n"</span>, str_buffer);</span><br><span class="line">    &#125;</span><br><span class="line">    close(sockfd);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>分别在两个终端窗口下运行代码即可看到效果</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>socket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++类的多态</title>
+    <url>/2019/11/13/C-%E7%B1%BB%E7%9A%84%E5%A4%9A%E6%80%81/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/wucz122140729/article/details/98583135" target="_blank" rel="noopener">类的多态</a></p>
+<a id="more"></a>
+<ul>
+<li>虚函数</li>
+<li>纯虚函数</li>
+<li>接口</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>多态</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++类的继承</title>
+    <url>/2019/11/12/C-%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF/</url>
+    <content><![CDATA[<a id="more"></a>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>继承是面向对象程序设计中最重要的一个概念。继承允许我们根据一个类来定义另一个类，达到了代码功能重用效果。<br>当创建一个类时，如果待创建的类与另一个类存在某些共同特征，程序员不需要全部重新编写成员变量和成员函数，只需指定继承另一个类即可，被继承的类称为基类或父类，新建的类称为派生类或子类。</p>
+<h3 id="基类和派生类"><a href="#基类和派生类" class="headerlink" title="基类和派生类"></a>基类和派生类</h3><p>定义一个派生类，需要指定它的基类，语法如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">derived</span>-<span class="title">class</span>:</span> access-specifier base-<span class="class"><span class="keyword">class</span></span></span><br></pre></td></tr></table></figure>
+
+<p>derived-class：派生类名。<br>access-specifie：访问修饰符 access-specifier 是 public、protected 或 private 其中的一个，base-class 是之前定义过的某个类的名称。如果未使用访问修饰符 access-specifier，则默认为 private。<br>base-class：基类名</p>
+<ul>
+<li>示例<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> m_name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">shout</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"动物叫"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span>:</span> <span class="keyword">public</span> Animal&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">char</span> color[<span class="number">20</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Cat *cat = <span class="keyword">new</span> Cat();</span><br><span class="line">    cat-&gt;shout();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果如下：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">动物叫</span><br></pre></td></tr></table></figure>
+
+<h3 id="访问控制和继承"><a href="#访问控制和继承" class="headerlink" title="访问控制和继承"></a>访问控制和继承</h3><p>派生类可以访问基类中所有的非私有成员变量和成员函数，如果基类的成员变量和成员函数不想被派生类访问，则应在基类中声明为 private。</p>
+<h3 id="继承类型"><a href="#继承类型" class="headerlink" title="继承类型"></a>继承类型</h3><p>当一个类派生自基类，该基类可以被继承为 public、protected 或 private 几种类型。继承类型是通过上面讲解的访问修饰符 access-specifier 来指定的。</p>
+<p>我们几乎不使用 protected 或 private 继承，通常使用 public 继承。当使用不同类型的继承时，遵循以下几个规则：</p>
+<ul>
+<li><p>公有继承（public）：当类派生以public方式继承时，基类的公有成员也是派生类的公有成员，基类的保护成员也是派生类的保护成员，基类的私有成员不能直接被派生类访问，但是可以通过调用基类的公有和保护成员来访问。</p>
+</li>
+<li><p>保护继承（protected）： 当类派生以protected方式继承时，基类的公有和保护成员将成为派生类的保护成员。</p>
+</li>
+<li><p>私有继承（private）：当类派生以private方式继承时，基类的公有和保护成员将成为派生类的私有成员。</p>
+</li>
+</ul>
+<h3 id="基类与派生类的指针"><a href="#基类与派生类的指针" class="headerlink" title="基类与派生类的指针"></a>基类与派生类的指针</h3><p>基类的指针可以指向基类对象。<br>派生类的指针可以指向派生类对象。<br>基类的指针可以指向派生类对象，但是不能通过基类的指针访问派生类的成员。<br>派生类的指针不可以指向基类对象。</p>
+<h3 id="多继承"><a href="#多继承" class="headerlink" title="多继承"></a>多继承</h3><p>多继承即一个派生类可以有多个基类，它继承了多个基类的特性。<br>C++ 类可以从多个基类继承成员，语法如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;派生类名&gt;:</span>&lt;继承方式<span class="number">1</span>&gt;&lt;基类名<span class="number">1</span>&gt;,&lt;继承方式<span class="number">2</span>&gt;&lt;基类名<span class="number">2</span>&gt;,…</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 派生类类体</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其中，访问修饰符继承方式是 public、protected 或 private 其中的一个，用来修饰每个基类，各个基类之间用逗号分隔。</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>继承</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++动态内存和运算符重载</title>
+    <url>/2019/11/12/C-%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p><a href="https://blog.csdn.net/wucz122140729/article/details/98582590" target="_blank" rel="noopener">动态内存</a></p>
+<p><a href="https://blog.csdn.net/wucz122140729/article/details/98582930" target="_blank" rel="noopener">运算符重载</a></p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>动态内存</tag>
+        <tag>运算符重载</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vector容器</title>
     <url>/2019/11/09/vector%E5%AE%B9%E5%99%A8/</url>
     <content><![CDATA[<p>转载自<a href="https://blog.csdn.net/wucz122140729/article/details/98582170" target="_blank" rel="noopener">码农有道</a></p>
@@ -3558,8 +3787,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>udp</tag>
         <tag>python网络编程</tag>
+        <tag>udp</tag>
       </tags>
   </entry>
   <entry>
