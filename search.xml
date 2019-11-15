@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>关于sockaddr与sockaddr_in详解</title>
+    <url>/2019/11/15/%E5%85%B3%E4%BA%8Esockaddr%E4%B8%8Esockaddr-in%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/qingzhuyuxian/article/details/79736821" target="_blank" rel="noopener">详解</a></p>
+<p>总的来说就是后者弥补了前者的一些缺陷，但是由于某些函数需要传入sockaddr类型的数据，可以用sockaddr_in赋值后，强转为sockaddr作为参数。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>socket通信二</title>
     <url>/2019/11/14/socket%E9%80%9A%E4%BF%A1%E4%BA%8C/</url>
     <content><![CDATA[<a id="more"></a>
