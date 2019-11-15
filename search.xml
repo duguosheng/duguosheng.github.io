@@ -109,7 +109,7 @@
     <content><![CDATA[<a id="more"></a>
 
 <p><a href="http://www.duguosheng.xyz/2019/09/12/%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" target="_blank" rel="noopener">一些基本概念</a></p>
-<p><a href>C语言中需要注意的socket编程知识</a></p>
+<p><a href="http://www.duguosheng.xyz/2019/11/14/socket%E9%80%9A%E4%BF%A1%E4%BA%8C/" target="_blank" rel="noopener">C语言中需要注意的socket编程知识</a></p>
 <ul>
 <li>C语言实现socket通信<blockquote>
 <p><code>_public.h</code></p>
