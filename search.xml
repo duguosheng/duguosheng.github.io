@@ -1,6 +1,337 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>linux信号signal</title>
+    <url>/2019/11/19/linux%E4%BF%A1%E5%8F%B7signal/</url>
+    <content><![CDATA[<ul>
+<li>修改自<a href="https://blog.csdn.net/wucz122140729/article/details/98587494" target="_blank" rel="noopener">码农有道的博客</a></li>
+</ul>
+<h2 id="信号的概念"><a href="#信号的概念" class="headerlink" title="信号的概念"></a>信号的概念</h2><p>信号是进程在运行过程中，由自身产生或由进程外部发过来的消息（事件）。信号是硬件中断的软件模拟(软中断)。每个信号用一个整型常量宏表示，以SIG开头，比如SIGCHLD( 子进程结束向父进程发送的一个信号 )、SIGINT（Ctrl+c）等，它们在系统头文件&lt;signal.h&gt;中定义,也可以通过在shell下键入kill –l查看信号列表，或者键入man 7 signal查看更详细的说明。</p>
+<a id="more"></a>
+
+<h2 id="如何让程序在后台运行"><a href="#如何让程序在后台运行" class="headerlink" title="如何让程序在后台运行"></a>如何让程序在后台运行</h2><p>如果想让程序在后台运行，有两种方法。</p>
+<h3 id="加“-amp-”符号"><a href="#加“-amp-”符号" class="headerlink" title="加“&amp;”符号"></a>加“&amp;”符号</h3><p>如果想让程序在后台运行，执行程序的时候，命令的最后面加“&amp;”符号。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./socket_serve &amp;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>程序<code>socket_serve</code>就在后台运行了。<br><img src="s1.png" alt="后台"><br>在后台运行的程序，用Ctrl+c无法中断，并且就算终端退出了，程序仍在后台运行。<br>如果终端退出了，后台运行的程序将由系统托管。<br><img src="s2.png" alt="交给系统"><br>在第一张图中，socket_serve的父进程是1971，第二张图中，book249的父进程是1。</p>
+</blockquote>
+<h3 id="采用fork"><a href="#采用fork" class="headerlink" title="采用fork"></a>采用fork</h3><p>另一种方法是采用fork，主程序执行fork，生成一个子进程，然后父进程退出，留下子进程继续运行，子进程将由系统托管。</p>
+<ul>
+<li><p>示例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(fork()&gt;<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">//主进程退出,只留下子进程</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上图中，子进程的父进程是系统进程。<br><img src="s3.png" alt="进程"></p>
+</li>
+</ul>
+<h3 id="如何让中止后台程序"><a href="#如何让中止后台程序" class="headerlink" title="如何让中止后台程序"></a>如何让中止后台程序</h3><p>问题来了，程序在后台运行了，离开了终端控制，用Ctrl+c上也无法中止，那怎么让它停下来呢？暂时用一个笨方法：杀了它。</p>
+<ul>
+<li>杀程序有两个方法：</li>
+</ul>
+<ol>
+<li><p>killall 程序名</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">killall <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>先用“ps -ef|grep 程序名”找到程序的进程编号，然后用“kill 进程编号”<br><img src="s4.png" alt="进程"></p>
+</li>
+</ol>
+<h2 id="signal信号"><a href="#signal信号" class="headerlink" title="signal信号"></a>signal信号</h2><p>signal信号是Linux编程中非常重要的部分，接下来将详细介绍信号机制的基本概念、Linux对信号的实现和使用，以及有关信号的几个系统调用（库函数）。</p>
+<p>signal信号是进程之间相互传递消息的一种方法，信号全称为软中断信号，也有人称作软中断。从它的命名可以看出，它的实质和使用很象中断。信号是进程控制的一部分。</p>
+<h3 id="信号的基本概念"><a href="#信号的基本概念" class="headerlink" title="信号的基本概念"></a>信号的基本概念</h3><p>软中断信号（signal，又简称为信号）用来通知进程发生了事件。进程之间可以通过调用kill库函数发送软中断信号。内核也可以因为内部事件而给进程发送信号，通知进程发生了某个事件。注意，信号只是用来通知某进程发生了什么事件，并不给该进程传递任何数据。 </p>
+<p>收到信号的进程对各种信号有不同的处理方法。处理方法可以分为三类：第一种是类似中断的处理程序，对于需要处理的信号，进程可以指定处理函数，由该函数来处理。第二种方法是，忽略某个信号，对该信号不做任何处理，就象未发生过一样。第三种方法是，对该信号的处理保留系统的默认操作，大部分的信号的默认操作是终止进程。</p>
+<h3 id="信号的类型"><a href="#信号的类型" class="headerlink" title="信号的类型"></a>信号的类型</h3><p>发出信号的原因很多，这里按发出信号的原因简单分类，以了解各种信号：</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>信号值</th>
+<th>默认处理动作</th>
+<th>发出信号的原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SIGHUP</td>
+<td>1</td>
+<td>A</td>
+<td>终端挂起或者控制进程终止</td>
+</tr>
+<tr>
+<td><strong>SIGINT</strong></td>
+<td>2</td>
+<td>A</td>
+<td>键盘中断Ctrl+c</td>
+</tr>
+<tr>
+<td>SIGQUIT</td>
+<td>3</td>
+<td>C</td>
+<td>键盘的退出键被按下</td>
+</tr>
+<tr>
+<td>SIGILL</td>
+<td>4</td>
+<td>C</td>
+<td>非法指令</td>
+</tr>
+<tr>
+<td>SIGABRT</td>
+<td>6</td>
+<td>C</td>
+<td>由abort(3)发出的退出指令</td>
+</tr>
+<tr>
+<td>SIGFPE</td>
+<td>8</td>
+<td>C</td>
+<td>浮点异常</td>
+</tr>
+<tr>
+<td><strong>SIGKILL</strong></td>
+<td>9</td>
+<td>AEF</td>
+<td>采用kill -9 进程编号 强制杀死程序。不可捕获</td>
+</tr>
+<tr>
+<td><strong>SIGSEGV</strong></td>
+<td>11</td>
+<td>C</td>
+<td>无效的内存引用,不可被捕获</td>
+</tr>
+<tr>
+<td>SIGPIPE</td>
+<td>13</td>
+<td>A</td>
+<td>管道破裂:写一个没有读端口的管道</td>
+</tr>
+<tr>
+<td>SIGALRM</td>
+<td>14</td>
+<td>A</td>
+<td>由alarm(2)发出的信号</td>
+</tr>
+<tr>
+<td><strong>SIGTERM</strong></td>
+<td>15</td>
+<td>A</td>
+<td>采用“kill 进程编号”或“killall 程序名”通知程序。</td>
+</tr>
+<tr>
+<td>SIGUSR1</td>
+<td>30,10,16</td>
+<td>A</td>
+<td>用户自定义信号1</td>
+</tr>
+<tr>
+<td>SIGUSR2</td>
+<td>31,12,17</td>
+<td>A</td>
+<td>用户自定义信号2</td>
+</tr>
+<tr>
+<td><strong>SIGCHLD</strong></td>
+<td>20,17,18</td>
+<td>B</td>
+<td>子进程结束信号</td>
+</tr>
+<tr>
+<td>SIGCONT</td>
+<td>19,18,25</td>
+<td></td>
+<td>进程继续（曾被停止的进程）</td>
+</tr>
+<tr>
+<td>SIGSTOP</td>
+<td>17,19,23</td>
+<td>DEF</td>
+<td>终止进程</td>
+</tr>
+<tr>
+<td>SIGTSTP</td>
+<td>18,20,24</td>
+<td>D</td>
+<td>控制终端（tty）上按下停止键</td>
+</tr>
+<tr>
+<td>SIGTTIN</td>
+<td>21,21,26</td>
+<td>D</td>
+<td>后台进程企图从控制终端读</td>
+</tr>
+<tr>
+<td>SIGTTOU</td>
+<td>22,22,27</td>
+<td>D</td>
+<td>后台进程企图从控制终端写</td>
+</tr>
+<tr>
+<td>* 处理动作一项中的字母含义如下</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>A 缺省的动作是终止进程。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>B 缺省的动作是忽略此信号，将该信号丢弃，不做处理。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>C 缺省的动作是终止进程并进行内核映像转储（core dump），内核映像转储是指将进程数据在内存的映像和进程在内核结构中的部分内容以一定格式转储到文件系统，并且进程退出执行，这样做的好处是为程序员 提供了方便，使得他们可以得到进程当时执行时的数据值，允许他们确定转储的原因，并且可以调试他们的程序。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>D 缺省的动作是停止进程，进入停止状况以后还能重新进行下去。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>E 信号不能被捕获。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>F 信号不能被忽略。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="signal库函数"><a href="#signal库函数" class="headerlink" title="signal库函数"></a>signal库函数</h3><p>signal库函数可以设置程序对信号的处理方式。<br>包含头文件：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sighandler_t</span> signal(<span class="keyword">int</span> signum, <span class="keyword">sighandler_t</span> handler);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数signum表示信号的编号。</p>
+<ul>
+<li>参数handler表示信号的处理方式，有三种情况：<br>1）SIG_IGN：忽略参数signum所指的信号。<br>2）一个自定义的处理信号的函数，信号的编号为这个自定义函数的参数。<br>3）SIG_DFL：恢复参数signum所指信号的处理方法为默认值。<br>程序员不关心signal的返回值。</li>
+</ul>
+<h3 id="信号有什么用"><a href="#信号有什么用" class="headerlink" title="信号有什么用"></a>信号有什么用</h3><p>服务程序运行在后台，如果想让它中止，杀了它不是个好办法，因为程序被杀的时候，程序突然死亡，没有释放资源，会影响系统的稳定。还有，用Ctrl+c与杀程序是相同的效果。<br>如果能向后台程序发送一个信号，后台程序收到这个信号后，调用一个函数，在函数中编写释放资源的代码，程序就可以有计划的退出，安全而体面。<br>信号还可以用于服务程序抓包等，这是较复杂的应用，暂时不介绍。</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>在实际开发中，在main函数开始的位置，程序员会先屏蔽掉全部的信号。</p>
+<blockquote>
+<p>Linux操作系统为每个程序默认打开三个文件，即标准输入stdin、标准输出stdout和标准错误输出stderr，其中0就是stdin，表示输入流，指从键盘输入，1代表stdout，2代表stderr，1,2默认是显示器。一般也会通过<code>close</code>关闭他们</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> ii=<span class="number">0</span>;ii&lt;<span class="number">50</span>;ii++)</span><br><span class="line">&#123;</span><br><span class="line">    signal(ii,SIG_IGN);</span><br><span class="line">    close(ii);  <span class="comment">//屏蔽标准的输入输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么做的目的是不希望程序被干扰。然后，再设置程序员关心的信号的处理函数。</p>
+<ul>
+<li>程序员关心的信号有三个：SIGINT、SIGTERM和SIGKILL。<blockquote>
+<p>程序在运行中，如果按Ctrl+c，将向程序发出SIGINT信号，信号编号是2。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>采用“kill 进程编号”或“killall 程序名”向程序发出的是SIGTERM信号，编号是15。</p>
+</blockquote>
+<blockquote>
+<p>采用“kill -9 进程编号”向程序发出的是SIGKILL信号，编号是9，此信号不能被忽略，也无法捕获，程序将突然死亡。</p>
+</blockquote>
+<p>所以，程序员只要设置SIGINT和SIGTERM两个信号的处理函数就可以了，这两个信号可以使用同一个处理函数，函数的代码是释放资源。</p>
+<ul>
+<li>示例<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">FILE *fp;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Exit</span><span class="params">(<span class="keyword">int</span> signal)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"signal=%d\n"</span>, signal);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//忽略所有的信号</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">50</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        signal(i, SIG_IGN);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//设置SIGINT和SIGTERM的处理函数</span></span><br><span class="line">    signal(SIGINT, Exit);</span><br><span class="line">    signal(SIGTERM, Exit);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>((fp=fopen(<span class="string">"/home/duguosheng/study/C_Cpp/signal/test.txt"</span>, <span class="string">"w"</span>))==<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"打开文件失败\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">fprintf</span>(fp, <span class="string">"我是第%d个数据\n"</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果<br><img src="s5.png" alt="结束"></p>
+</blockquote>
+<p>不管是用Ctrl+c还是kill，程序都能体面的退出。</p>
+<h2 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h2><p>Linux操作系统提供了kill命令向程序发送信号，C语言也提供了kill库函数，用于在程序中向其它进程或者线程发送信号。</p>
+<p>函数声明：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">int</span> sig)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>kill函数将参数sig指定的信号给参数pid 指定的进程。</p>
+<ul>
+<li>参数pid 有几种情况：</li>
+</ul>
+<ol>
+<li>pid&gt;0 将信号传给进程识别码为pid 的进程。</li>
+<li>pid=0 将信号传给和目前进程相同进程组的所有进程，常用于父进程给子进程发送信号。</li>
+<li>pid=-1 将信号广播传送给系统内所有的进程，例如系统关机时，会向所有的登录窗口广播关机信息。</li>
+</ol>
+<p>sig：准备发送的信号代码，假如其值为零则没有任何信号送出，但是系统会执行错误检查，通常会利用sig值为零来检验某个进程是否仍在运行。<br>返回值说明： 成功执行时，返回0；失败返回-1，errno被设为以下的某个值。<br>EINVAL：指定的信号码无效（参数 sig 不合法）。<br>EPERM：权限不够无法传送信号给指定进程。<br>ESRCH：参数 pid 所指定的进程或进程组不存在。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>信号</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用多进程实现socket并发</title>
+    <url>/2019/11/19/%E7%94%A8%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%AE%9E%E7%8E%B0socket%E5%B9%B6%E5%8F%91/</url>
+    <content><![CDATA[<p>修改自<a href="https://blog.csdn.net/wucz122140729/article/details/98587017" target="_blank" rel="noopener">码农有道的博客</a></p>
+<a id="more"></a>
+<h3 id="并发的概念"><a href="#并发的概念" class="headerlink" title="并发的概念"></a>并发的概念</h3><p>在之前介绍socket通信的时候，socket的服务端在同一时间只能和一个客户端通信，并不是服务端有多忙，而是因为单进程的程序在同一时间只能做一件事情，不可能一边等待客户端的新连接，一边与其它的客户端进行通信。</p>
+<p>如果把socket服务端改为多进程，在每次accept到一个客户端的连接后，生成一个子进程，让子进程负责和这个客户端通信，父进程继续accept客户端的连接，socket的服务端在监听新客户端的同时，还可以与多个客户端进行通信。这就是并发</p>
+<h3 id="并发的应用"><a href="#并发的应用" class="headerlink" title="并发的应用"></a>并发的应用</h3><p><a href="https://github.com/duguosheng/MyFunc" target="_blank" rel="noopener">已经封装好了的socket通信代码</a></p>
+<blockquote>
+<p>具体是下面图中的文件<br><img src="p1.png" alt></p>
+</blockquote>
+<ul>
+<li>修改socket服务端的代码，如下：<br>首先，在CTcpServer类中增加两个成员函数，如下：<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CloseListen</span><span class="params">()</span></span>;  <span class="comment">//关闭监听套接字</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CloseClient</span><span class="params">()</span></span>;  <span class="comment">//关闭与客户端通信的套接字</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>具体实现</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> CTcpServe::CloseListen(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(m_listen_sock&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        close(m_listen_sock);</span><br><span class="line">        m_listen_sock = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> CTcpServe::CloseClient(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(m_serve_sock&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        close(m_serve_sock);</span><br><span class="line">        m_serve_sock= <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>main函数略做修改，如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(!tcp_serve.Accept())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"接收客户端的连接失败\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(fork()&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        tcp_serve.CloseClient();  <span class="comment">//关闭父进程中的客户端套接字</span></span><br><span class="line">        <span class="keyword">continue</span>;  <span class="comment">//父进程进入下次循环继续监听</span></span><br><span class="line">    &#125;</span><br><span class="line">    tcp_serve.CloseListen();  <span class="comment">//关闭子进程中的监听套接字</span></span><br><span class="line">    <span class="keyword">break</span>;  <span class="comment">//子进程跳出循环进入下面的通信程序</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解释一下：</p>
+</li>
+</ul>
+<ol>
+<li>当有客户端连上来的时候，主进程执行fork，这时候会产生两个客户端的socket（m_clientfd被复制了一份），对父进程来说，只负责监听客户端的连接，不需要与客户端通信，所以父进程关闭客户端的socket，即close(m_clientfd)。</li>
+<li>当有客户端连上来的时候，主进程执行fork，这时候也会产生两个服务端的socket（m_listenfd被复制了一份），对子进程来说，只需要与客户端通信，不需要监听客户端的连接，所以子进程关闭监听的socket，即close(m_listenfd)。</li>
+<li>子进程执行完任务后，要调用retrun或exit(0)退出，如果没有调用return或exit(0)，子进程将一直存在，直到父进程退出才消失。</li>
+</ol>
+<h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3><h4 id="僵尸进程产生的原因"><a href="#僵尸进程产生的原因" class="headerlink" title="僵尸进程产生的原因"></a>僵尸进程产生的原因</h4><p>一个子进程在调用return结束自己的生命的时候，其实它并没有真正的被销毁，而是留下一个僵尸进程。</p>
+<p>僵尸进程是子进程比父进程先结束，而父进程又没有回收子进程，释放子进程占用的资源。如果父进程先退出，子进程<strong>被系统接管</strong>，也就是子进程的父进程变为了系统进程，子进程退出后系统会回收其占用的相关资源，不会成为僵尸进程。</p>
+<p>先启动服务端程序<code>socket_serve</code>，然后多次启动客户端程序<code>socket_client</code>，查看进程，如下图，有<defunct>标志的是僵尸进程，<br><img src="p3.png" alt="僵尸进程"></defunct></p>
+<p>如果父进程出退出，僵尸进程随之消失。</p>
+<h4 id="僵尸进程的危害"><a href="#僵尸进程的危害" class="headerlink" title="僵尸进程的危害"></a>僵尸进程的危害</h4><p>僵尸进程在消失之前会继续占用系统资源。</p>
+<h4 id="如何解决僵尸进程"><a href="#如何解决僵尸进程" class="headerlink" title="如何解决僵尸进程"></a>如何解决僵尸进程</h4><p>解决僵尸进程的方法有两种。</p>
+<ol>
+<li><p>子进程退出之前，会向父进程发送一个信号，父进程调用waid函数等待这个信号，只要等到了，就不会产生僵尸进程。这话说得容易，因为在并发的服务端程序中这是不可能的，因为父进程要做其它的事，例如等待客户端的新连接，不可能去等待子进程的退出信号。所以这种方法我就不介绍了。</p>
+</li>
+<li><p>另一种方法就是父进程直接忽略子进程的信号，具体做法很简单，在主程序中增加以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//忽略子进程的信号，避免成为僵尸进程</span></span><br><span class="line">    signal(SIGCHLD, SIG_IGN);</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>signal库函数的用法暂时不介绍，以后有详细说明。</p>
+<h3 id="应用经验"><a href="#应用经验" class="headerlink" title="应用经验"></a>应用经验</h3><p>在学习了多进程的基础知识之后，初学者可能会认为多进程是一个高大上的技术，认为多进程处理数据肯定比单进程快，其实不是。在实际开发中，采用多进程的主要目的是处理多个并发的任务，而不是为了提高程序的效率。</p>
+<p>从效率方面来说，多进程的效率比单进程要低，原因很简单，因为在有限的硬件资源中，多进程的内存开销更大，还会产生资源锁和竞争。</p>
+<p>就像多个人端着一盆水，不如一个人端着一盆水走得快。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>多进程</tag>
+        <tag>socket</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux多进程</title>
     <url>/2019/11/17/linux%E5%A4%9A%E8%BF%9B%E7%A8%8B/</url>
     <content><![CDATA[<p>转自<a href="https://blog.csdn.net/wucz122140729/article/details/98586806" target="_blank" rel="noopener">linux多进程</a></p>
@@ -162,30 +493,6 @@
       </categories>
       <tags>
         <tag>防火墙</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>测试socket代码</title>
-    <url>/2019/11/15/%E6%B5%8B%E8%AF%95socket%E4%BB%A3%E7%A0%81/</url>
-    <content><![CDATA[<a id="more"></a>
-<ul>
-<li><p><code>_public.h</code></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __PUBLIC_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __PUBLIC_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netdb.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IP_ADDR <span class="meta-string">"172.24.16.182"</span>  <span class="comment">//服务器ifconfig出来的地址</span></span></span><br><span class="line"><span class="comment">//#define IP_ADDR "123.56.99.48"  //服务器公网地址</span></span><br><span class="line"><span class="comment">//#define IP_ADDR "10.128.130.212"  //本地IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IP_PORT 39500</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketClient</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketServe</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>socket_serve.cpp</code></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_public.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(SocketServe()==<span class="literal">false</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketServe</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//1.创建服务器套接字</span></span><br><span class="line">    <span class="keyword">int</span> listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.为套接字绑定信息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serve_info</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;serve_info, <span class="number">0</span>, <span class="keyword">sizeof</span>(serve_info));</span><br><span class="line">    serve_info.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line">    serve_info.sin_family = AF_INET;</span><br><span class="line">    serve_info.sin_port = htons(IP_PORT);</span><br><span class="line">    <span class="keyword">if</span>(bind(listen_sock, (struct sockaddr *)&amp;serve_info, (<span class="keyword">socklen_t</span>)<span class="keyword">sizeof</span>(serve_info))!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"bind"</span>);</span><br><span class="line">        close(listen_sock);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//3.将服务器设定为监听模式</span></span><br><span class="line">    <span class="keyword">if</span>(listen(listen_sock, <span class="number">5</span>)!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"listen"</span>);</span><br><span class="line">        close(listen_sock);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//4.等待连接，如果连接成功则创建一个新的套接字用于和客户端通信，原来的套接字仍然用于监听</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">client_addr</span>;</span></span><br><span class="line">    <span class="keyword">int</span> client_addr_len = <span class="keyword">sizeof</span>(client_addr);</span><br><span class="line">    <span class="built_in">memset</span>(&amp;client_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(client_addr));</span><br><span class="line">    <span class="keyword">int</span> serve_sock = accept(listen_sock, (struct sockaddr *)&amp;client_addr, (<span class="keyword">socklen_t</span> *)&amp;client_addr_len);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"与(%s)连接成功\n"</span>, inet_ntoa(client_addr.sin_addr));</span><br><span class="line">    <span class="comment">//5.与客户端通信</span></span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="keyword">if</span>(recv(serve_sock, buffer, <span class="number">1024</span>, <span class="number">0</span>)&lt;=<span class="number">0</span> || \</span><br><span class="line">                <span class="built_in">strcmp</span>(buffer, <span class="string">"quit"</span>)==<span class="number">0</span>) <span class="comment">//0:对方关闭socket;-1:出错</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"接收：%s\n发送："</span>, buffer);</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%s"</span>, buffer);</span><br><span class="line">        <span class="keyword">if</span>(send(serve_sock, buffer, <span class="keyword">sizeof</span>(buffer), <span class="number">0</span>)&lt;=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//6.通信结束，关闭套接字</span></span><br><span class="line">    close(serve_sock);</span><br><span class="line">    close(listen_sock);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>socket_client.cpp</code></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_public.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(SocketClient()==<span class="literal">false</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SocketClient</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//1.创建客户端的套接字</span></span><br><span class="line">    <span class="keyword">int</span> client_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);</span><br><span class="line">    <span class="comment">//2.获取服务器信息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> *<span class="title">hptr</span>;</span></span><br><span class="line">    <span class="keyword">if</span>((hptr=gethostbyname(IP_ADDR))==<span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"gethostbyname失败"</span>);</span><br><span class="line">        close(client_sock);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serve_addr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;serve_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serve_addr));</span><br><span class="line">    serve_addr.sin_family = AF_INET;</span><br><span class="line">    serve_addr.sin_port = htons(IP_PORT);</span><br><span class="line">    <span class="built_in">memcpy</span>(&amp;serve_addr.sin_addr, hptr-&gt;h_addr, hptr-&gt;h_length);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.连接到服务器</span></span><br><span class="line">    <span class="keyword">if</span>(connect(client_sock, (struct sockaddr *)&amp;serve_addr, <span class="keyword">sizeof</span>(serve_addr))!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"connect"</span>);</span><br><span class="line">        close(client_sock);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//3.收发数据</span></span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"发送："</span>);</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%s"</span>, buffer);</span><br><span class="line">        <span class="keyword">if</span>(send(client_sock, buffer, <span class="keyword">sizeof</span>(buffer), <span class="number">0</span>)&lt;=<span class="number">0</span> || \</span><br><span class="line">                <span class="built_in">strcmp</span>(buffer, <span class="string">"quit"</span>)==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span>(recv(client_sock, buffer, <span class="number">1024</span>, <span class="number">0</span>)&lt;=<span class="number">0</span>) <span class="comment">//0:对方关闭socket;-1:出错</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"接收：%s\n"</span>, buffer);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//4.通信结束，关闭套接字</span></span><br><span class="line">    close(client_sock);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>测试</tag>
       </tags>
   </entry>
   <entry>
@@ -1475,7 +1782,7 @@
 <p>在实际开发中，文本文件以行为单位存放字符串，如C程序的源代码，一段文字等，所以一般是按行写入或读取数据。</p>
 </blockquote>
 <h3 id="向文件中写入数据"><a href="#向文件中写入数据" class="headerlink" title="向文件中写入数据"></a>向文件中写入数据</h3><ul>
-<li>可使用<code>fputc</code>, <code>fputs</code>, <code>fprintf</code>写文件，一般使用<code>sprintf</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sprintf</span> <span class="params">(FILE *__stream,<span class="keyword">const</span> <span class="keyword">char</span> *__format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+<li>可使用<code>fputc</code>, <code>fputs</code>, <code>fprintf</code>写文件，一般使用<code>fprintf</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span> <span class="params">(FILE *__stream,<span class="keyword">const</span> <span class="keyword">char</span> *__format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>

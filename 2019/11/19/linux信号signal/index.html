@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="修改自码农有道的博客  信号的概念信号是进程在运行过程中，由自身产生或由进程外部发过来的消息（事件）。信号是硬件中断的软件模拟(软中断)。每个信号用一个整型常量宏表示，以SIG开头，比如SIGCHLD( 子进程结束向父进程发送的一个信号 )、SIGINT（Ctrl+c）等，它们在系统头文件&amp;lt;signal.h&amp;gt;中定义,也可以通过在shell下键入kill –l查看信号列表，或者键入ma">
+<meta name="keywords" content="linux,信号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux信号signal">
+<meta property="og:url" content="http://yoursite.com/2019/11/19/linux信号signal/index.html">
+<meta property="og:site_name" content="Oh, My Blog!">
+<meta property="og:description" content="修改自码农有道的博客  信号的概念信号是进程在运行过程中，由自身产生或由进程外部发过来的消息（事件）。信号是硬件中断的软件模拟(软中断)。每个信号用一个整型常量宏表示，以SIG开头，比如SIGCHLD( 子进程结束向父进程发送的一个信号 )、SIGINT（Ctrl+c）等，它们在系统头文件&amp;lt;signal.h&amp;gt;中定义,也可以通过在shell下键入kill –l查看信号列表，或者键入ma">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/11/19/linux信号signal/s1.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/19/linux信号signal/s2.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/19/linux信号signal/s3.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/19/linux信号signal/s4.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/19/linux信号signal/s5.png">
+<meta property="og:updated_time" content="2019-11-20T09:00:42.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux信号signal">
+<meta name="twitter:description" content="修改自码农有道的博客  信号的概念信号是进程在运行过程中，由自身产生或由进程外部发过来的消息（事件）。信号是硬件中断的软件模拟(软中断)。每个信号用一个整型常量宏表示，以SIG开头，比如SIGCHLD( 子进程结束向父进程发送的一个信号 )、SIGINT（Ctrl+c）等，它们在系统头文件&amp;lt;signal.h&amp;gt;中定义,也可以通过在shell下键入kill –l查看信号列表，或者键入ma">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/19/linux信号signal/s1.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/19/linux信号signal/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>linux信号signal | Oh, My Blog!</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Oh, My Blog!</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习记录，点滴成长</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/duguosheng" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/linux信号signal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+      <meta itemprop="name" content="Greatboy">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Oh, My Blog!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux信号signal
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-19 23:15:49" itemprop="dateCreated datePublished" datetime="2019-11-19T23:15:49+08:00">2019-11-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-20 17:00:42" itemprop="dateModified" datetime="2019-11-20T17:00:42+08:00">2019-11-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index">
+                    <span itemprop="name">C/C++</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>修改自<a href="https://blog.csdn.net/wucz122140729/article/details/98587494" target="_blank" rel="noopener">码农有道的博客</a></li>
+</ul>
+<h2 id="信号的概念"><a href="#信号的概念" class="headerlink" title="信号的概念"></a>信号的概念</h2><p>信号是进程在运行过程中，由自身产生或由进程外部发过来的消息（事件）。信号是硬件中断的软件模拟(软中断)。每个信号用一个整型常量宏表示，以SIG开头，比如SIGCHLD( 子进程结束向父进程发送的一个信号 )、SIGINT（Ctrl+c）等，它们在系统头文件&lt;signal.h&gt;中定义,也可以通过在shell下键入kill –l查看信号列表，或者键入man 7 signal查看更详细的说明。</p>
+<a id="more"></a>
+
+<h2 id="如何让程序在后台运行"><a href="#如何让程序在后台运行" class="headerlink" title="如何让程序在后台运行"></a>如何让程序在后台运行</h2><p>如果想让程序在后台运行，有两种方法。</p>
+<h3 id="加“-amp-”符号"><a href="#加“-amp-”符号" class="headerlink" title="加“&amp;”符号"></a>加“&amp;”符号</h3><p>如果想让程序在后台运行，执行程序的时候，命令的最后面加“&amp;”符号。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./socket_serve &amp;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>程序<code>socket_serve</code>就在后台运行了。<br><img src="s1.png" alt="后台"><br>在后台运行的程序，用Ctrl+c无法中断，并且就算终端退出了，程序仍在后台运行。<br>如果终端退出了，后台运行的程序将由系统托管。<br><img src="s2.png" alt="交给系统"><br>在第一张图中，socket_serve的父进程是1971，第二张图中，book249的父进程是1。</p>
+</blockquote>
+<h3 id="采用fork"><a href="#采用fork" class="headerlink" title="采用fork"></a>采用fork</h3><p>另一种方法是采用fork，主程序执行fork，生成一个子进程，然后父进程退出，留下子进程继续运行，子进程将由系统托管。</p>
+<ul>
+<li><p>示例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(fork()&gt;<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">//主进程退出,只留下子进程</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上图中，子进程的父进程是系统进程。<br><img src="s3.png" alt="进程"></p>
+</li>
+</ul>
+<h3 id="如何让中止后台程序"><a href="#如何让中止后台程序" class="headerlink" title="如何让中止后台程序"></a>如何让中止后台程序</h3><p>问题来了，程序在后台运行了，离开了终端控制，用Ctrl+c上也无法中止，那怎么让它停下来呢？暂时用一个笨方法：杀了它。</p>
+<ul>
+<li>杀程序有两个方法：</li>
+</ul>
+<ol>
+<li><p>killall 程序名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">killall <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>先用“ps -ef|grep 程序名”找到程序的进程编号，然后用“kill 进程编号”<br><img src="s4.png" alt="进程"></p>
+</li>
+</ol>
+<h2 id="signal信号"><a href="#signal信号" class="headerlink" title="signal信号"></a>signal信号</h2><p>signal信号是Linux编程中非常重要的部分，接下来将详细介绍信号机制的基本概念、Linux对信号的实现和使用，以及有关信号的几个系统调用（库函数）。</p>
+<p>signal信号是进程之间相互传递消息的一种方法，信号全称为软中断信号，也有人称作软中断。从它的命名可以看出，它的实质和使用很象中断。信号是进程控制的一部分。</p>
+<h3 id="信号的基本概念"><a href="#信号的基本概念" class="headerlink" title="信号的基本概念"></a>信号的基本概念</h3><p>软中断信号（signal，又简称为信号）用来通知进程发生了事件。进程之间可以通过调用kill库函数发送软中断信号。内核也可以因为内部事件而给进程发送信号，通知进程发生了某个事件。注意，信号只是用来通知某进程发生了什么事件，并不给该进程传递任何数据。 </p>
+<p>收到信号的进程对各种信号有不同的处理方法。处理方法可以分为三类：第一种是类似中断的处理程序，对于需要处理的信号，进程可以指定处理函数，由该函数来处理。第二种方法是，忽略某个信号，对该信号不做任何处理，就象未发生过一样。第三种方法是，对该信号的处理保留系统的默认操作，大部分的信号的默认操作是终止进程。</p>
+<h3 id="信号的类型"><a href="#信号的类型" class="headerlink" title="信号的类型"></a>信号的类型</h3><p>发出信号的原因很多，这里按发出信号的原因简单分类，以了解各种信号：</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>信号值</th>
+<th>默认处理动作</th>
+<th>发出信号的原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SIGHUP</td>
+<td>1</td>
+<td>A</td>
+<td>终端挂起或者控制进程终止</td>
+</tr>
+<tr>
+<td><strong>SIGINT</strong></td>
+<td>2</td>
+<td>A</td>
+<td>键盘中断Ctrl+c</td>
+</tr>
+<tr>
+<td>SIGQUIT</td>
+<td>3</td>
+<td>C</td>
+<td>键盘的退出键被按下</td>
+</tr>
+<tr>
+<td>SIGILL</td>
+<td>4</td>
+<td>C</td>
+<td>非法指令</td>
+</tr>
+<tr>
+<td>SIGABRT</td>
+<td>6</td>
+<td>C</td>
+<td>由abort(3)发出的退出指令</td>
+</tr>
+<tr>
+<td>SIGFPE</td>
+<td>8</td>
+<td>C</td>
+<td>浮点异常</td>
+</tr>
+<tr>
+<td><strong>SIGKILL</strong></td>
+<td>9</td>
+<td>AEF</td>
+<td>采用kill -9 进程编号 强制杀死程序。不可捕获</td>
+</tr>
+<tr>
+<td><strong>SIGSEGV</strong></td>
+<td>11</td>
+<td>C</td>
+<td>无效的内存引用,不可被捕获</td>
+</tr>
+<tr>
+<td>SIGPIPE</td>
+<td>13</td>
+<td>A</td>
+<td>管道破裂:写一个没有读端口的管道</td>
+</tr>
+<tr>
+<td>SIGALRM</td>
+<td>14</td>
+<td>A</td>
+<td>由alarm(2)发出的信号</td>
+</tr>
+<tr>
+<td><strong>SIGTERM</strong></td>
+<td>15</td>
+<td>A</td>
+<td>采用“kill 进程编号”或“killall 程序名”通知程序。</td>
+</tr>
+<tr>
+<td>SIGUSR1</td>
+<td>30,10,16</td>
+<td>A</td>
+<td>用户自定义信号1</td>
+</tr>
+<tr>
+<td>SIGUSR2</td>
+<td>31,12,17</td>
+<td>A</td>
+<td>用户自定义信号2</td>
+</tr>
+<tr>
+<td><strong>SIGCHLD</strong></td>
+<td>20,17,18</td>
+<td>B</td>
+<td>子进程结束信号</td>
+</tr>
+<tr>
+<td>SIGCONT</td>
+<td>19,18,25</td>
+<td></td>
+<td>进程继续（曾被停止的进程）</td>
+</tr>
+<tr>
+<td>SIGSTOP</td>
+<td>17,19,23</td>
+<td>DEF</td>
+<td>终止进程</td>
+</tr>
+<tr>
+<td>SIGTSTP</td>
+<td>18,20,24</td>
+<td>D</td>
+<td>控制终端（tty）上按下停止键</td>
+</tr>
+<tr>
+<td>SIGTTIN</td>
+<td>21,21,26</td>
+<td>D</td>
+<td>后台进程企图从控制终端读</td>
+</tr>
+<tr>
+<td>SIGTTOU</td>
+<td>22,22,27</td>
+<td>D</td>
+<td>后台进程企图从控制终端写</td>
+</tr>
+<tr>
+<td>* 处理动作一项中的字母含义如下</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>A 缺省的动作是终止进程。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>B 缺省的动作是忽略此信号，将该信号丢弃，不做处理。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>C 缺省的动作是终止进程并进行内核映像转储（core dump），内核映像转储是指将进程数据在内存的映像和进程在内核结构中的部分内容以一定格式转储到文件系统，并且进程退出执行，这样做的好处是为程序员 提供了方便，使得他们可以得到进程当时执行时的数据值，允许他们确定转储的原因，并且可以调试他们的程序。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>D 缺省的动作是停止进程，进入停止状况以后还能重新进行下去。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>E 信号不能被捕获。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>F 信号不能被忽略。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="signal库函数"><a href="#signal库函数" class="headerlink" title="signal库函数"></a>signal库函数</h3><p>signal库函数可以设置程序对信号的处理方式。<br>包含头文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数声明：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sighandler_t</span> signal(<span class="keyword">int</span> signum, <span class="keyword">sighandler_t</span> handler);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数signum表示信号的编号。</p>
+<ul>
+<li>参数handler表示信号的处理方式，有三种情况：<br>1）SIG_IGN：忽略参数signum所指的信号。<br>2）一个自定义的处理信号的函数，信号的编号为这个自定义函数的参数。<br>3）SIG_DFL：恢复参数signum所指信号的处理方法为默认值。<br>程序员不关心signal的返回值。</li>
+</ul>
+<h3 id="信号有什么用"><a href="#信号有什么用" class="headerlink" title="信号有什么用"></a>信号有什么用</h3><p>服务程序运行在后台，如果想让它中止，杀了它不是个好办法，因为程序被杀的时候，程序突然死亡，没有释放资源，会影响系统的稳定。还有，用Ctrl+c与杀程序是相同的效果。<br>如果能向后台程序发送一个信号，后台程序收到这个信号后，调用一个函数，在函数中编写释放资源的代码，程序就可以有计划的退出，安全而体面。<br>信号还可以用于服务程序抓包等，这是较复杂的应用，暂时不介绍。</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>在实际开发中，在main函数开始的位置，程序员会先屏蔽掉全部的信号。</p>
+<blockquote>
+<p>Linux操作系统为每个程序默认打开三个文件，即标准输入stdin、标准输出stdout和标准错误输出stderr，其中0就是stdin，表示输入流，指从键盘输入，1代表stdout，2代表stderr，1,2默认是显示器。一般也会通过<code>close</code>关闭他们</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> ii=<span class="number">0</span>;ii&lt;<span class="number">50</span>;ii++)</span><br><span class="line">&#123;</span><br><span class="line">    signal(ii,SIG_IGN);</span><br><span class="line">    close(ii);  <span class="comment">//屏蔽标准的输入输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么做的目的是不希望程序被干扰。然后，再设置程序员关心的信号的处理函数。</p>
+<ul>
+<li>程序员关心的信号有三个：SIGINT、SIGTERM和SIGKILL。<blockquote>
+<p>程序在运行中，如果按Ctrl+c，将向程序发出SIGINT信号，信号编号是2。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>采用“kill 进程编号”或“killall 程序名”向程序发出的是SIGTERM信号，编号是15。</p>
+</blockquote>
+<blockquote>
+<p>采用“kill -9 进程编号”向程序发出的是SIGKILL信号，编号是9，此信号不能被忽略，也无法捕获，程序将突然死亡。</p>
+</blockquote>
+<p>所以，程序员只要设置SIGINT和SIGTERM两个信号的处理函数就可以了，这两个信号可以使用同一个处理函数，函数的代码是释放资源。</p>
+<ul>
+<li>示例<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">FILE *fp;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Exit</span><span class="params">(<span class="keyword">int</span> signal)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"signal=%d\n"</span>, signal);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//忽略所有的信号</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">50</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        signal(i, SIG_IGN);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//设置SIGINT和SIGTERM的处理函数</span></span><br><span class="line">    signal(SIGINT, Exit);</span><br><span class="line">    signal(SIGTERM, Exit);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>((fp=fopen(<span class="string">"/home/duguosheng/study/C_Cpp/signal/test.txt"</span>, <span class="string">"w"</span>))==<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"打开文件失败\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">fprintf</span>(fp, <span class="string">"我是第%d个数据\n"</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果<br><img src="s5.png" alt="结束"></p>
+</blockquote>
+<p>不管是用Ctrl+c还是kill，程序都能体面的退出。</p>
+<h2 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h2><p>Linux操作系统提供了kill命令向程序发送信号，C语言也提供了kill库函数，用于在程序中向其它进程或者线程发送信号。</p>
+<p>函数声明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">int</span> sig)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>kill函数将参数sig指定的信号给参数pid 指定的进程。</p>
+<ul>
+<li>参数pid 有几种情况：</li>
+</ul>
+<ol>
+<li>pid&gt;0 将信号传给进程识别码为pid 的进程。</li>
+<li>pid=0 将信号传给和目前进程相同进程组的所有进程，常用于父进程给子进程发送信号。</li>
+<li>pid=-1 将信号广播传送给系统内所有的进程，例如系统关机时，会向所有的登录窗口广播关机信息。</li>
+</ol>
+<p>sig：准备发送的信号代码，假如其值为零则没有任何信号送出，但是系统会执行错误检查，通常会利用sig值为零来检验某个进程是否仍在运行。<br>返回值说明： 成功执行时，返回0；失败返回-1，errno被设为以下的某个值。<br>EINVAL：指定的信号码无效（参数 sig 不合法）。<br>EPERM：权限不够无法传送信号给指定进程。<br>ESRCH：参数 pid 所指定的进程或进程组不存在。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div></div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Greatboy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Greatboy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/信号/" rel="tag"># 信号</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/19/用多进程实现socket并发/" rel="next" title="用多进程实现socket并发">
+                  <i class="fa fa-chevron-left"></i> 用多进程实现socket并发
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#信号的概念"><span class="nav-number">1.</span> <span class="nav-text">信号的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何让程序在后台运行"><span class="nav-number">2.</span> <span class="nav-text">如何让程序在后台运行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加“-amp-”符号"><span class="nav-number">2.1.</span> <span class="nav-text">加“&amp;”符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用fork"><span class="nav-number">2.2.</span> <span class="nav-text">采用fork</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何让中止后台程序"><span class="nav-number">2.3.</span> <span class="nav-text">如何让中止后台程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#signal信号"><span class="nav-number">3.</span> <span class="nav-text">signal信号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信号的基本概念"><span class="nav-number">3.1.</span> <span class="nav-text">信号的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号的类型"><span class="nav-number">3.2.</span> <span class="nav-text">信号的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signal库函数"><span class="nav-number">3.3.</span> <span class="nav-text">signal库函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号有什么用"><span class="nav-number">3.4.</span> <span class="nav-text">信号有什么用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">3.5.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送信号"><span class="nav-number">4.</span> <span class="nav-text">发送信号</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="Greatboy"
+    src="/images/touxiang1.gif">
+  <p class="site-author-name" itemprop="name">Greatboy</p>
+  <div class="site-description" itemprop="description">武汉大学17级，机械专业</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Greatboy</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">152k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:18</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":175,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
