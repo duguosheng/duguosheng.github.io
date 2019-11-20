@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="有时需要通过进程间通信来完成某项功能或者交换数据">
+<meta name="keywords" content="进程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux进程间通信">
+<meta property="og:url" content="http://yoursite.com/2019/11/20/linux进程间通信/index.html">
+<meta property="og:site_name" content="Oh, My Blog!">
+<meta property="og:description" content="有时需要通过进程间通信来完成某项功能或者交换数据">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/11/20/linux进程间通信/p1.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/20/linux进程间通信/p2.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/20/linux进程间通信/p3.png">
+<meta property="og:updated_time" content="2019-11-20T11:50:16.341Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux进程间通信">
+<meta name="twitter:description" content="有时需要通过进程间通信来完成某项功能或者交换数据">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/20/linux进程间通信/p1.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/20/linux进程间通信/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>linux进程间通信 | Oh, My Blog!</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Oh, My Blog!</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习记录，点滴成长</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/duguosheng" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/linux进程间通信/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang1.gif">
+      <meta itemprop="name" content="Greatboy">
+      <meta itemprop="description" content="武汉大学17级，机械专业">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Oh, My Blog!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux进程间通信
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-20 19:07:27 / 修改时间：19:50:16" itemprop="dateCreated datePublished" datetime="2019-11-20T19:07:27+08:00">2019-11-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index">
+                    <span itemprop="name">C/C++</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+            <div class="post-description">有时需要通过进程间通信来完成某项功能或者交换数据</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>修改自<a href="https://blog.csdn.net/wucz122140729/article/details/98588176" target="_blank" rel="noopener">码农有道的博客</a></p>
+<a id="more"></a>
+<h3 id="进程通信的概念"><a href="#进程通信的概念" class="headerlink" title="进程通信的概念"></a>进程通信的概念</h3><p>进程数据空间是相互独立的，不能相互访问的。但某些情况下进程之间需要互相通信，来完成系统的某项功能或交换数据。</p>
+<h3 id="进程通信的场景"><a href="#进程通信的场景" class="headerlink" title="进程通信的场景"></a>进程通信的场景</h3><ul>
+<li>数据传输：一个进程需要将它的数据发送给另一个进程，发送的数据量在一个字节到几兆字节之间。</li>
+<li>共享数据：多个进程想要操作共享数据，一个进程对共享数据的修改，别的进程应该立刻看到。</li>
+<li>通知事件：一个进程需要向另一个或一组进程发送消息，通知它（它们）发生了某种事件（如通知进程退出）。</li>
+<li>进程控制：有些进程希望控制另一个进程的运行。</li>
+</ul>
+<h3 id="进程通信的方式"><a href="#进程通信的方式" class="headerlink" title="进程通信的方式"></a>进程通信的方式</h3><h4 id="进程通信的方式-1"><a href="#进程通信的方式-1" class="headerlink" title="进程通信的方式"></a>进程通信的方式</h4><ul>
+<li>无名管道（pipe）及有名管道（named pipe）：无名管道可用于具有父进程和子进程之间的通信。有名管道克服了管道没有名字的限制，因此，除具有管道所具有的功能外，它还允许无亲缘关系进程间的通信。</li>
+<li>信号（signal）：信号用于通知接受进程有某种事件发生。</li>
+<li>消息队列（message）：消息队列是消息的链接表，进程可以向队列中添加消息，其它的进程则可以读走队列中的消息。</li>
+<li>共享内存：使得多个进程可以访问同一块内存空间。</li>
+<li>信号灯（semaphore）：也叫信号量，主要作为进程之间对共享资源加锁的手段。</li>
+<li>套接字（socket）：可用于不同机器之间的进程间通信。</li>
+</ul>
+<h4 id="应用经验"><a href="#应用经验" class="headerlink" title="应用经验"></a>应用经验</h4><ul>
+<li>管道和消息队列：太过时了，实在没什么应用价值，了解一下即可。</li>
+<li>信号灯（semaphore）：我有十年没用过了，可能会有用，也是了解一下即可，不必深入学习。</li>
+<li>信号（signal）：在信号章节中已详细介绍。</li>
+<li>套接字（socket）：在TCP通讯章节中介绍。</li>
+<li>共享内存：应用场景不多，但还是有，本章节将介绍它。</li>
+</ul>
+<p>共享内存和信号灯的江湖地位本来是很高的，但是，随着网络带宽的增加和内存数据库技术的发展，共享内存的应用场景越来越少。但是，对于大型数据库系统来说，共享内存和信号灯仍极其重要。<br>socket可以用于不同机器之间的进程通信，完全可以代替只能在同一机器的进程通信的管道和消息队列。</p>
+<h3 id="共享内存的概念"><a href="#共享内存的概念" class="headerlink" title="共享内存的概念"></a>共享内存的概念</h3><p>共享内存就是允许多个进程访问同一个内存空间。共享内存是在多个进程之间共享和传递数据最高效的方式。操作系统将不同进程之间共享内存安排为同一段物理内存，进程可以将共享内存连接到它们自己的地址空间中，如果某个进程修改了共享内存中的数据，其它的进程读到的数据也将会改变。</p>
+<p>共享内存并未提供锁机制，也就是说，在某一个进程对共享内存的进行读写的时候，不会阻止其它的进程对它的读写。如果要对共享内存的读写加锁，我们可以用共享内存自身的标记或信号灯。对普通程序员来说，对共享内存加锁的应用场景并不多见。</p>
+<h3 id="共享内存的操作"><a href="#共享内存的操作" class="headerlink" title="共享内存的操作"></a>共享内存的操作</h3><p>Linux中提供了一组函数用于操作共享内存，它们声明在头文件 sys/shm.h 中。</p>
+<h4 id="shmget函数"><a href="#shmget函数" class="headerlink" title="shmget函数"></a>shmget函数</h4><p>shmget函数用来获取或创建共享内存，它的声明为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">size_t</span> size, <span class="keyword">int</span> shmflg)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数key是共享内存的键值，是一个整数，typedef unsigned int key_t，是共享内存在系统中的编号，不同共享内存的编号不能相同，这一点由程序员保证。key用十六进制表示比较好。<br>参数size是待创建的共享内存的大小，以字节为单位。<br>参数shmflg是共享内存的访问权限，与文件的权限一样，0666|IPC_CREAT表示全部用户对它可读写，如果共享内存不存在，就创建一个共享内存。</p>
+<h4 id="shmat函数"><a href="#shmat函数" class="headerlink" title="shmat函数"></a>shmat函数</h4><p>把共享内存连接到当前进程的地址空间。它的声明如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">shmat</span><span class="params">(<span class="keyword">int</span> shm_id, <span class="keyword">const</span> <span class="keyword">void</span> *shm_addr, <span class="keyword">int</span> shmflg)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数，shm_id是由shmget函数返回的共享内存标识。<br>参数shm_addr指定共享内存连接到当前进程中的地址位置，通常为空，表示让系统来选择共享内存的地址。<br>参数shm_flg是一组标志位，通常为0。<br>调用成功时返回一个指向共享内存第一个字节的指针，如果调用失败返回-1.</p>
+<h4 id="shmdt函数"><a href="#shmdt函数" class="headerlink" title="shmdt函数"></a>shmdt函数</h4><p>该函数用于将共享内存从当前进程中分离，相当于shmat函数的反操作。它的声明如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmdt</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *shmaddr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数shmaddr是shmat函数返回的地址。<br>调用成功时返回0，失败时返回-1.</p>
+<h4 id="shmctl函数"><a href="#shmctl函数" class="headerlink" title="shmctl函数"></a>shmctl函数</h4><p>删除共享内存，它的声明如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shm_id, <span class="keyword">int</span> command, struct shmid_ds *buf)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数shm_id是shmget函数返回的共享内存标识符。<br>参数command填IPC_RMID。<br>参数buf填0。<br>解释一下，shmctl是控制共享内存的函数，其功能不只是删除共享内容，但其它的功能没什么用，所以不介绍了。<br>注意，用root创建的共享内存，不管创建的权限是什么，普通用户无法删除。</p>
+<ul>
+<li>示例程序（book255.cpp）<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/shm.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> shmid;  <span class="comment">//共享内存标识符</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建共享内存，键值为0x5005, 共1024字节, 全部用户可读可写</span></span><br><span class="line">    <span class="keyword">if</span>((shmid=shmget((<span class="keyword">key_t</span>)<span class="number">0x5005</span>, <span class="number">1024</span>, <span class="number">0666</span>|IPC_CREAT))==<span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"shmat(0x5005)failed\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *ptext = <span class="number">0</span>;  <span class="comment">//用于指向共享内存的指针</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//将共享内存连接到当前进程的地址空间，由ptext指针指向它</span></span><br><span class="line">    ptext = (<span class="keyword">char</span> *)shmat(shmid, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//操作本程序的ptext指针，就是操作共享内存</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"写入前：%s\n"</span>, ptext);</span><br><span class="line">    <span class="built_in">sprintf</span>(ptext, <span class="string">"本程序的进程号是：%d"</span>, getpid());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"写入后：%s\n"</span>, ptext);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//把共享内存从当前进程中分离</span></span><br><span class="line">    shmdt(ptext);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除共享内存</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    if(shmctl(shmid, IPC_RMID, 0)==-1)</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">        printf("stmctl(0x5005) failed\n");</span></span><br><span class="line"><span class="comment">        return -1;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>运行结果<br><img src="p1.png" alt="共享内存"></p>
+</blockquote>
+<p>注意，程序第一次运行的时候，共享内存未创建，所以第一次运行程序的时候，共享内存中的内容为空。之后程序每次运行都能获取到上一次程序运行写入的内容。</p>
+<h4 id="两个共享内存的操作命令"><a href="#两个共享内存的操作命令" class="headerlink" title="两个共享内存的操作命令"></a>两个共享内存的操作命令</h4><p>用ipcs -m可以查看当前用户有读限权的共享内存，内容有键值（key），共享内存编号（shmid），创建者（owner），权限（perms），大小（bytes）。<br><img src="p2.png" alt="ipcs"></p>
+<p>用ipcrm -m共享内存编号，可以手工删除共享内存，如下：<br><img src="p3.png" alt="ipcrm"></p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div></div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Greatboy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Greatboy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/进程/" rel="tag"># 进程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/19/linux信号signal/" rel="next" title="linux信号signal">
+                  <i class="fa fa-chevron-left"></i> linux信号signal
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程通信的概念"><span class="nav-number">1.</span> <span class="nav-text">进程通信的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程通信的场景"><span class="nav-number">2.</span> <span class="nav-text">进程通信的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程通信的方式"><span class="nav-number">3.</span> <span class="nav-text">进程通信的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程通信的方式-1"><span class="nav-number">3.1.</span> <span class="nav-text">进程通信的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用经验"><span class="nav-number">3.2.</span> <span class="nav-text">应用经验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享内存的概念"><span class="nav-number">4.</span> <span class="nav-text">共享内存的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享内存的操作"><span class="nav-number">5.</span> <span class="nav-text">共享内存的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shmget函数"><span class="nav-number">5.1.</span> <span class="nav-text">shmget函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shmat函数"><span class="nav-number">5.2.</span> <span class="nav-text">shmat函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shmdt函数"><span class="nav-number">5.3.</span> <span class="nav-text">shmdt函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shmctl函数"><span class="nav-number">5.4.</span> <span class="nav-text">shmctl函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个共享内存的操作命令"><span class="nav-number">5.5.</span> <span class="nav-text">两个共享内存的操作命令</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="Greatboy"
+    src="/images/touxiang1.gif">
+  <p class="site-author-name" itemprop="name">Greatboy</p>
+  <div class="site-description" itemprop="description">武汉大学17级，机械专业</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Greatboy</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">155k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:21</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":175,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
