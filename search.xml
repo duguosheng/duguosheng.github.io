@@ -1,6 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>linux下将gbk文件转换为utf-8</title>
+    <url>/2019/11/23/linux%E4%B8%8B%E5%B0%86gbk%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAutf-8/</url>
+    <content><![CDATA[<p>转自<a href="https://blog.csdn.net/u012724167/article/details/77248919" target="_blank" rel="noopener">Linux下GBK文件编码批量转换UTF-8命令</a></p>
+<p>在工作中，经常会遇到使用操作系统不一样的环境，从而导致在不同环境下的文件编辑的编码是不一样的，Windows默认是GBK编码格式，Linux默认是UTF-8的格式，这样就会出现把GBK编码的文件拷贝到Linux下出现乱码情况，很是让人头疼，下面给大家介绍下GBK-&gt;UTF-8文件编码批量转换。</p>
+<a id="more"></a>
+<h3 id="Linux命令-enca-查看文件的编码"><a href="#Linux命令-enca-查看文件的编码" class="headerlink" title="Linux命令-enca 查看文件的编码"></a>Linux命令-enca 查看文件的编码</h3><ul>
+<li><p>Enca语法</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Usage:  enca [-L LANGUAGE] [OPTION]... [FILE]...</span><br><span class="line">        enconv [-L LANGUAGE] [OPTION]... [FILE]...</span><br><span class="line">        Detect encoding of text files and convert them <span class="keyword">if</span> required.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Enca用法</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ enca -L zh_CN file 检查文件的编码</span><br><span class="line">$ enca -L zh_CN -x UTF-8 file 将文件编码转换为<span class="string">"UTF-8"</span>编码</span><br><span class="line">$ enca -L zh_CN -x UTF-8 file1 file2 如果不想覆盖原文件可以这样</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>除了有检查文件编码的功能以外，”enca”还有一个好处就是如果文件本来就是你要转换的那种编码，它不会报错，还是会print出结果来， 而”iconv”则会报错。这对于脚本编写是比较方便的事情。</p>
+<ul>
+<li><p>转换单个文件的编码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ enca -L none -x utf-8  index.html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转换多个文件的编码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ enca -x utf-8 *</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="Linux文件名编码批量转换–convmv"><a href="#Linux文件名编码批量转换–convmv" class="headerlink" title="Linux文件名编码批量转换–convmv"></a>Linux文件名编码批量转换–convmv</h3><p>Convmv语法</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ convmv -f 源编码 -t 新编码 [选项] 文件名</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Convmv 常用参数</li>
+</ul>
+<p>-r 递归处理子文件夹<br>–notest 真正进行操作，请注意在默认情况下是不对文件进行真实操作的，而只是试验。<br>–list 显示所有支持的编码<br>–unescap 可以做一下转义，比如把%20变成空格</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><ul>
+<li><p>转换一个文件由GBK转换成UTF-8</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">convmv -f GBK -t UTF-8 --notest utf8 filename</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GBK-&gt;UTF-8文件编码批量转换脚本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ find default -<span class="built_in">type</span> f -<span class="built_in">exec</span> convmv -f GBK -t UTF-8 --notest utf8 &#123;&#125; -o utf/&#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="使用iconv-转换"><a href="#使用iconv-转换" class="headerlink" title="使用iconv 转换"></a>使用iconv 转换</h3><ul>
+<li>Iconv语法<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iconv -f encoding -t encoding inputfile</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><ul>
+<li><p>单个文件转换</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ iconv -f GBK -t UTF-8 file1 -o file2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>批量转换</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ find default -<span class="built_in">type</span> d -<span class="built_in">exec</span> mkdir -p utf/&#123;&#125; \;</span><br><span class="line">$ find default -<span class="built_in">type</span> f -<span class="built_in">exec</span> iconv -f GBK -t UTF-8 &#123;&#125; -o utf/&#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>这两行命令将default目录下的文件由GBK编码转换为UTF-8编码，目录结构不变，转码后的文件保存在utf/default目录下。</p>
+]]></content>
+      <categories>
+        <category>problems</category>
+      </categories>
+      <tags>
+        <tag>编码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言多线程</title>
+    <url>/2019/11/21/C%E8%AF%AD%E8%A8%80%E5%A4%9A%E7%BA%BF%E7%A8%8B/</url>
+    <content><![CDATA[<p>修改自<a href="https://blog.csdn.net/wucz122140729/article/details/98588567" target="_blank" rel="noopener">码农有道的博客</a></p>
+<h2 id="线程的概念"><a href="#线程的概念" class="headerlink" title="线程的概念"></a>线程的概念</h2><p>和多进程相比，多线程是一种比较节省资源的多任务操作方式。启动一个新的进程必须分配给它独立的地址空间，每个进程都有自己的堆栈段和数据段，系统开销比较高，进行数据的传递只能通过进行间通信的方式进行。在同一个进程中，可以运行多个线程，运行于同一个进程中的多个线程，它们彼此之间使用相同的地址空间，共享全局数据，启动一个线程所消耗的资源比启动一个进程所消耗的资源要少。</p>
+<a id="more"></a>
+
+<h2 id="线程的使用"><a href="#线程的使用" class="headerlink" title="线程的使用"></a>线程的使用</h2><h3 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h3><p>在Linux下，采用pthread_create函数来创建一个新的线程，函数声明：</p>
+<ul>
+<li><p>包含头文件：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数声明：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *thread, <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr,<span class="keyword">void</span> *(*start_routine) (<span class="keyword">void</span> *), <span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>参数thread为为指向线程标识符的地址。<br>参数attr用于设置线程属性，一般为空，表示使用默认属性。<br>参数start_routine是线程运行函数的地址。<br>参数arg是线程运行函数的参数。新创建的线程从start_routine函数的地址开始运行，该函数只有一个无类型指针参数arg。  </p>
+<blockquote>
+<p>在编译时注意加上-lpthread参数，以调用静态链接库。因为pthread并非Linux系统的默认库。</p>
+</blockquote>
+<h3 id="线程的终止"><a href="#线程的终止" class="headerlink" title="线程的终止"></a>线程的终止</h3><p>如果进程中的任一线程调用了exit(0)，则整个进程会终止，所以，在线程的start_routine函数中，不能采用exit。</p>
+<ul>
+<li>线程的终止有三种方式：<br>1）线程的start_routine函数代码结束，自然消亡。<br>2）线程的start_routine函数调用pthread_exit结束，不想活了。<br>3）被主进程或其它线程中止，被杀了，一般情况不会这么做。</li>
+</ul>
+<p>pthread_exit函数的声明如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *retval)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数retval填空。</p>
+<ul>
+<li>线程主函数的函数体中，不能使用return语句，如果想退出线程，可以用pthread_exit(0);返回。</li>
+</ul>
+<h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><p>线程同步？怎么同步？一起运行？一起停止？我当年听说线程同步这个词的时候，也是一头雾水。</p>
+<p>在人们的日常生活中，所说的锁大概有两种：一种是不允许访问；另一种是资源忙，同一时间只允许一个使用者占用，其它使用者如果要使用，必须要等待。</p>
+<p>1）不允许访问的锁好理解，就像每户人家的锁，不允许外人进入。<br>2）第二种锁，例如火车上的厕所，它是公共的，空闲的时候任何人可以进入，人进去以后就会把它锁起来，其它的人如果要上厕所，必须等待解锁，即里面的人出来。还有红绿灯，红灯是加锁，绿灯是解锁。</p>
+<p>对多线程来说，资源是共享的，基本上不存在不允许访问的情况，但是，共享的资源在某一时间点只能有一个线程占用，这种情况是存在的，所以需要给资源加锁。</p>
+<p>线程的锁的种类有互斥锁、读写锁、条件变量、自旋锁、信号灯。</p>
+<p>在本章节中，只介绍互斥锁，其它的锁应用场景极少</p>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><p>互斥锁机制是同一时刻只允许一个线程占有共享的资源。</p>
+<ul>
+<li>初始化锁<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_init</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex,<span class="keyword">const</span> <span class="keyword">pthread_mutex_attr_t</span> *mutexattr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>其中参数 mutexattr 用于指定锁的属性（见下），如果为NULL则使用缺省属性。<br>互斥锁的属性在创建锁的时候指定，当资源被某线程锁住的时候，其它的线程在试图加锁时表现将不同。当前有四个值可供选择：</p>
+<p>1）PTHREAD_MUTEX_TIMED_NP，这是缺省值，也就是普通锁。当一个线程加锁以后，其余请求锁的线程将形成一个等待队列，并在解锁后按优先级获得锁。这种锁策略保证了资源分配的公平性。<br>2）PTHREAD_MUTEX_RECURSIVE_NP，嵌套锁，允许同一个线程对同一个锁成功获得多次，并通过多次unlock解锁。<br>3）PTHREAD_MUTEX_ERRORCHECK_NP，检错锁，如果同一个线程请求同一个锁，则返回EDEADLK，否则与PTHREAD_MUTEX_TIMED_NP类型动作相同。<br>4）PTHREAD_MUTEX_ADAPTIVE_NP，适应锁，动作最简单的锁类型，等待解锁后重新竞争。</p>
+<ul>
+<li><p>阻塞加锁</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_lock</span><span class="params">(pthread_mutex *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>非阻塞加锁</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_trylock</span><span class="params">( <span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>该函数语义与 pthread_mutex_lock() 类似，不同的是在锁已经被占据时立即返回 EBUSY，不是挂起等待。</p>
+<ul>
+<li><p>解锁（要求锁是lock状态，并且由加锁线程解锁）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_unlock</span><span class="params">(pthread_mutex *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>销毁锁（此时锁必需unlock状态，否则返回EBUSY）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_destroy</span><span class="params">(pthread_mutex *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="应用经验"><a href="#应用经验" class="headerlink" title="应用经验"></a>应用经验</h2><p>Linux没有真正意义上的线程，它的实现是由进程来模拟，属于用户级线程。所以，在Linux系统下，进程与线程在性能和资源消耗方面没有本质的差别。对我们程序员来说，进程不能共享全局数据，线程可以共享全局数据，各位可以根据应用场景选择采用多进程或多线程。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux进程间通信</title>
     <url>/2019/11/20/linux%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/</url>
     <content><![CDATA[<p>修改自<a href="https://blog.csdn.net/wucz122140729/article/details/98588176" target="_blank" rel="noopener">码农有道的博客</a></p>
