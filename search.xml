@@ -1,6 +1,418 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>解决外网被动模式访问ftp服务器</title>
+    <url>/2020/01/10/%E8%A7%A3%E5%86%B3%E5%A4%96%E7%BD%91%E8%A2%AB%E5%8A%A8%E6%A8%A1%E5%BC%8F%E8%AE%BF%E9%97%AEftp%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<p>配置完成ftp服务器后可以连接，执行cd等命令，但不能从服务器获取数据，我的原因是因为服务器返回了本地的地址，而不是公网的ip地址</p>
+<a id="more"></a>
+<p>解决方法</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/vsftpd/vsftpd.conf</span><br></pre></td></tr></table></figure>
+
+<p>修改或添加以下参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen=YES</span><br><span class="line">listen_ipv6=NO</span><br><span class="line">pasv_enable=YES</span><br><span class="line">pasv_address=服务器公网ip</span><br><span class="line">pasv_min_port=5500</span><br><span class="line">pasv_max_port=6000</span><br></pre></td></tr></table></figure>
+
+<p>放行5500-6000端口为tcp方式，如果是买的如阿里云服务器，去控制台也放行一下，这样就可以了</p>
+]]></content>
+      <categories>
+        <category>problems</category>
+      </categories>
+      <tags>
+        <tag>ftp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>centos7更新gcc,并解决version 'GLIBCXX_3.4.21' not found</title>
+    <url>/2020/01/09/centos7%E6%9B%B4%E6%96%B0gcc-%E5%B9%B6%E8%A7%A3%E5%86%B3version-GLIBCXX-3-4-21-not-found/</url>
+    <content><![CDATA[<a id="more"></a>
+<ol>
+<li><p>升级gcc<br><a href="https://www.cnblogs.com/NanZhiHan/p/11010130.html" target="_blank" rel="noopener">https://www.cnblogs.com/NanZhiHan/p/11010130.html</a></p>
+</li>
+<li><p>解决解决version ‘’GLIBCXX_3.4.21’’ not found’<br>安装完成新版本gcc后，根据上面的教程安装在了<code>/usr/local/gcc</code>下，<br>首先</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/gcc/lib64</span><br><span class="line"><span class="comment"># 根据升级的gcc版本不同，这里的文件名可能后面的某些数字不同</span></span><br><span class="line">sudo cp libstdc++.so.6.0.25 /usr/lib64</span><br><span class="line"><span class="built_in">cd</span> /usr/lib64</span><br><span class="line"><span class="comment"># 如果已经存在则将其备份</span></span><br><span class="line">sudo mv libstdc++.so.6 libstdc++.so.6.back</span><br><span class="line"><span class="comment"># 将拷贝进来的文件建立软连接</span></span><br><span class="line">sudo ln -s libstdc++.so.6.0.25 libstdc++.so.6</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>problems</category>
+      </categories>
+      <tags>
+        <tag>gcc</tag>
+        <tag>centos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tmux简单使用</title>
+    <url>/2020/01/09/tmux%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tmux</td>
+<td>进入tmux</td>
+</tr>
+<tr>
+<td><c-b>+%</c-b></td>
+<td>新建一个竖分屏窗口会话</td>
+</tr>
+<tr>
+<td><c-b>+”</c-b></td>
+<td>新建一个横分屏窗口会话</td>
+</tr>
+<tr>
+<td><c-b>+c</c-b></td>
+<td>新建一个tmux标签页</td>
+</tr>
+<tr>
+<td><c-b>+p</c-b></td>
+<td>到上一个tmux标签页</td>
+</tr>
+<tr>
+<td><c-b>+n</c-b></td>
+<td>到下一个tmux标签页</td>
+</tr>
+<tr>
+<td><c-b>+w</c-b></td>
+<td>菜单选择tmux标签页</td>
+</tr>
+<tr>
+<td><c-b>+d</c-b></td>
+<td>删除当前会话窗口</td>
+</tr>
+<tr>
+<td><c-b>+t</c-b></td>
+<td>显示时钟，按enter回到shell</td>
+</tr>
+<tr>
+<td><c-b>+方向键</c-b></td>
+<td>选择会话窗口</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>tmux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ftp服务搭建</title>
+    <url>/2020/01/08/ftp%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/langyue919/article/details/80796369" target="_blank" rel="noopener">https://blog.csdn.net/langyue919/article/details/80796369</a></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>ftp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ftp相关命令</title>
+    <url>/2020/01/08/ftp%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ftp接地址直接登录</span></span><br><span class="line">ftp ip地址</span><br><span class="line"><span class="comment"># 先启动ftp然后使用open</span></span><br><span class="line">ftp</span><br><span class="line">open ip地址</span><br></pre></td></tr></table></figure>
+
+<p>之后输入用户名和密码即可</p>
+<h2 id="文件相关指令"><a href="#文件相关指令" class="headerlink" title="文件相关指令"></a>文件相关指令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dir     <span class="comment">#显示服务器目录和文件列表</span></span><br><span class="line">ls      <span class="comment">#显示服务器目录和文件列表</span></span><br><span class="line"><span class="built_in">cd</span>      <span class="comment">#进入服务器指定目录</span></span><br><span class="line">lcd     <span class="comment">#进入本地客户端指定目录</span></span><br><span class="line">ascii   <span class="comment">#设定传输方式为ascii传输</span></span><br><span class="line">binary  <span class="comment">#设定传输方式为二进制传输</span></span><br><span class="line">get/recv oldname [newname] <span class="comment">#下载服务器上的文件到本地，[并重命名为newname]</span></span><br><span class="line">mget file1 file2 ...  <span class="comment">#下载多个文件，支持通配符</span></span><br><span class="line">put/send oldname [newname] <span class="comment">#上传文件到服务器，[并重命名为newname]</span></span><br><span class="line">mput file1 file2 ...  <span class="comment">#上传多个文件，支持通配符</span></span><br><span class="line">rename oldname newname <span class="comment">#重命名文件</span></span><br><span class="line">delete file  <span class="comment">#删除文件</span></span><br><span class="line">mdelete file1 file2 ...  <span class="comment">#删除多个文件</span></span><br><span class="line"><span class="built_in">help</span>   <span class="comment">#帮助信息</span></span><br><span class="line">prompt <span class="comment">#打开/关闭交互提示</span></span><br><span class="line"><span class="built_in">bye</span>    <span class="comment">#退出ftp</span></span><br><span class="line">passive  <span class="comment">#主动与被动模式切换</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>ftp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT中TCP通信</title>
+    <url>/2019/12/07/QT%E4%B8%ADTCP%E9%80%9A%E4%BF%A1/</url>
+    <content><![CDATA[<a id="more"></a>
+
+
+<ul>
+<li>整体流程如下<br><img src="t1.png" alt="tcp"></li>
+</ul>
+<h3 id="代码如下"><a href="#代码如下" class="headerlink" title="代码如下"></a>代码如下</h3><ul>
+<li>在pro文件中加入<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">QT += network</span><br><span class="line">CONFIG += c++11</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="include-h"><a href="#include-h" class="headerlink" title="_include.h"></a>_include.h</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _INCLUDE_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _INCLUDE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QObject&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QWidget&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QTcpServer&gt;  //监听套接字</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QTcpSocket&gt;  //通信套接字</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QHostAddress&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"tcpserver.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"tcpclient.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// _INCLUDE_H</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="tcpclient-h"><a href="#tcpclient-h" class="headerlink" title="tcpclient.h"></a>tcpclient.h</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> TCPCLIENT_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TCPCLIENT_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_include.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ui &#123;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TcpClient</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TcpClient</span> :</span> <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">TcpClient</span><span class="params">(QWidget *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    ~TcpClient();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_btn_connect_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_btn_send_clicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_btn_close_clicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::TcpClient *ui;</span><br><span class="line">    QTcpSocket *client_sock;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// TCPCLIENT_H</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="tcpclient-cpp"><a href="#tcpclient-cpp" class="headerlink" title="tcpclient.cpp"></a>tcpclient.cpp</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"tcpclient.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ui_tcpclient.h"</span></span></span><br><span class="line"></span><br><span class="line">TcpClient::TcpClient(QWidget *parent) :</span><br><span class="line">    QWidget(parent),</span><br><span class="line">    ui(<span class="keyword">new</span> Ui::TcpClient)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line">    setWindowTitle(<span class="string">"客户端"</span>);</span><br><span class="line">    client_sock = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//分配空间</span></span><br><span class="line">    client_sock = <span class="keyword">new</span> QTcpSocket(<span class="keyword">this</span>);</span><br><span class="line">    connect(client_sock, &amp;QTcpSocket::connected,\</span><br><span class="line">            [=]()&#123;</span><br><span class="line">        ui-&gt;text_recv-&gt;setText(<span class="string">"成功连接服务器"</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    connect(client_sock, &amp;QTcpSocket::readyRead, \</span><br><span class="line">            [=]()&#123;</span><br><span class="line">                <span class="comment">//获取对方发送的内容</span></span><br><span class="line">                QByteArray <span class="built_in">array</span> = client_sock-&gt;readAll();</span><br><span class="line">                <span class="comment">//追加到编辑区中</span></span><br><span class="line">                ui-&gt;text_recv-&gt;append(<span class="built_in">array</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TcpClient::~TcpClient()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> TcpClient::on_btn_connect_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//获取服务器端口和IP</span></span><br><span class="line">    QString ip = ui-&gt;lineEdit_ip-&gt;text();</span><br><span class="line">    quint16 port = ui-&gt;lineEdit_port-&gt;text().toInt();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//主动和服务器连接</span></span><br><span class="line">    client_sock-&gt;connectToHost(QHostAddress(ip), port);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> TcpClient::on_btn_send_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(client_sock==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//获取编辑框内容</span></span><br><span class="line">    QString str = ui-&gt;text_send-&gt;toPlainText();</span><br><span class="line">    ui-&gt;text_send-&gt;clear();</span><br><span class="line">    <span class="comment">//给对方发送数据，使用的是tcpSocket</span></span><br><span class="line">    client_sock-&gt;write(str.toUtf8().data());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> TcpClient::on_btn_close_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(client_sock==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//主动和对方断开连接</span></span><br><span class="line">    client_sock-&gt;disconnectFromHost();</span><br><span class="line">    client_sock-&gt;close();</span><br><span class="line">    client_sock = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="tcpserver-h"><a href="#tcpserver-h" class="headerlink" title="tcpserver.h"></a>tcpserver.h</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> TCPSERVER_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TCPSERVER_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_include.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TcpServer</span> :</span> <span class="keyword">public</span> QObject</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QTcpServer *tcpServer;</span><br><span class="line">    QTcpSocket *tcpSocket;</span><br><span class="line">    QString client_ip;</span><br><span class="line">    quint16 client_port;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">InitServer</span><span class="params">()</span></span>;  <span class="comment">//初始化服务器</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">TcpServer</span><span class="params">(QObject *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">Write</span><span class="params">(QString data)</span></span>;</span><br><span class="line">    <span class="function">QByteArray <span class="title">Read</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DisConnect</span><span class="params">()</span></span>;</span><br><span class="line">    ~TcpServer();</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SuccessConnected</span><span class="params">(QString ip, quint16 port)</span></span>;  <span class="comment">//成功连接客户端</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">RecvMessage</span><span class="params">(QByteArray data)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// TCPSERVER_H</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="tcpserver-cpp"><a href="#tcpserver-cpp" class="headerlink" title="tcpserver.cpp"></a>tcpserver.cpp</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"tcpserver.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//宏定义监听端口</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TCP_SERVER_LISTEN_PORT 5894</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">TcpServer::TcpServer(QObject *parent) : QObject(parent)</span><br><span class="line">&#123;    </span><br><span class="line">    InitServer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> TcpServer::InitServer()</span><br><span class="line">&#123;</span><br><span class="line">    tcpServer = <span class="keyword">new</span> QTcpServer(<span class="keyword">this</span>);</span><br><span class="line">    tcpSocket = <span class="literal">NULL</span>;</span><br><span class="line">    tcpServer-&gt;listen(QHostAddress::Any, TCP_SERVER_LISTEN_PORT);</span><br><span class="line">    connect(tcpServer, &amp;QTcpServer::newConnection, \</span><br><span class="line">            [=]()&#123;</span><br><span class="line">                <span class="comment">//取出建立好连接的套接字</span></span><br><span class="line">                tcpSocket = tcpServer-&gt;nextPendingConnection();</span><br><span class="line">                <span class="comment">//获取对方的ip和端口</span></span><br><span class="line">                QString client_ip = tcpSocket-&gt;peerAddress().toString();</span><br><span class="line">                quint16 client_port = tcpSocket-&gt;peerPort();</span><br><span class="line">                emit SuccessConnected(client_ip, client_port);</span><br><span class="line"></span><br><span class="line">                <span class="comment">//当获取了tcpSocket后,建立连接关系，读取接收到的消息</span></span><br><span class="line">                connect(tcpSocket, &amp;QTcpSocket::readyRead, \</span><br><span class="line">                        [=]()&#123;</span><br><span class="line">                            QByteArray <span class="built_in">array</span> = tcpSocket-&gt;readAll();</span><br><span class="line">                            emit RecvMessage(<span class="built_in">array</span>);</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> TcpServer::Write(QString data)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="comment">//给对方发送数据，使用的是tcpSocket</span></span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;write(data.toUtf8().data())==<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> TcpServer::DisConnect()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//主动和客户端断开连接</span></span><br><span class="line">    tcpSocket-&gt;disconnectFromHost();</span><br><span class="line">    tcpSocket-&gt;close();</span><br><span class="line">    tcpSocket = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TcpServer::~TcpServer()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="widget-h"><a href="#widget-h" class="headerlink" title="widget.h"></a>widget.h</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> WIDGET_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WIDGET_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"_include.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ui &#123;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> :</span> <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Widget</span><span class="params">(QWidget *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    ~Widget();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::Widget *ui;</span><br><span class="line">    TcpServer *tcp_server;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DealSuccessConnected</span><span class="params">(QString ip, quint16 port)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DealRecvMessage</span><span class="params">(QByteArray data)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_button_send_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_button_close_clicked</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// WIDGET_H</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="widget-cpp"><a href="#widget-cpp" class="headerlink" title="widget.cpp"></a>widget.cpp</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"widget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ui_widget.h"</span></span></span><br><span class="line"></span><br><span class="line">Widget::Widget(QWidget *parent) :</span><br><span class="line">    QWidget(parent),</span><br><span class="line">    ui(<span class="keyword">new</span> Ui::Widget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line">    setWindowTitle(<span class="string">"服务器：5894"</span>);</span><br><span class="line">    tcp_server = <span class="keyword">new</span> TcpServer(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//连接成功后输出提示信息</span></span><br><span class="line">    connect(tcp_server, &amp;TcpServer::SuccessConnected, <span class="keyword">this</span>, &amp;Widget::DealSuccessConnected);</span><br><span class="line">    <span class="comment">//收到消息后显示在文本框</span></span><br><span class="line">    connect(tcp_server, &amp;TcpServer::RecvMessage, <span class="keyword">this</span>, &amp;Widget::DealRecvMessage);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::DealSuccessConnected(QString ip, quint16 port)</span><br><span class="line">&#123;</span><br><span class="line">    QString info = QString (<span class="string">"%1:%2:成功连接"</span>).arg(ip).arg(port);</span><br><span class="line">    ui-&gt;text_read-&gt;setText(info);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::DealRecvMessage(QByteArray data)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;text_read-&gt;append(data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::on_button_send_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//获取编辑区内容</span></span><br><span class="line">    QString str = ui-&gt;text_send-&gt;toPlainText();</span><br><span class="line">    ui-&gt;text_send-&gt;clear();</span><br><span class="line">    <span class="comment">//发送数据</span></span><br><span class="line">    tcp_server-&gt;Write(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::on_button_close_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    tcp_server-&gt;DisConnect();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Widget::~Widget()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>QT</category>
+      </categories>
+      <tags>
+        <tag>TCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>crontab调度</title>
+    <url>/2019/12/06/crontab%E8%B0%83%E5%BA%A6/</url>
+    <content><![CDATA[<a id="more"></a>
+<ul>
+<li>crontab命令</li>
+</ul>
+<p>-e : 执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数来指定使用那个文字编辑器(比如说 setenv VISUAL joe)<br>-r : 删除目前的时程表<br>-l : 列出目前的时程表</p>
+<ul>
+<li>编写任务<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">* * * * * 执行的任务</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>星号分别代表<strong>分，时，一个月中的第几天，月份，星期几</strong></p>
+<blockquote>
+<p>分：0-59，如在每小时的第十分钟执行，这里就写<code>10</code>，如果每隔五分钟执行一次就写<code>*/5</code>，如要每小时的第1,5,10分钟执行，就写<code>1,5,10</code><br>时：0-23<br>第几天：1-31<br>月份：1-12<br>星期：0-7，0和7都代表周日</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>任务调度</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT多线程</title>
+    <url>/2019/12/03/QT%E5%A4%9A%E7%BA%BF%E7%A8%8B/</url>
+    <content><![CDATA[<a id="more"></a>
+<h2 id="QT4"><a href="#QT4" class="headerlink" title="QT4"></a>QT4</h2><ul>
+<li><p>自定义一个类，继承自<strong>QThread</strong>，并实现<strong>run()</strong>方法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span>:</span> <span class="keyword">public</span> Qthread</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;  <span class="comment">//线程处理函数（和主线程不在同一个线程）</span></span><br><span class="line">signals:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">isDone</span><span class="params">()</span></span>;  <span class="comment">//用于判断线程是否结束</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MyThread::run()</span><br><span class="line">&#123;</span><br><span class="line">	QThread.sleep(<span class="number">5</span>);  <span class="comment">//sleep延时模拟实际工程中的处理函数</span></span><br><span class="line">	<span class="function">emit <span class="title">isDone</span><span class="params">()</span></span>;  <span class="comment">//处理完触发isDone()</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建对象并调用<strong>start()</strong>方法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">MyThread th;</span><br><span class="line">th.start();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭线程</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//关闭线程</span></span><br><span class="line">th-&gt;quit();</span><br><span class="line"><span class="comment">//等待线程处理完手头工作</span></span><br><span class="line">th-&gt;wait();</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="QT5"><a href="#QT5" class="headerlink" title="QT5"></a>QT5</h2><ul>
+<li>自定义一个类，继承自<strong>QObject</strong></li>
+<li>类中设置一个线程函数（只有一个是线程函数）</li>
+<li>在主线程中创建线程对象（不能指定父对象）myTh和Qthread实例对象th</li>
+<li>使用<code>myTh-&gt;moveToThread(th)</code>把自定义线程类加入到子线程</li>
+<li>使用connect建立一定关系的连接</li>
+<li>调用Qthread实例对象的<code>start()</code>方法启动线程</li>
+</ul>
+<blockquote>
+<p>mythread.h</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MYTHREAD_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MYTHREAD_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QObject&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QThread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> :</span> <span class="keyword">public</span> QObject</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">MyThread</span><span class="params">(QObject *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doWork</span><span class="params">()</span></span>;  <span class="comment">//线程处理函数</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setFlag</span><span class="params">(<span class="keyword">bool</span> flg=<span class="literal">false</span>)</span></span>;  <span class="comment">//标志位，通过设置标志位进入或退出处理函数的循环</span></span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">mySignal</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">bool</span> flag;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MYTHREAD_H</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>mythread.cpp</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"mythread.h"</span></span></span><br><span class="line"></span><br><span class="line">MyThread::MyThread(QObject *parent) : QObject(parent)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MyThread::setFlag(<span class="keyword">bool</span> flg)</span><br><span class="line">&#123;</span><br><span class="line">    flag = flg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MyThread::doWork()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(flag)</span><br><span class="line">    &#123;</span><br><span class="line">        QThread::sleep(<span class="number">1</span>);  <span class="comment">//每隔一秒触发一次信号</span></span><br><span class="line">        <span class="function">emit <span class="title">mySignal</span><span class="params">()</span></span>;</span><br><span class="line">        qDebug() &lt;&lt; <span class="string">"子线程号："</span> &lt;&lt; QThread::currentThread();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>widget.h</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> WIDGET_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WIDGET_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QWidget&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QThread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"mythread.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ui &#123;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> :</span> <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Widget</span><span class="params">(QWidget *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    ~Widget();</span><br><span class="line">    QThread *th;</span><br><span class="line">    MyThread *myTh;</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">startThread</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_start_button_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_stop_btn_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addLcdNum</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dealClose</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::Widget *ui;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// WIDGET_H</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>widget.cpp</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"widget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ui_widget.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Widget::Widget(QWidget *parent) :</span><br><span class="line">    QWidget(parent),</span><br><span class="line">    ui(<span class="keyword">new</span> Ui::Widget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1. 为线程分配空间</span></span><br><span class="line">    <span class="comment">//创建QThread对象</span></span><br><span class="line">    th = <span class="keyword">new</span> QThread(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//创建自定义线程类对象，该类必须继承于QObject</span></span><br><span class="line">    myTh = <span class="keyword">new</span> MyThread;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 将自定义线程加入到QThread创建的对象中</span></span><br><span class="line">    myTh -&gt; moveToThread(th);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//当触发自定义线程中的信号时，使LCD显示的数字增加</span></span><br><span class="line">    connect(myTh, &amp;MyThread::mySignal, <span class="keyword">this</span>, &amp;Widget::addLcdNum);</span><br><span class="line">    <span class="comment">//3. 当触发主界面类的开启线程信号时，开启线程处理函数,调用th-&gt;start()</span></span><br><span class="line">    connect(<span class="keyword">this</span>, &amp;Widget::startThread, myTh, &amp;MyThread::doWork);</span><br><span class="line">    <span class="comment">//当窗口被关闭时，释放资源</span></span><br><span class="line">    connect(<span class="keyword">this</span> ,&amp;Widget::destroyed, <span class="keyword">this</span>, &amp;Widget::dealClose);</span><br><span class="line"></span><br><span class="line">    qDebug() &lt;&lt; <span class="string">"主线程是："</span> &lt;&lt; QThread::currentThread();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Widget::~Widget()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::addLcdNum()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">    ui -&gt; lcdNumber -&gt; display(++num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//按下开始键，触发开启线程的信号</span></span><br><span class="line"><span class="keyword">void</span> Widget::on_start_button_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(th-&gt;isRunning())</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    th -&gt; start();</span><br><span class="line">    myTh -&gt; setFlag(<span class="literal">true</span>);</span><br><span class="line">    <span class="function">emit <span class="title">startThread</span><span class="params">()</span></span>;  <span class="comment">//触发信号</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//按下停止键，将标志位翻转</span></span><br><span class="line"><span class="keyword">void</span> Widget::on_stop_btn_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(!(th-&gt;isRunning()))</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    myTh -&gt; setFlag(<span class="literal">false</span>);</span><br><span class="line">    th -&gt; quit();</span><br><span class="line">    th -&gt; wait();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭窗口</span></span><br><span class="line"><span class="keyword">void</span> Widget::dealClose()</span><br><span class="line">&#123;</span><br><span class="line">    on_stop_btn_clicked();</span><br><span class="line">    <span class="keyword">delete</span> myTh;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>QT</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT中QString和char*互转</title>
+    <url>/2019/12/02/QT%E4%B8%ADQString%E5%92%8Cchar-%E4%BA%92%E8%BD%AC/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h4 id="QString转char"><a href="#QString转char" class="headerlink" title="QString转char*"></a>QString转char*</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">QString qstr = <span class="string">"abcd"</span>;</span><br><span class="line"><span class="keyword">char</span> *str = qstr.toUtf8().data(); <span class="comment">//先转为QByteArray,再转为char*</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="char-转QString"><a href="#char-转QString" class="headerlink" title="char*转QString"></a>char*转QString</h4><p>使用构造方法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *ch=<span class="string">"hello!"</span>;</span><br><span class="line"><span class="function">QString <span class="title">str</span><span class="params">(ch)</span></span>;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>QT</category>
+      </categories>
+      <tags>
+        <tag>QString</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT中信号和槽</title>
+    <url>/2019/12/02/QT%E4%B8%AD%E4%BF%A1%E5%8F%B7%E5%92%8C%E6%A7%BD/</url>
+    <content><![CDATA[<a id="more"></a>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>信号槽是 Qt 框架引以为豪的机制之一。所谓信号槽，实际就是观察者模式。当某个事件发生之后，比如，按钮检测到自己被点击了一下，它就会发出一个信号（signal）。这种发出是没有目的的，类似广播。如果有对象对这个信号感兴趣，它就会使用连接（connect）函数，意思是，将想要处理的信号和自己的一个函数（称为槽（slot））绑定来处理这个信号。也就是说，当信号发出时，被连接的槽函数会自动被回调。这就类似观察者模式：当发生了感兴趣的事件，某一个操作就会被自动触发。（这里提一句，Qt 的信号槽使用了额外的处理来实现，并不是 GoF 经典的观察者模式的实现方式。）</p>
+<p>信号和槽是Qt特有的信息传输机制，是Qt设计程序的重要基础，它可以让互不干扰的对象建立一种联系。</p>
+<h3 id="connect函数"><a href="#connect函数" class="headerlink" title="connect函数"></a>connect函数</h3><p>connect()函数最常用的一般形式：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">connect(sender, signal, receiver, slot);</span><br></pre></td></tr></table></figure>
+
+<p>参数：<br>sender：发出信号的对象<br>signal：发送对象发出的信号(地址)<br>receiver：接收信号的对象<br>slot：接收对象在接收到信号之后所需要调用的函数(地址)</p>
+<p>信号槽要求信号和槽的参数一致，所谓一致，是参数类型一致。如果不一致，允许的情况是，槽函数的参数可以比信号的少，即便如此，槽函数存在的那些参数的顺序也必须和信号的前面几个一致起来。这是因为，你可以在槽函数中选择忽略信号传来的数据（也就是槽函数的参数比信号的少），但是不能说信号根本没有这个数据，你就要在槽函数中使用（就是槽函数的参数比信号的多，这是不允许的）。</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>在使用widget新建的工程中，在<code>widget.cpp</code>的构造函数中写入下面的函数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"widget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPushButton.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">Widget::Widget(QWidget *parent)</span><br><span class="line">    : QWidget(parent)</span><br><span class="line">&#123;</span><br><span class="line">    QPushButton *btn1 = <span class="keyword">new</span> QPushButton();</span><br><span class="line"><span class="comment">//    btn1-&gt;show();  //show会以顶层方式弹出窗口控件</span></span><br><span class="line">    btn1-&gt;setParent(<span class="keyword">this</span>);</span><br><span class="line">    btn1-&gt;setText(<span class="string">"关闭窗口"</span>);</span><br><span class="line">    btn1-&gt;move(<span class="number">100</span>, <span class="number">100</span>);</span><br><span class="line">    setFixedSize(<span class="number">600</span>, <span class="number">400</span>);  <span class="comment">//设置窗口固定大小</span></span><br><span class="line">    <span class="comment">//调用connect实现信号与槽函数的连接</span></span><br><span class="line">    connect(btn1, &amp;QPushButton::clicked, <span class="keyword">this</span>, &amp;Widget::close);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样建立了点击按钮这个信号和关闭窗口这个槽函数的连接，当按下按钮时，窗口就会关闭</p>
+<h3 id="自定义信号与槽"><a href="#自定义信号与槽" class="headerlink" title="自定义信号与槽"></a>自定义信号与槽</h3><ul>
+<li><p>实现的效果是-&gt;信号：下课-老师饿了  槽：学生请老师吃饭</p>
+</li>
+<li><p>首先创建两个类老师Teacher，学生Student</p>
+</li>
+<li><p>老师在signals下声明hungry()方法，不需实现</p>
+</li>
+<li><p>学生在public slots下声明treat()方法，需要实现，实现如下</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> Student::treat()</span><br><span class="line">&#123;</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">"请客吃饭"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在Widget类中声明并实现ClassIsOver()方法，使用emit触发Teacher类中hungry()信号</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"widget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ui_widget.h"</span></span></span><br><span class="line"></span><br><span class="line">Widget::Widget(QWidget *parent) :</span><br><span class="line">    QWidget(parent),</span><br><span class="line">    ui(<span class="keyword">new</span> Ui::Widget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//创建老师，学生对象</span></span><br><span class="line">    <span class="keyword">this</span>-&gt;tc = <span class="keyword">new</span> Teacher(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>-&gt;st = <span class="keyword">new</span> Student(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//建立老师饿了，学生请客的链接</span></span><br><span class="line">    connect(tc, &amp;Teacher::hungry, st, &amp;Student::treat);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//调用下课函数，</span></span><br><span class="line">    classISOver();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::classISOver()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//下课函数,调用此函数后使用emit触发老师饿了的信号</span></span><br><span class="line">    emit tc-&gt;hungry();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Widget::~Widget()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果发生重载，可以定义函数指针来指向确定的函数，如在上述例子中重载hungry和treat方法中加入QString参数，指明吃什么，就可以通过下面的写法指明</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//定义函数指针，指向重载函数中确定的某一个</span></span><br><span class="line"><span class="keyword">void</span> (Teacher::*tcSignal)(QString) = &amp;Teacher::hungry;</span><br><span class="line"><span class="keyword">void</span> (Student::*stSlot)(QString) = &amp;Student::treat;</span><br><span class="line">connect(tc, tcSignal, st, stSlot);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一些注意事项</p>
+</li>
+</ul>
+<ul>
+<li><input disabled type="checkbox"> <p>信号：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">自定义信号，写到signals下</span><br><span class="line">返回值是void，只需要声明，不需要实现</span><br><span class="line">可以有参数，可以重载</span><br></pre></td></tr></table></figure>
+</li>
+<li><input disabled type="checkbox"> <p>槽：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">早期QT版本，必须写到public slots下，高版本可以写到public或全局下</span><br><span class="line">返回值void，需要声明，也要实现</span><br><span class="line">可以有参数，可以重载</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="断开信号与槽"><a href="#断开信号与槽" class="headerlink" title="断开信号与槽"></a>断开信号与槽</h3><ul>
+<li>使用<code>disconnect</code>方法，参数复制<code>connect</code>中的即可</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li>信号可以连接信号</li>
+<li>一个信号可以连接多个槽</li>
+<li>多个信号可以连接同一个槽</li>
+<li>信号和槽函数的参数必须类型一一对应</li>
+<li>信号的参数个数可以多于槽函数参数的个数，之前的参数类型要一一对应</li>
+</ul>
+]]></content>
+      <categories>
+        <category>QT</category>
+      </categories>
+      <tags>
+        <tag>信号与槽</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT学习1</title>
+    <url>/2019/12/01/QT%E5%AD%A6%E4%B9%A01/</url>
+    <content><![CDATA[<a id="more"></a>
+<p>创建工程时，会看到如下界面<br><img src="q1.png" alt="工程"><br>其实，<code>QMainWindows</code>和<code>QDialog</code>是<code>QWidget</code>的子类，<code>QWidget</code>只有一个空界面，而另外两个子类在其基础上增添了其他功能</p>
+<h3 id="新建源文件的注释说明"><a href="#新建源文件的注释说明" class="headerlink" title="新建源文件的注释说明"></a>新建源文件的注释说明</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"mywidget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QApplication&gt;  //包含一个应用程序类的头文件</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//main程序入口</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//a应用程序对象，在Qt中，应用程序对象有切纸有一个</span></span><br><span class="line">    <span class="function">QApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">    <span class="comment">//窗口对象，myWidget父类-&gt;QWidget</span></span><br><span class="line">    myWidget w;</span><br><span class="line">    <span class="comment">//窗口对象，需使用show方法来显示</span></span><br><span class="line">    w.show();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//让应用程序对象进入消息循环</span></span><br><span class="line">    <span class="comment">//让代码阻塞到这行</span></span><br><span class="line">    <span class="keyword">return</span> a.exec();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="新建源文件的注释说明-1"><a href="#新建源文件的注释说明-1" class="headerlink" title="新建源文件的注释说明"></a>新建源文件的注释说明</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MYWIDGET_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MYWIDGET_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QWidget&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myWidget</span> :</span> <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//这是一个宏，允许类中使用信号和槽的机制</span></span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    myWidget(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~myWidget();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MYWIDGET_H</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="QT的pro文件"><a href="#QT的pro文件" class="headerlink" title="QT的pro文件"></a>QT的pro文件</h3><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># QT包含的模块</span></span><br><span class="line">QT       += core gui</span><br><span class="line"></span><br><span class="line"><span class="comment"># 大于QT4版本以上，包含widget模块</span></span><br><span class="line">greaterThan(QT_MAJOR_VERSION, <span class="number">4</span>): QT += widgets</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标：生成的.exe程序的名称</span></span><br><span class="line">TARGET = <span class="number">01</span>_FirstProject</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模板：应用程序模板Application</span></span><br><span class="line">TEMPLATE = app</span><br><span class="line"></span><br><span class="line"><span class="comment"># 源文件</span></span><br><span class="line">SOURCES += \</span><br><span class="line">    main.cpp \</span><br><span class="line">    mywidget.cpp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 头文件</span></span><br><span class="line">HEADERS += \</span><br><span class="line">    mywidget.h</span><br></pre></td></tr></table></figure>
+
+<h3 id="一些快捷键"><a href="#一些快捷键" class="headerlink" title="一些快捷键"></a>一些快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ctrl+/</td>
+<td>注释</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>运行</td>
+</tr>
+<tr>
+<td>ctrl+b</td>
+<td>编译</td>
+</tr>
+<tr>
+<td>ctrl+滚轮</td>
+<td>字体缩放</td>
+</tr>
+<tr>
+<td>ctrl+f</td>
+<td>查找</td>
+</tr>
+<tr>
+<td>ctrl+shift+上下键</td>
+<td>整行移动</td>
+</tr>
+<tr>
+<td>ctrl+i</td>
+<td>自动对齐</td>
+</tr>
+<tr>
+<td><f4></f4></td>
+<td>同名的.h和.cpp文件切换</td>
+</tr>
+<tr>
+<td><f1></f1></td>
+<td>帮助文档</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>QT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器安装mysql(CentOS7)</title>
+    <url>/2019/11/29/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql-CentOS7/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h3 id="安装Yum资源包"><a href="#安装Yum资源包" class="headerlink" title="安装Yum资源包"></a>安装Yum资源包</h3><p>CentOS 7 版本中 MySQL数据库已从默认的程序列表中移除，所以在安装前我们需要先去官网下载 Yum 资源包，下载地址为：<img src="https://dev.mysql.com/downloads/repo/yum/" alt="官网链接"><br><img src="f1.png" alt="下载"><br>点击Download下载到本地<br>然后</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux下使用scp命令将下载的文件传输到服务器，windows下可以使用xftp软件</span></span><br><span class="line">scp /path/to/download/package user@123.31.31.45:path/to/your/server</span><br></pre></td></tr></table></figure>
+
+<h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm</span><br><span class="line"><span class="built_in">cd</span> 放置刚才下载.rpm文件的目录</span><br><span class="line">sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm</span><br><span class="line">sudo yum update</span><br></pre></td></tr></table></figure>
+
+<p>通过修改vim /etc/yum.repos.d/mysql-community.repo文件，改变默认安装的mysql版本。比如要安装5.6版本，将5.7源的enabled=1改成enabled=0，然后再将5.6源的enabled=0改成enabled=1即可。<br>注意： 任何时候，只能启用一个版本。<br>查看当前的启用的 MySQL 版本：yum repolist enabled | grep mysql</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install mysql-server -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化mysql"><a href="#初始化mysql" class="headerlink" title="初始化mysql"></a>初始化mysql</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysqld --initialize</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo systemctl start mysqld</span><br></pre></td></tr></table></figure>
+
+<p>然后这一步我就出问题了，我把<code>/var/lib/mysql删除后就可以了</code></p>
+]]></content>
+      <categories>
+        <category>problems</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux下将gbk文件转换为utf-8</title>
     <url>/2019/11/23/linux%E4%B8%8B%E5%B0%86gbk%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAutf-8/</url>
     <content><![CDATA[<p>转自<a href="https://blog.csdn.net/u012724167/article/details/77248919" target="_blank" rel="noopener">Linux下GBK文件编码批量转换UTF-8命令</a></p>
@@ -4569,8 +4981,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>property装饰器</tag>
         <tag>python基础</tag>
+        <tag>property装饰器</tag>
       </tags>
   </entry>
   <entry>
