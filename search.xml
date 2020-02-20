@@ -1,22 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>centos7安装oracle数据库</title>
-    <url>/2020/02/06/centos7%E5%AE%89%E8%A3%85oracle%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
-    <content><![CDATA[<p><strong>分为三个部分</strong></p>
-<ul>
-<li><a href="#安装环境准备">安装环境准备</a></li>
-<li><a href="#11g安装过程">11g安装过程</a></li>
-<li><a href="11g连接工具">11g连接工具</a><a id="more"></a>
-
-</li>
-</ul>
-<h1 id="安装环境准备"><a href="#安装环境准备" class="headerlink" title="安装环境准备"></a>安装环境准备</h1>]]></content>
+    <title>CentOS7服务器上部署oracle11g-静默安装</title>
+    <url>/2020/02/20/CentOS7%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2oracle11g-%E9%9D%99%E9%BB%98%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<a id="more"></a>
+<p>搜索了B站centos7上部署oracle，结果需要图形化界面，又找了很多文章，跟着下面的这篇文章终于部署成功了</p>
+<p><strong>静默安装，无需图形界面</strong></p>
+<p><a href="https://yq.aliyun.com/articles/667322" target="_blank" rel="noopener noreferrer">原文章跳转</a></p>
+]]></content>
       <categories>
         <category>数据库</category>
       </categories>
       <tags>
         <tag>oracle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>oracle中的表及其相关操作</title>
+    <url>/2020/02/20/oracle%E4%B8%AD%E7%9A%84%E8%A1%A8%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<a id="more"></a>
+<h2 id="表的概念"><a href="#表的概念" class="headerlink" title="表的概念"></a>表的概念</h2><h3 id="基本理解"><a href="#基本理解" class="headerlink" title="基本理解"></a>基本理解</h3><p>表是数据库的最基本的逻辑结构，一切数据都存放在表中，其它数据库对象（索引、视图、同义词等）都是为了用户很好地操作表中的数据，一个ORACLE数据库就是由若干个数据表组成，每个表由列和行组成，如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th>学号</th>
+<th>姓名</th>
+<th>性别</th>
+<th>籍贯</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>001</td>
+<td>张三</td>
+<td>男</td>
+<td>北京</td>
+</tr>
+<tr>
+<td>002</td>
+<td>李四</td>
+<td>男</td>
+<td>上海</td>
+</tr>
+</tbody></table>
+<h3 id="表的组成"><a href="#表的组成" class="headerlink" title="表的组成"></a>表的组成</h3><blockquote>
+<p>表是由列或字段组成，表的内容，也就是表的各个属性，组成了表的各个列。</p>
+</blockquote>
+<ul>
+<li>表结构</li>
+</ul>
+<ol>
+<li>列名：列的名称。</li>
+<li>长度：该列所能容纳的最大数据位数。</li>
+<li>数据类型：该列存储的数据类型，常用数据类型如所示。</li>
+<li>非空列：该列值是不能为空的。</li>
+<li>主键：该列能唯一表示一行内容，则称该列为关键字。识别码，唯一的ID。</li>
+</ol>
+<h3 id="常用数据类型"><a href="#常用数据类型" class="headerlink" title="常用数据类型"></a>常用数据类型</h3><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>说明</th>
+<th>最大长度</th>
+<th>表示方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char(长度)</td>
+<td>定长字符串</td>
+<td>255</td>
+<td>单引号括起来，如’张三’</td>
+</tr>
+<tr>
+<td>varchar2(长度)</td>
+<td>变长字符串</td>
+<td>2000</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>number(长度,精度)</td>
+<td>数字</td>
+<td>38</td>
+<td>可以括起来，也可以不括，如12.3或’12.3’</td>
+</tr>
+<tr>
+<td>date</td>
+<td>日期时间，实际是一个整数</td>
+<td></td>
+<td>用<code>to_date</code>和<code>to_char</code>把字符串和日期进行转换</td>
+</tr>
+</tbody></table>
+<p><code>to_date</code>使用：如<code>to_date(&#39;2020-01-01 20:00:00&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;)</code>将字符串转换为<code>date</code>类型</p>
+<p><code>to_char</code>使用：假设<code>birthday</code>是表中的一个<code>date</code>数据类型，使用<code>to_char(birthday,&#39;yyyy-mm-dd hh24:mi:ss&#39;)</code>将<code>date</code>类型转换为<code>yyyy-mm-dd hh24:mi:ss</code>格式的字符串</p>
+<p><strong>行/记录</strong>：表中所有列组合在一起形成的一条信息，称之为一行或一条记录。</p>
+<hr>
+<h2 id="表的操作"><a href="#表的操作" class="headerlink" title="表的操作"></a>表的操作</h2><blockquote>
+<p>sql命令不区分大小写<br>sql中使用两个短横线作为注释符号，如</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--这是一段注释</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><ul>
+<li><p>命令</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> tablename</span><br><span class="line">	(</span><br><span class="line">	<span class="comment">--每个参数间以逗号结束</span></span><br><span class="line">	<span class="comment">--变量名 数据类型</span></span><br><span class="line">	column1 datatype,</span><br><span class="line">	<span class="comment">--null表示可以空，为默认值，可不填</span></span><br><span class="line">	column2 datatype <span class="literal">null</span>,</span><br><span class="line">	<span class="comment">--not null表示该项必须非空</span></span><br><span class="line">	column3 datatype <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	……,</span><br><span class="line">	<span class="comment">--最后一行没有逗号</span></span><br><span class="line">	<span class="comment">--指定id为主键</span></span><br><span class="line">	primary <span class="keyword">key</span>(<span class="keyword">id</span>)</span><br><span class="line">	);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建表举例</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> T_GIRL</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">char</span>(<span class="number">6</span>),</span><br><span class="line">    <span class="keyword">name</span> varchar2(<span class="number">30</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    gender <span class="built_in">char</span>(<span class="number">2</span>),</span><br><span class="line">    hometown varchar2(<span class="number">100</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="表记录的插入"><a href="#表记录的插入" class="headerlink" title="表记录的插入"></a>表记录的插入</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--第一种写法,前后的值要一一对应</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tablename(col1,col2,col3,……,coln) <span class="keyword">values</span>(value1,value2,value3,……,valuen);</span><br><span class="line"><span class="comment">--还有一种写法。</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tablename <span class="keyword">values</span>(value1,value2,value3,……,valuen);<span class="comment">--value的顺序为建表时指定的顺序</span></span><br></pre></td></tr></table></figure>
+
+<p>后面的写法一定不能出现在程序中，因为只要表结构发生改变，或字段的位置改变，SQL就会出错。</p>
+<h3 id="查询表中数据"><a href="#查询表中数据" class="headerlink" title="查询表中数据"></a>查询表中数据</h3><ul>
+<li>查询<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--常用语法</span></span><br><span class="line"><span class="keyword">select</span> col1,col2,col3 <span class="keyword">from</span> tablename <span class="keyword">where</span> ...; <span class="comment">--where后接条件语句</span></span><br><span class="line"><span class="comment">--查询法和条件的所有内容</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tablename <span class="keyword">where</span> ...;</span><br><span class="line"><span class="comment">--查询系统时间</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">sysdate</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--查询表的结构</span></span><br><span class="line">desc tablename;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>条件判断</strong>:<code>=</code>相等, <code>!=</code>不相等, <code>and</code>与, <code>or</code>或</p>
+<ul>
+<li>排序<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--在上面的语句后接</span></span><br><span class="line">order by A; <span class="comment">--查询后根据A元素升序排序</span></span><br><span class="line">order by A,B; <span class="comment">--查询后先根据A升序,再根据B元素升序排序</span></span><br><span class="line">order by A asc; <span class="comment">--asc表示升序,为默认值,可省略</span></span><br><span class="line">order by A desc; <span class="comment">--desc是降序</span></span><br><span class="line">order by A,B desc; <span class="comment">--先根据A升序,再根据B降序排列</span></span><br><span class="line">order by A desc, B desc; <span class="comment">--现根据A降序,再根据B降序排</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="修改表中的数据"><a href="#修改表中的数据" class="headerlink" title="修改表中的数据"></a>修改表中的数据</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> tablename <span class="keyword">set</span> col1=value1,col2=value2,……,coln=valuen <span class="keyword">where</span> 条件表达式;</span><br></pre></td></tr></table></figure>
+
+<p>如果没有条件表达式，就更新表中全部的数据。</p>
+<h3 id="删除表中的数据"><a href="#删除表中的数据" class="headerlink" title="删除表中的数据"></a>删除表中的数据</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> tablename <span class="keyword">where</span> 条件表达式;</span><br></pre></td></tr></table></figure>
+
+<p>如果没有条件表达式，就删除表中全部的数据。</p>
+<h2 id="sqlplus技巧"><a href="#sqlplus技巧" class="headerlink" title="sqlplus技巧"></a>sqlplus技巧</h2><p>在sqlplus登录后,执行sql语句,可以用<code>/</code>重复上一条命令,<code>l</code>显示出来上一条语句,<code>c/old/new</code>来将上一条命令中的<code>old</code>改为<code>new</code></p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>oracle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>oracle的事务及与删除操作的关联</title>
+    <url>/2020/02/20/oracle%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%8F%8A%E4%B8%8E%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%E7%9A%84%E5%85%B3%E8%81%94/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h2 id="oracle的事务"><a href="#oracle的事务" class="headerlink" title="oracle的事务"></a>oracle的事务</h2><h3 id="对数据库中事务的理解"><a href="#对数据库中事务的理解" class="headerlink" title="对数据库中事务的理解"></a>对数据库中事务的理解</h3><p>在数据库中事务是工作的逻辑任务，一个事务是由一个或多个SQL语句组成，通过事务机制确保这一组SQL语句所作的操作要么全部成功执行，完成整个工作任务，要么一个也不执行，对数据表所做的操作全部撤销。</p>
+<p>例如<strong>银行转账</strong></p>
+<ul>
+<li>A用户帐户余额减少1000元；</li>
+<li>B用户帐户余额增加1000元；</li>
+<li>记录A用户的交易日志。</li>
+<li>记录B用户的交易日志。</li>
+</ul>
+<p>一次交易产生四次数据库操作，要么全部都成功，如果有一个失败，其它操作也应该全部被撤销。</p>
+<h3 id="提交事务"><a href="#提交事务" class="headerlink" title="提交事务"></a>提交事务</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">commit</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="回滚事务"><a href="#回滚事务" class="headerlink" title="回滚事务"></a>回滚事务</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">rollback</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除操作与事务的关联"><a href="#删除操作与事务的关联" class="headerlink" title="删除操作与事务的关联"></a>删除操作与事务的关联</h2><h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><p>删除表中数据有以下两种方式：</p>
+<ul>
+<li>delete<br>删除数据时，数据库需要写日志，ORACLE数据库还需要占用回滚段，每次事务越大，对数据库的冲击越大，所以在删除或者更新数据时，一定要注意控制事务的大小，避免产生大事务。如：<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> tablename <span class="keyword">where</span>  ……;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>用delete删除数据时，只删除数据，但不释放空间，并且产生碎片。</p>
+<ul>
+<li>truncate<br>删除表中所有数据，并回收存储空间，truncate不产生事务。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">truncate</span> <span class="keyword">table</span> tablename;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><p>删除表命令为drop，利用 drop命令删除表将删除表中全部的数据。不产生事务。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> tablename;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>oracle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sql语言概述</title>
+    <url>/2020/02/20/sql%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h3 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h3><p>主要由<code>select</code>关键字完成，查询语句是SQL 语句中最复杂、功能最丰富的语句。</p>
+<h3 id="DML语句"><a href="#DML语句" class="headerlink" title="DML语句"></a>DML语句</h3><p>Data Manipulation Language，数据操作语言<br>主要由<code>insert</code>、<code>update</code>和<code>delete</code>三个关键字完成。</p>
+<h3 id="DDL语句"><a href="#DDL语句" class="headerlink" title="DDL语句"></a>DDL语句</h3><p>Data Definition Language，数据定义语言<br>主要由<code>create</code>、<code>alter</code>、<code>drop</code>和<code>truncate</code>四个关键字完成。</p>
+<ul>
+<li>ALTER用法</li>
+</ul>
+<ol>
+<li><p>如需在表中添加列，请使用下列语法:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> column_name datatype</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>要删除表中的列，请使用下列语法：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">DROP</span> <span class="keyword">COLUMN</span> column_name</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>注释：某些数据库系统不允许这种在数据库表中删除列的方式 (DROP COLUMN column_name)。</p>
+<ol start="3">
+<li>要改变表中列的数据类型，请使用下列语法：<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ALTER</span> <span class="keyword">COLUMN</span> column_name datatype</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>或</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">MODIFY</span> column_name datatype</span><br></pre></td></tr></table></figure>
+
+<h3 id="DCL语句"><a href="#DCL语句" class="headerlink" title="DCL语句"></a>DCL语句</h3><p>Data Control Language，数据控制语言<br>主要<code>grant</code>和<code>revoke</code> 两个关键字完成。</p>
+<h3 id="事务控制语句"><a href="#事务控制语句" class="headerlink" title="事务控制语句"></a>事务控制语句</h3><p>主要由<code>commit</code>、<code>rollback</code>和<code>savepoint</code>三个关键字完成，<code>savepoint</code>了解就行。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>sql</tag>
       </tags>
   </entry>
   <entry>
@@ -235,6 +432,7 @@
 
 <h4 id="widget-cpp"><a href="#widget-cpp" class="headerlink" title="widget.cpp"></a>widget.cpp</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"widget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ui_widget.h"</span></span></span><br><span class="line"></span><br><span class="line">Widget::Widget(QWidget *parent) :</span><br><span class="line">    QWidget(parent),</span><br><span class="line">    ui(<span class="keyword">new</span> Ui::Widget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line">    setWindowTitle(<span class="string">"服务器：5894"</span>);</span><br><span class="line">    tcp_server = <span class="keyword">new</span> TcpServer(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//连接成功后输出提示信息</span></span><br><span class="line">    connect(tcp_server, &amp;TcpServer::SuccessConnected, <span class="keyword">this</span>, &amp;Widget::DealSuccessConnected);</span><br><span class="line">    <span class="comment">//收到消息后显示在文本框</span></span><br><span class="line">    connect(tcp_server, &amp;TcpServer::RecvMessage, <span class="keyword">this</span>, &amp;Widget::DealRecvMessage);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::DealSuccessConnected(QString ip, quint16 port)</span><br><span class="line">&#123;</span><br><span class="line">    QString info = QString (<span class="string">"%1:%2:成功连接"</span>).arg(ip).arg(port);</span><br><span class="line">    ui-&gt;text_read-&gt;setText(info);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::DealRecvMessage(QByteArray data)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;text_read-&gt;append(data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::on_button_send_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//获取编辑区内容</span></span><br><span class="line">    QString str = ui-&gt;text_send-&gt;toPlainText();</span><br><span class="line">    ui-&gt;text_send-&gt;clear();</span><br><span class="line">    <span class="comment">//发送数据</span></span><br><span class="line">    tcp_server-&gt;Write(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::on_button_close_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    tcp_server-&gt;DisConnect();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Widget::~Widget()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>该程序会生成两个窗口（重合在一起，需用鼠标拖开），一个服务端，一个客户端，连接后即可通信</p>
 ]]></content>
       <categories>
         <category>QT</category>
@@ -8308,8 +8506,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>pacman</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>

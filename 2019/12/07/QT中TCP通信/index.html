@@ -59,7 +59,7 @@
 <meta property="og:description" content="整体流程大同小异，记录一下方便以后查看">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/12/07/QT中TCP通信/t1.png">
-<meta property="og:updated_time" content="2019-12-14T02:57:43.098Z">
+<meta property="og:updated_time" content="2020-02-20T07:13:20.853Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="QT中TCP通信">
 <meta name="twitter:description" content="整体流程大同小异，记录一下方便以后查看">
@@ -250,7 +250,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-14 10:57:43" itemprop="dateModified" datetime="2019-12-14T10:57:43+08:00">2019-12-14</time>
+                <time title="修改时间：2020-02-20 15:13:20" itemprop="dateModified" datetime="2020-02-20T15:13:20+08:00">2020-02-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,7 +277,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.2k</span>
+              <span>5.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -322,6 +322,7 @@
 
 <h4 id="widget-cpp"><a href="#widget-cpp" class="headerlink" title="widget.cpp"></a>widget.cpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"widget.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ui_widget.h"</span></span></span><br><span class="line"></span><br><span class="line">Widget::Widget(QWidget *parent) :</span><br><span class="line">    QWidget(parent),</span><br><span class="line">    ui(<span class="keyword">new</span> Ui::Widget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line">    setWindowTitle(<span class="string">"服务器：5894"</span>);</span><br><span class="line">    tcp_server = <span class="keyword">new</span> TcpServer(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//连接成功后输出提示信息</span></span><br><span class="line">    connect(tcp_server, &amp;TcpServer::SuccessConnected, <span class="keyword">this</span>, &amp;Widget::DealSuccessConnected);</span><br><span class="line">    <span class="comment">//收到消息后显示在文本框</span></span><br><span class="line">    connect(tcp_server, &amp;TcpServer::RecvMessage, <span class="keyword">this</span>, &amp;Widget::DealRecvMessage);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::DealSuccessConnected(QString ip, quint16 port)</span><br><span class="line">&#123;</span><br><span class="line">    QString info = QString (<span class="string">"%1:%2:成功连接"</span>).arg(ip).arg(port);</span><br><span class="line">    ui-&gt;text_read-&gt;setText(info);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::DealRecvMessage(QByteArray data)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;text_read-&gt;append(data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::on_button_send_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//获取编辑区内容</span></span><br><span class="line">    QString str = ui-&gt;text_send-&gt;toPlainText();</span><br><span class="line">    ui-&gt;text_send-&gt;clear();</span><br><span class="line">    <span class="comment">//发送数据</span></span><br><span class="line">    tcp_server-&gt;Write(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Widget::on_button_close_clicked()</span><br><span class="line">&#123;</span><br><span class="line">    tcp_server-&gt;DisConnect();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Widget::~Widget()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>该程序会生成两个窗口（重合在一起，需用鼠标拖开），一个服务端，一个客户端，连接后即可通信</p>
 
     </div>
 
@@ -408,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码如下"><span class="nav-number">1.</span> <span class="nav-text">代码如下</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#include-h"><span class="nav-number">1.1.</span> <span class="nav-text">_include.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpclient-h"><span class="nav-number">1.2.</span> <span class="nav-text">tcpclient.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpclient-cpp"><span class="nav-number">1.3.</span> <span class="nav-text">tcpclient.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpserver-h"><span class="nav-number">1.4.</span> <span class="nav-text">tcpserver.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpserver-cpp"><span class="nav-number">1.5.</span> <span class="nav-text">tcpserver.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#widget-h"><span class="nav-number">1.6.</span> <span class="nav-text">widget.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#widget-cpp"><span class="nav-number">1.7.</span> <span class="nav-text">widget.cpp</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码如下"><span class="nav-number">1.</span> <span class="nav-text">代码如下</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#include-h"><span class="nav-number">1.1.</span> <span class="nav-text">_include.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpclient-h"><span class="nav-number">1.2.</span> <span class="nav-text">tcpclient.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpclient-cpp"><span class="nav-number">1.3.</span> <span class="nav-text">tcpclient.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpserver-h"><span class="nav-number">1.4.</span> <span class="nav-text">tcpserver.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpserver-cpp"><span class="nav-number">1.5.</span> <span class="nav-text">tcpserver.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#widget-h"><span class="nav-number">1.6.</span> <span class="nav-text">widget.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#widget-cpp"><span class="nav-number">1.7.</span> <span class="nav-text">widget.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说明"><span class="nav-number">1.8.</span> <span class="nav-text">说明</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -424,7 +425,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -437,7 +438,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -475,12 +476,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">174k</span>
+    <span title="站点总字数">177k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:38</span>
+    <span title="站点阅读时长">2:41</span>
 </div>
 
         
