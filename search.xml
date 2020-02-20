@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>解决外网被动模式访问ftp服务器</title>
-    <url>/2020/01/10/%E8%A7%A3%E5%86%B3%E5%A4%96%E7%BD%91%E8%A2%AB%E5%8A%A8%E6%A8%A1%E5%BC%8F%E8%AE%BF%E9%97%AEftp%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<p>配置完成ftp服务器后可以连接，执行cd等命令，但不能从服务器获取数据，我的原因是因为服务器返回了本地的地址，而不是公网的ip地址</p>
-<a id="more"></a>
-<p>解决方法</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/vsftpd/vsftpd.conf</span><br></pre></td></tr></table></figure>
+    <title>centos7安装oracle数据库</title>
+    <url>/2020/02/06/centos7%E5%AE%89%E8%A3%85oracle%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
+    <content><![CDATA[<p><strong>分为三个部分</strong></p>
+<ul>
+<li><a href="#安装环境准备">安装环境准备</a></li>
+<li><a href="#11g安装过程">11g安装过程</a></li>
+<li><a href="11g连接工具">11g连接工具</a><a id="more"></a>
 
-<p>修改或添加以下参数</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen=YES</span><br><span class="line">listen_ipv6=NO</span><br><span class="line">pasv_enable=YES</span><br><span class="line">pasv_address=服务器公网ip</span><br><span class="line">pasv_min_port=5500</span><br><span class="line">pasv_max_port=6000</span><br></pre></td></tr></table></figure>
-
-<p>放行5500-6000端口为tcp方式，如果是买的如阿里云服务器，去控制台也放行一下，这样就可以了</p>
-]]></content>
+</li>
+</ul>
+<h1 id="安装环境准备"><a href="#安装环境准备" class="headerlink" title="安装环境准备"></a>安装环境准备</h1>]]></content>
       <categories>
-        <category>problems</category>
+        <category>数据库</category>
       </categories>
       <tags>
-        <tag>ftp</tag>
+        <tag>oracle</tag>
       </tags>
   </entry>
   <entry>
@@ -105,7 +104,83 @@
   <entry>
     <title>ftp服务搭建</title>
     <url>/2020/01/08/ftp%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<p><a href="https://blog.csdn.net/langyue919/article/details/80796369" target="_blank" rel="noopener">https://blog.csdn.net/langyue919/article/details/80796369</a></p>
+    <content><![CDATA[<p>参考文章<a href="https://blog.csdn.net/langyue919/article/details/80796369" target="_blank" rel="noopener">https://blog.csdn.net/langyue919/article/details/80796369</a></p>
+<a id="more"></a>
+
+<ul>
+<li>默认在root用户下操作<h3 id="安装服务器"><a href="#安装服务器" class="headerlink" title="安装服务器"></a>安装服务器</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y vsftpd</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="配置端口"><a href="#配置端口" class="headerlink" title="配置端口"></a>配置端口</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># tcp模式放行20, 21端口</span></span><br><span class="line">firewall-cmd --zone=public --add-port=21/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=20/tcp --permanent</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>同时各个云服务器要在网页控制台直接放行端口，或配置安全组策略</li>
+</ul>
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/vsftpd</span><br><span class="line">vi vsftpd.conf</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>修改以下参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen=YES</span><br><span class="line">listen_ipv6=NO</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加如下参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pam_service_name=vsftpd</span><br><span class="line">userlist_enable=YES</span><br><span class="line">tcp_wrappers=YES</span><br><span class="line"></span><br><span class="line">pasv_enable=YES</span><br><span class="line">pasv_address=123.1.1.1  #服务器外网ip地址</span><br><span class="line">pasv_min_port=5500</span><br><span class="line">pasv_max_port=6000</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="配置被动模式所用端口"><a href="#配置被动模式所用端口" class="headerlink" title="配置被动模式所用端口"></a>配置被动模式所用端口</h3><ul>
+<li>上面配置文件中选定了5500-6000端口，现在放行<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=5500-6000/tcp --permanent</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="关闭selinux"><a href="#关闭selinux" class="headerlink" title="关闭selinux"></a>关闭selinux</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>修改</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">selinux=disable</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行<code>setenforce 0</code>立即生效</p>
+</li>
+</ul>
+<h3 id="创建ftp用户"><a href="#创建ftp用户" class="headerlink" title="创建ftp用户"></a>创建ftp用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/vsftpd/vsftpd_login</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>写入虚拟用户的用户名和密码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user1          奇数行  写用户名</span><br><span class="line">123            偶数行  写密码</span><br><span class="line">user2          多个用户就写多组，中间不能有空行和空格</span><br><span class="line">456</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更改权限：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod 600 /etc/vsftpd/vsftpd_login</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li>将文本文件转换成二进制文件：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">db_load -T -t <span class="built_in">hash</span> -f /etc/vsftpd/vsftpd_login /etc/vsftpd/vsftpd_login.db</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>创建虚拟用户的配置文件目录：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir /etc/vsftpd/vsftpd_user_conf</span><br><span class="line"><span class="built_in">cd</span> /etc/vsftpd/vsftpd_user_conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建虚拟用户的配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim user1       <span class="comment">#此处的文件名必须和/etc/vsftpd/vsftpd_login文件里的用户名一致</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#定义虚拟用户的家目录</span><br><span class="line">local_root=/home/user1</span><br><span class="line"></span><br><span class="line">#不允许匿名用户登陆，如果允许则用YES</span><br><span class="line">anonymous_enable=YES</span><br><span class="line"></span><br><span class="line">#写权限，允许</span><br><span class="line">write_enable=YES</span><br><span class="line"></span><br><span class="line">#设定umask，用来控制用户创建文件和目录的默认权限</span><br><span class="line">local_umask=022</span><br><span class="line"></span><br><span class="line">#不允许匿名用户上传</span><br><span class="line">anon_upload_enable=NO</span><br><span class="line"></span><br><span class="line">#不允许匿名用户创建目录和写权限</span><br><span class="line">anon_mkdir_write_enable=NO</span><br><span class="line"></span><br><span class="line">#空闲时限600秒，超时自动断开</span><br><span class="line">#idle_session_timeout=600</span><br><span class="line"></span><br><span class="line">#数据连接（请求）时限120秒，超时会自动断开</span><br><span class="line">#data_connection_timeout=120</span><br><span class="line"></span><br><span class="line">#客户端的最大连接数</span><br><span class="line">max_clients=10</span><br><span class="line">pasv_promiscuous=YES</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义用户验证文件路径</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/vsftpd    #编辑ftp的用户认证文件</span><br><span class="line">#在最前面加上：注意区分系统是32位还是64位</span><br><span class="line">#指定密码验证形式为文件形式，并指定路径路径</span><br><span class="line">auth sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/vsftpd_login </span><br><span class="line">#指定账户存储形式为文件，并指定账户存储文件路径</span><br><span class="line">account sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/vsftpd_login</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="启动vsftpd服务"><a href="#启动vsftpd服务" class="headerlink" title="启动vsftpd服务"></a>启动vsftpd服务</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start vsftpd</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>配置完成</strong>，接下来就可使用ftp客户端连接了</p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -4981,8 +5056,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>python基础</tag>
         <tag>property装饰器</tag>
+        <tag>python基础</tag>
       </tags>
   </entry>
   <entry>
@@ -8233,8 +8308,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>pacman</tag>
         <tag>linux</tag>
+        <tag>pacman</tag>
       </tags>
   </entry>
   <entry>
