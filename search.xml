@@ -1,6 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++抽象类子类实例化的析构</title>
+    <url>/2020/03/06/C-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%AD%90%E7%B1%BB%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%9A%84%E6%9E%90%E6%9E%84/</url>
+    <content><![CDATA[<p>在C++使用抽象类时会面临一个问题，根据其派生类实例出来的对象，如何释放内存，需要用道虚析构，C++将从最底层依次向上调用析构函数</p>
+<a id="more"></a>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><ul>
+<li>定义类<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Run</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//定义一个虚析构函数，但不能为纯虚函数</span></span><br><span class="line">    <span class="comment">//如果没有visual将不会调用子类的析构</span></span><br><span class="line">    <span class="keyword">virtual</span> ~Animal() &#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"del animal"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> :</span> <span class="keyword">public</span> Animal &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Run</span><span class="params">()</span> </span>&#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"猫步轻悄"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</span><br><span class="line">    ~Cat() &#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"del cat"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p>抽象类的析构前要加’virtual’，否则不会调用子类的析构</p>
+</blockquote>
+<ul>
+<li><p>实例化演示</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Animal *ani = <span class="keyword">new</span> Cat;</span><br><span class="line">    ani-&gt;Run();</span><br><span class="line">    <span class="keyword">delete</span> ani;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">猫步轻悄</span><br><span class="line">del cat</span><br><span class="line">del animal</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>抽象类</tag>
+        <tag>虚析构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle的序列生成器</title>
+    <url>/2020/02/26/Oracle%E7%9A%84%E5%BA%8F%E5%88%97%E7%94%9F%E6%88%90%E5%99%A8-1/</url>
+    <content><![CDATA[<a id="more"></a>
+]]></content>
+  </entry>
+  <entry>
+    <title>Oracle的序列生成器</title>
+    <url>/2020/02/26/Oracle%E7%9A%84%E5%BA%8F%E5%88%97%E7%94%9F%E6%88%90%E5%99%A8/</url>
+    <content><![CDATA[<a id="more"></a>
+<p>序列(SEQUENCE)是序列号生成器，可以为表中的行自动生成序列号，产生一组等间隔的数值(类型为数字)。不占用磁盘空间，占用内存。其可以在插入语句中引用，也可以通过查询检查当前值，或使序列增至下一个值。</p>
+<ul>
+<li>创建序列生成器</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">SEQUENCE</span> SEQ _SURFDATA <span class="keyword">INCREMENT</span> <span class="keyword">BY</span> <span class="number">1</span> <span class="keyword">START</span> <span class="keyword">WITH</span> <span class="number">100</span> MAXVALUE <span class="number">9999999999</span> <span class="keyword">NOCYCLE</span> NOCACHE;</span><br></pre></td></tr></table></figure>
+
+<p>语法详解：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--创建序列命令</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">SEQUENCE</span> 序列名</span><br><span class="line"><span class="comment">--定义序列的步长（增长量），如果省略，则默认为1</span></span><br><span class="line"><span class="comment">--如果出现负值，则代表序列的值是按照此步长递减的。</span></span><br><span class="line">[<span class="keyword">INCREMENT</span> <span class="keyword">BY</span> n]</span><br><span class="line"><span class="comment">--定义序列的初始值(即产生的第一个值)，默认为1</span></span><br><span class="line">[<span class="keyword">START</span> <span class="keyword">WITH</span> n]</span><br><span class="line"><span class="comment">--定义序列生成器能产生的最大值</span></span><br><span class="line"><span class="comment">--选项NOMAXVALUE是默认选项，代表没有最大值定义</span></span><br><span class="line"><span class="comment">--这时对于递增序列，系统能够产生的最大值是10的27次方;对于递减序列，最大值是-1。</span></span><br><span class="line"><span class="comment">--MINVALUE 定义序列生成器能产生的最小值</span></span><br><span class="line"><span class="comment">--选项NOMAXVALUE是默认选项，代表没有最小值定义</span></span><br><span class="line"><span class="comment">--这时对于递减序列，系统能够产生的最小值是?10的26次方;对于递增序列，最小值是1。</span></span><br><span class="line">[&#123;MAXVALUE/<span class="keyword">MINVALUE</span> n|<span class="keyword">NOMAXVALUE</span>&#125;] <span class="comment">--3、</span></span><br><span class="line"><span class="comment">--CYCLE 和 NOCYCLE 表示当序列生成器的值达到限制值后是否循环</span></span><br><span class="line"><span class="comment">--CYCLE代表循环，NOCYCLE代表不循环。</span></span><br><span class="line">[&#123;<span class="keyword">CYCLE</span>|<span class="keyword">NOCYCLE</span>&#125;]</span><br><span class="line"><span class="comment">--CACHE(缓冲)定义存放序列的内存块的大小，默认为20。NOCACHE表示不对序列进行内存缓冲。</span></span><br><span class="line"><span class="comment">--对序列进行内存缓冲，可以改善序列的性能</span></span><br><span class="line">[&#123;<span class="keyword">CACHE</span> n|NOCACHE&#125;]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>删除序列</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">SEQUENCE</span> 序列名;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取序列的当前值和下一个值</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--获取序列的当前值</span></span><br><span class="line"><span class="keyword">SELECT</span> 序列名.CURRVAL <span class="keyword">FROM</span> dual;</span><br><span class="line"><span class="comment">--获取序列的下一个值</span></span><br><span class="line"><span class="keyword">SELECT</span> abc.NEXTVAL <span class="keyword">FROM</span> dual;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>oracle</tag>
+        <tag>序列生成器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle的虚表dual及伪列</title>
+    <url>/2020/02/26/Oracle%E7%9A%84%E8%99%9A%E8%A1%A8dual/</url>
+    <content><![CDATA[<a id="more"></a>
+<h2 id="虚表dual"><a href="#虚表dual" class="headerlink" title="虚表dual"></a>虚表dual</h2><p>dual是一个虚拟表，用来构成select的语法规则，oracle保证dual里面永远只有一条记录。我们可以用它来做很多事情，如下：</p>
+<ul>
+<li>查看当前用户，可以在 SQL Plus中执行下面语句</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用来调用系统函数</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--获得当前系统时间</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">sysdate</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--获得主机名</span></span><br><span class="line"><span class="keyword">select</span> SYS_CONTEXT(<span class="string">'USERENV'</span>,<span class="string">'TERMINAL'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--获得当前 locale</span></span><br><span class="line"><span class="keyword">select</span> SYS_CONTEXT(<span class="string">'USERENV'</span>,<span class="string">'language'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--获得一个随机数</span></span><br><span class="line"><span class="keyword">select</span> dbms_random.random <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
+<p>3、得到序列的下一个值或当前值，用下面语句</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--获得序列your_sequence的下一个值</span></span><br><span class="line"><span class="keyword">select</span> your_sequence.nextval <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--获得序列your_sequence的当前值</span></span><br><span class="line"><span class="keyword">select</span> your_sequence.currval <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
+<p>4、可以用做计算器</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">7</span>*<span class="number">9</span> <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>C语言取的是操作系统的时间<br>Oracle运行数据库的服务器的操作系统的时间</p>
+</blockquote>
+<h2 id="伪列"><a href="#伪列" class="headerlink" title="伪列"></a>伪列</h2><p>Oracle 中伪列就像一个表列（表中的列），但是它并没有存储在表中，伪列可以从表中查询，但不能插入、更新和删除它们的值<br>常用的伪列有ROWID和ROWNUM。</p>
+<ul>
+<li><p>ROWNUM 是查询返回的结果集中行的序号，可以使用它来限制查询返回的行数。</p>
+</li>
+<li><p>rowid格式<br>ROWID是数据的详细地址，通过rowid，oracle可以快速的定位某行具体的数据在磁盘中存放的物理位置。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--查询rowid</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">rowid</span> <span class="keyword">from</span> 表名;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>查到的格式如<code>AAASP3AAEAAAACvABj</code><br>第一部分6位表示：该行数据所在的数据对象的编号；<br>第二部分3位表示：该行数据所在的相对数据文件的id;<br>第三部分6位表示：该数据行所在的数据块的编号；<br>第四部分3位表示：该行数据的行的编号；</p>
+<blockquote>
+<p>使用rowid可以快速查询定位文件，效率很高</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> 表名 <span class="keyword">where</span> <span class="keyword">rowid</span>=<span class="string">'AAASP3AAEAAAACvABj'</span>;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>oracle</tag>
+        <tag>dual</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>error while loading shared libraries: libclntsh.so.11.1: cannot open shared object file: No such file or directory问题解决</title>
     <url>/2020/02/20/error-while-loading-shared-libraries-libclntsh-so-11-1-cannot-open-shared-object-file-No-such-file-or-directory%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/</url>
     <content><![CDATA[<a id="more"></a>
@@ -5176,8 +5293,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>udp</tag>
         <tag>python网络编程</tag>
+        <tag>udp</tag>
       </tags>
   </entry>
   <entry>
@@ -8537,8 +8654,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>pacman</tag>
         <tag>linux</tag>
+        <tag>pacman</tag>
       </tags>
   </entry>
   <entry>
