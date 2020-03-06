@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>简单工厂模式</title>
+    <url>/2020/03/06/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<a id="more"></a>
+<p>面向对象的三大特性：<strong>封装，继承和多态</strong></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li>一般来说，工厂模式需要三个类</li>
+</ul>
+<ol>
+<li>抽象产品类：简单工厂模式中所有对象的父类，负责描述接口</li>
+<li>具体产品类：继承自抽象产品类，是简单工厂模式的创建目标</li>
+<li>工厂类：简单工厂模式的核心，负责判断到底需要实例化谁</li>
+</ol>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>假设需要设计一个执行两个数字简单四则运算的程序</p>
+<h3 id="抽象产品类"><a href="#抽象产品类" class="headerlink" title="抽象产品类"></a>抽象产品类</h3><p>抽象出该程序中公共的内容：两个数字，及其<code>get</code>，<code>set</code>方法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//运算基类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Operation</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">double</span> num1;</span><br><span class="line">    <span class="keyword">double</span> num2;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">GetNum1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SetNum1</span><span class="params">(<span class="keyword">double</span> num)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">GetNum2</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SetNum2</span><span class="params">(<span class="keyword">double</span> num)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">double</span> <span class="title">GetResult</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//定义虚析构函数</span></span><br><span class="line">    <span class="keyword">virtual</span> ~Operation() &#123; <span class="built_in">printf</span>(<span class="string">"del opera\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法的实现</span></span><br><span class="line"><span class="keyword">double</span> Operation::GetNum1() &#123; <span class="keyword">return</span> num1; &#125;</span><br><span class="line"><span class="keyword">void</span> Operation::SetNum1(<span class="keyword">double</span> num) &#123; num1 = num; &#125;</span><br><span class="line"><span class="keyword">double</span> Operation::GetNum2() &#123; <span class="keyword">return</span> num2; &#125;</span><br><span class="line"><span class="keyword">void</span> Operation::SetNum2(<span class="keyword">double</span> num) &#123; num2 = num; &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="具体产品类"><a href="#具体产品类" class="headerlink" title="具体产品类"></a>具体产品类</h3><p>接下来写出每个运算的具体类</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//加法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Add</span> :</span> <span class="keyword">public</span> Operation &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">GetResult</span><span class="params">()</span></span>;</span><br><span class="line">    ~Add() &#123; <span class="built_in">printf</span>(<span class="string">"deladd\n"</span>); &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//减法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sub</span> :</span> <span class="keyword">public</span> Operation &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">GetResult</span><span class="params">()</span></span>;</span><br><span class="line">    ~Sub() &#123; <span class="built_in">printf</span>(<span class="string">"delsub\n"</span>); &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//乘法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mul</span> :</span> <span class="keyword">public</span> Operation &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">GetResult</span><span class="params">()</span></span>;</span><br><span class="line">    ~Mul() &#123; <span class="built_in">printf</span>(<span class="string">"delmul\n"</span>); &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//除法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Div</span> :</span> <span class="keyword">public</span> Operation &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">GetResult</span><span class="params">()</span></span>;</span><br><span class="line">    ~Div() &#123; <span class="built_in">printf</span>(<span class="string">"deldiv\n"</span>); &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> Add::GetResult() &#123; <span class="keyword">return</span> num1 + num2; &#125;</span><br><span class="line"><span class="keyword">double</span> Sub::GetResult() &#123; <span class="keyword">return</span> num1 - num2; &#125;</span><br><span class="line"><span class="keyword">double</span> Mul::GetResult() &#123; <span class="keyword">return</span> num1 * num2; &#125;</span><br><span class="line"><span class="keyword">double</span> Div::GetResult() &#123;</span><br><span class="line">    <span class="keyword">if</span> (num2 == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="string">"除数不能为0"</span>;</span><br><span class="line">    <span class="keyword">return</span> num1 / num2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="工厂类"><a href="#工厂类" class="headerlink" title="工厂类"></a>工厂类</h3><p>这个类用于判断什么时候实例出哪一个类的对象</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//运算简单工厂类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OperationFactory</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//提供静态方法</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> Operation* <span class="title">CreateOperation</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* opearte)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">Operation* OperationFactory::CreateOperation(<span class="keyword">const</span> <span class="keyword">char</span>* opearte) &#123;</span><br><span class="line">    Operation* oper = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(opearte, <span class="string">"+"</span>) == <span class="number">0</span>)</span><br><span class="line">        oper = <span class="keyword">new</span> Add;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(opearte, <span class="string">"-"</span>) == <span class="number">0</span>)</span><br><span class="line">        oper = <span class="keyword">new</span> Sub;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(opearte, <span class="string">"*"</span>) == <span class="number">0</span>)</span><br><span class="line">        oper = <span class="keyword">new</span> Mul;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(opearte, <span class="string">"/"</span>) == <span class="number">0</span>)</span><br><span class="line">        oper = <span class="keyword">new</span> Div;</span><br><span class="line">    <span class="keyword">return</span> oper;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//由工厂类来判断到底需要创建什么对象</span></span><br><span class="line">    Operation* oper = OperationFactory::CreateOperation(<span class="string">"+"</span>);</span><br><span class="line">    oper-&gt;SetNum1(<span class="number">10</span>);</span><br><span class="line">    oper-&gt;SetNum2(<span class="number">20</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"res=%lf"</span>, oper-&gt;GetResult());</span><br><span class="line">    <span class="comment">//析构</span></span><br><span class="line">    <span class="keyword">delete</span> oper;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">res=30.000000</span><br><span class="line">deladd</span><br><span class="line">del opera</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用简单工厂模式后，更为方便扩展，当需要添加新的运算如次方根等时，需要</p>
+<ul>
+<li>添加相应的运算子类</li>
+<li>在工厂类中添加新的判断分支<br>而不需要影响整个代码</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>工厂模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++抽象类子类实例化的析构</title>
     <url>/2020/03/06/C-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%AD%90%E7%B1%BB%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%9A%84%E6%9E%90%E6%9E%84/</url>
     <content><![CDATA[<p>在C++使用抽象类时会面临一个问题，根据其派生类实例出来的对象，如何释放内存，需要用道虚析构，C++将从最底层依次向上调用析构函数</p>
@@ -8654,8 +8701,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>pacman</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
