@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>fcntl函数及示例解析</title>
+    <url>/2020/03/28/fcntl%E5%87%BD%E6%95%B0%E5%8F%8A%E7%A4%BA%E4%BE%8B%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h3 id="函数原型"><a href="#函数原型" class="headerlink" title="函数原型"></a>函数原型</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fcntl</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> cmd, ... <span class="comment">/*int arg*/</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>fd</code>:文件描述符 cmd:影响该函数的操作命令</p>
+<ul>
+<li>该函数具有以下五种功能<br>复制一个已有的文件描述符(cmd=F_DUPFD或F_DUPFD_CLOEXEC)<br>获取/设置文件描述符标志(cmd=F_GETFD或F_SETFD)<br>获取/设置文件状态标志(cmd=F_GETFL或F_SETFL)<br>获取/设置异步IO所有权(cmd=F_GETOWN或F_SETOWN)<br>获取/设置记录锁(cmd=F_GETLK，F_SETLK或F_SETLKW)</li>
+</ul>
+</blockquote>
+<h3 id="例程解析"><a href="#例程解析" class="headerlink" title="例程解析"></a>例程解析</h3><p>关于cmd参数的详细内容参考<a href="https://blog.csdn.net/qq_37414405/article/details/83690447" target="_blank" rel="noopener">csdn博客</a><br>这里主要讲《UNIX环境高级编程》第三版67页的例程</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)</span><br><span class="line">        err_quit(<span class="string">"usage: p67 &lt;descriptor#&gt;"</span>);</span><br><span class="line">    <span class="keyword">if</span> ((val = fcntl(atoi(argv[<span class="number">1</span>]), F_GETFL, <span class="number">0</span>)) &lt; <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">"fcntl error for fd %d"</span>, atoi(argv[<span class="number">1</span>]));</span><br><span class="line">    <span class="comment">//由于历史原因，这三种标志并不各占一位，而是0,1,2,所以需要先用O_ACCMODE(0003)取得访问方式位</span></span><br><span class="line">    <span class="keyword">switch</span> (val &amp; O_ACCMODE) &#123;</span><br><span class="line">        <span class="keyword">case</span> O_RDONLY:</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"read only"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> O_WRONLY:</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"write only"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> O_RDWR:</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"read write"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            err_dump(<span class="string">"unknown access mode"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (val &amp; O_APPEND)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">", append"</span>);</span><br><span class="line">    <span class="keyword">if</span> (val &amp; O_NONBLOCK)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">", nonblocking"</span>);</span><br><span class="line">    <span class="keyword">if</span> (val &amp; O_SYNC)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">", synchronous writes"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined(_POSIX_C_SOURCE) &amp;&amp; defined(O_FSYNC) &amp;&amp; (O_FSYNC != O_SYNC)</span></span><br><span class="line">    <span class="keyword">if</span> (val &amp; O_FSYNC)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">", synchronous writes"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="built_in">putchar</span>(<span class="string">'\n'</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假设编译出的可执行文件为<code>a.out</code>，则在终端下执行命令及其结果为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./a.out 0 &lt; /dev/tty</span><br><span class="line"><span class="built_in">read</span> only</span><br><span class="line">$ ./a.out 1 &gt; temp.foo</span><br><span class="line">$ cat temp.foo</span><br><span class="line">write only</span><br><span class="line">$ ./a.out 2 2&gt;&gt;temp.foo</span><br><span class="line">write only, append</span><br><span class="line">$ ./a.out 5 5&lt;&gt;temp.foo</span><br><span class="line"><span class="built_in">read</span> write</span><br></pre></td></tr></table></figure>
+
+<p>首先解释程序中<code>F_GETFL</code>的作用：当使用此参数作为fcntl的cmd参数传入时，对应于fd的文件状态标志作为函数值返回</p>
+<ul>
+<li><p>关于unix中的重定向<a href="http://www.duguosheng.xyz/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/#more" target="_blank" rel="noopener">重定向说明</a></p>
+</li>
+<li><p>依次解析<br>第一行命令<code>./a.out 0 &lt; /dev/tty</code>，则C语言程序中argv[0]=”./a.out”，argv[1]=”0”，通过atoi函数，将字符串”0”，转换为整型0，并传入fcntl函数中，而在unix系统的<code>&lt;unistd.h&gt;</code>中有如下宏定义</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span>	STDIN_FILENO	0	<span class="comment">/* Standard input.  */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>	STDOUT_FILENO	1	<span class="comment">/* Standard output.  */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>	STDERR_FILENO	2	<span class="comment">/* Standard error output.  */</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>即标准输入0,标准输出1,标准错误2，所以，fcntl第一个参数为1(STDIN_FILENO)标准输入时，fcntl将继续接收来自终端的输入，通过输入重定向符号<code>&lt;</code>，将<code>/dev/tty</code>的文件描述符传入到fcntl函数的第一个参数，由于此时程序只是读入该文件的信息，故返回<code>O_RDONLY</code></p>
+<p>第二行命令<code>./a.out 1 &gt; temp.foo</code>同理，1是标准输出，由于此时fcntl接收temp.foo文件描述符，由于此时要写入，且覆盖写入，所以返回<code>O_WRONLY</code></p>
+<p>第三行命令<code>cat temp.foo</code>打开文件查看信息</p>
+<p>第四行命令<code>./a.out 2 2&gt;&gt;temp.foo</code>由于传<a href="http://www.duguosheng.xyz/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/#more入fcntl的参数是2(STDERR_FILENO)，而错误信息使用命令`2&gt;&gt;`追加重定向到temp.foo中，所以fcntl第一个参数将为temp.foo的文件描述符，由于是追加写入，所以返回值为`O_WRONLY|O_APPEND`，标准输出依然为终端，所以将C程序中的`printf`出的信息依然输出到终端" target="_blank" rel="noopener">http://www.duguosheng.xyz/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/#more入fcntl的参数是2(STDERR_FILENO)，而错误信息使用命令`2&gt;&gt;`追加重定向到temp.foo中，所以fcntl第一个参数将为temp.foo的文件描述符，由于是追加写入，所以返回值为`O_WRONLY|O_APPEND`，标准输出依然为终端，所以将C程序中的`printf`出的信息依然输出到终端</a></p>
+<p>第五行命令<code>./a.out 5 5&lt;&gt;temp.foo</code>中子句<code>5&lt;&gt;temp.foo</code>表示在文件描述符5上打开文件temp.foo以供读写</p>
+]]></content>
+      <categories>
+        <category>unix环境高级编程</category>
+      </categories>
+      <tags>
+        <tag>fcntl</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>unix下的重定向</title>
     <url>/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/</url>
     <content><![CDATA[<h3 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h3><p><strong>输出重定向</strong>：一般情况下，我们在终端下执行命令，或者执行程序，如果有输出信息，则会显示在终端上，通过重定向功能，我们可以将这些信息输出到文件中，这是输出重定向的一般用法<br><strong>输入重定向</strong>：将文件中的内容作为程序的输入信息</p>
