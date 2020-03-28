@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>unix下的重定向</title>
+    <url>/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/</url>
+    <content><![CDATA[<h3 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h3><p><strong>输出重定向</strong>：一般情况下，我们在终端下执行命令，或者执行程序，如果有输出信息，则会显示在终端上，通过重定向功能，我们可以将这些信息输出到文件中，这是输出重定向的一般用法<br><strong>输入重定向</strong>：将文件中的内容作为程序的输入信息</p>
+<a id="more"></a>
+<h3 id="重定向符号"><a href="#重定向符号" class="headerlink" title="重定向符号"></a>重定向符号</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;  输出重定向(write)</span><br><span class="line">&gt;&gt; 输出追加重定向(append)</span><br><span class="line">&lt;  输入重定向</span><br><span class="line">&lt;&lt; 输入追加重定向</span><br></pre></td></tr></table></figure>
+
+<h3 id="标准输入，输出，错误"><a href="#标准输入，输出，错误" class="headerlink" title="标准输入，输出，错误"></a>标准输入，输出，错误</h3><p>在unix系统中规定了这三种符号</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">STDIN  0</span><br><span class="line">STDOUT 1</span><br><span class="line">STDERR 2</span><br></pre></td></tr></table></figure>
+
+<p>一般来说，这三者都指向终端，即各种信息都由终端输入，输出显示</p>
+<h3 id="重定向的使用"><a href="#重定向的使用" class="headerlink" title="重定向的使用"></a>重定向的使用</h3><h4 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 123 &gt; test.txt</span><br><span class="line"><span class="built_in">echo</span> 123 1&gt; test.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$HOME</span> &gt;&gt; test.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$HOME</span> 1&gt;&gt; test.txt</span><br></pre></td></tr></table></figure>
+
+<p>标准输出<code>STDOUT</code>默认是<code>1</code>，所以<code>&gt;</code>等同于<code>1&gt;</code>，<code>&gt;&gt;</code>等同于<code>1&gt;&gt;</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls / /123 2&gt;ls.log</span><br></pre></td></tr></table></figure>
+
+<p><code>2&gt;</code>，<code>2&gt;&gt;</code>中，2表示<code>STDERR</code>标准错误，即仅将错误信息重定向到文件<br>执行上面的命令后，正常信息(<code>ls /</code>的输出信息)会在终端显示，而错误信息(<code>ls /123</code>没有该目录)会被重定向到<code>ls.log</code>文件中<br><img src="r1.png" alt="结果"></p>
+<h4 id="丢弃输出"><a href="#丢弃输出" class="headerlink" title="丢弃输出"></a>丢弃输出</h4><p>有时你需要执行命令，但不想在屏幕上显示输出。在这种情况下，你可以通过重定向到文件<code>/dev/null</code>以丢弃输出:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">command</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+
+<p>在这里 command 是要执行的命令的名字。文件<code>/dev/null</code>是一个自动丢弃其所有的输入的特殊文件。</p>
+<p>为了丢弃一个命令的输出和它的错误输出，你可以使用标准重定向来将 STDOUT 重定向到 STDERR ：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">command</span> &gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p><code>2&gt;&amp;1</code>表示<code>2(STDERR)</code>的重定向位置和<code>1(STDOUT)</code>相同</p>
+<h4 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFFSIZE 4096</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="keyword">char</span> buf[BUFFSIZE];</span><br><span class="line">    <span class="keyword">while</span> ((n = read(STDIN_FILENO, buf, BUFFSIZE)) &gt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> ((write(STDOUT_FILENO, buf, n)) != n) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"write error.\n"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"read error.\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>STDIN_FILENO</code>和<code>STDOUT_FILENO</code>分别是定义在<code>&lt;unistd.h&gt;</code>下的宏，分别对应于标准输入输出，<code>read</code>将从标准输入中依次读取<code>BUFFSIZE</code>字节数据，并存入<code>buf</code>中，然后<code>write</code>将读入的数据再输出到标准输出<br>而通过重定向可以实现(假设编译的可执行文件为<code>test</code>)</p>
+<ul>
+<li>批量输出(&lt;&lt; EOF)<br><img src="r2.png" alt="示例"></li>
+</ul>
+<p>图中，前面有<code>&gt;</code>的是用户输入的数据，下面的是输出的数据</p>
+<ul>
+<li>文件复制<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./<span class="built_in">test</span> &lt; a.txt &gt; b.txt</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>此命令<strong>输入重定向为<code>a.txt</code>，输出重定向为<code>b.txt</code></strong>，结果是将<code>a.txt</code>的所有内容复制到<code>b.txt</code>中</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>重定向</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>KMP算法及C语言实现</title>
+    <url>/2020/03/10/KMP%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<a id="more"></a>
+<h2 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h2><p>假设主串<code>S=&quot;abcdefgab&quot;</code>，要匹配的子串<code>T=&quot;abcdex&quot;</code>，</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>KMP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>简单工厂模式</title>
     <url>/2020/03/06/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<a id="more"></a>
