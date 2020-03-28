@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="Oh, My Blog!">
 <meta property="og:description" content="fcntl可以改变已经打开文件的属性">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-28T05:59:50.687Z">
+<meta property="og:updated_time" content="2020-03-28T06:08:55.291Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fcntl函数及示例解析">
 <meta name="twitter:description" content="fcntl可以改变已经打开文件的属性">
@@ -242,7 +242,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-28 11:46:39 / 修改时间：13:59:50" itemprop="dateCreated datePublished" datetime="2020-03-28T11:46:39+08:00">2020-03-28</time>
+              <time title="创建时间：2020-03-28 11:46:39 / 修改时间：14:08:55" itemprop="dateCreated datePublished" datetime="2020-03-28T11:46:39+08:00">2020-03-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -269,7 +269,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -317,7 +317,7 @@
 <p>即标准输入0,标准输出1,标准错误2，所以，fcntl第一个参数为1(STDIN_FILENO)标准输入时，fcntl将继续接收来自终端的输入，通过输入重定向符号<code>&lt;</code>，将<code>/dev/tty</code>的文件描述符传入到fcntl函数的第一个参数，由于此时程序只是读入该文件的信息，故返回<code>O_RDONLY</code></p>
 <p>第二行命令<code>./a.out 1 &gt; temp.foo</code>同理，1是标准输出，由于此时fcntl接收temp.foo文件描述符，由于此时要写入，且覆盖写入，所以返回<code>O_WRONLY</code></p>
 <p>第三行命令<code>cat temp.foo</code>打开文件查看信息</p>
-<p>第四行命令<code>./a.out 2 2&gt;&gt;temp.foo</code>由于传<a href="http://www.duguosheng.xyz/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/#more入fcntl的参数是2(STDERR_FILENO)，而错误信息使用命令`2&gt;&gt;`追加重定向到temp.foo中，所以fcntl第一个参数将为temp.foo的文件描述符，由于是追加写入，所以返回值为`O_WRONLY|O_APPEND`，标准输出依然为终端，所以将C程序中的`printf`出的信息依然输出到终端" target="_blank" rel="noopener">http://www.duguosheng.xyz/2020/03/27/unix%E4%B8%8B%E7%9A%84%E9%87%8D%E5%AE%9A%E5%90%91/#more入fcntl的参数是2(STDERR_FILENO)，而错误信息使用命令`2&gt;&gt;`追加重定向到temp.foo中，所以fcntl第一个参数将为temp.foo的文件描述符，由于是追加写入，所以返回值为`O_WRONLY|O_APPEND`，标准输出依然为终端，所以将C程序中的`printf`出的信息依然输出到终端</a></p>
+<p>第四行命令<code>./a.out 2 2&gt;&gt;temp.foo</code>由于传入fcntl的参数是2(STDERR_FILENO)，而错误信息使用命令<code>2&gt;&gt;</code>追加重定向到temp.foo中，所以fcntl第一个参数将为temp.foo的文件描述符，由于是追加写入，所以返回值为<code>O_WRONLY|O_APPEND</code>，标准输出依然为终端，所以将C程序中的<code>printf</code>出的信息依然输出到终端</p>
 <p>第五行命令<code>./a.out 5 5&lt;&gt;temp.foo</code>中子句<code>5&lt;&gt;temp.foo</code>表示在文件描述符5上打开文件temp.foo以供读写</p>
 
     </div>
@@ -474,7 +474,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:49</span>
+    <span title="站点阅读时长">2:48</span>
 </div>
 
         
