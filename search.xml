@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>mysql数据过滤</title>
+    <url>/2020/04/05/mysql%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>=</code></td>
+<td>等于</td>
+</tr>
+<tr>
+<td><code>&lt;&gt;</code></td>
+<td>不等于</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>不等于</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>小于</td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>小于等于</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>大于</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>大于等于</td>
+</tr>
+<tr>
+<td><code>BETWEEN ... AND ...</code></td>
+<td>在指定的两值之间</td>
+</tr>
+<tr>
+<td><code>IS NULL</code></td>
+<td>为空，没有值</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>示例</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> col1 <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> col2 BEERWARE <span class="number">10</span> <span class="keyword">AND</span> <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>IS NULL<br>在通过过滤选择出不具有特定值的行时，你可能希望返回具有<code>NULL</code>值的空行，但是不能，因为没有值具有特殊的含义，数据库不知道它们是否匹配</p>
+</li>
+</ul>
+<h3 id="AND和OR"><a href="#AND和OR" class="headerlink" title="AND和OR"></a>AND和OR</h3><p>mysql允许多个<code>where</code>子句联用，要使用<code>AND</code>或者<code>OR</code>给<code>WHERE</code>子句附加条件<br>像很多其他语言一样，mysql优先处理<code>AND</code>，然后再处理<code>OR</code>，所以应当使用圆括号明确的表示出处理的优先级</p>
+<ul>
+<li>示例<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> col1 <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> col1 = <span class="number">1000</span> <span class="keyword">AND</span> <span class="keyword">col</span> <span class="keyword">IS</span> <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="IN操作符"><a href="#IN操作符" class="headerlink" title="IN操作符"></a>IN操作符</h3><p><code>IN</code>操作符用来指定条件范围，范围中的每个条件都可以进行匹配。<code>IN</code>取合法值的由逗号分隔的清单，全部括在圆括号里<br><code>IN</code>通常都可以由<code>OR</code>来实现相同的功能，但<code>IN</code>一般比<code>OR</code>执行的更快<br><code>IN</code>的最大优点是可以包含其他<code>SELECT</code>语句，使得能够更动态的建立<code>WHERE</code>子句</p>
+<ul>
+<li>示例<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> col1 <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> col2 <span class="keyword">IN</span> (<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="NOT操作符"><a href="#NOT操作符" class="headerlink" title="NOT操作符"></a>NOT操作符</h3><p>mysql支持使用<code>NOT</code>对<code>IN</code>，<code>BETWEEN</code>和<code>EXISTS</code>取反</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>where子句</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C预处理器</title>
     <url>/2020/04/05/C%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8-%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E5%8F%98%E5%8F%82%E5%AE%8F/</url>
     <content><![CDATA[<a id="more"></a>
@@ -5570,8 +5647,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>udp</tag>
         <tag>python网络编程</tag>
+        <tag>udp</tag>
       </tags>
   </entry>
   <entry>
@@ -5679,8 +5756,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>property装饰器</tag>
         <tag>python基础</tag>
+        <tag>property装饰器</tag>
       </tags>
   </entry>
   <entry>
