@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++处理类型</title>
+    <url>/2020/04/27/C-%E5%A4%84%E7%90%86%E7%B1%BB%E5%9E%8B/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h2 id="类型别名"><a href="#类型别名" class="headerlink" title="类型别名"></a>类型别名</h2><h3 id="typedef"><a href="#typedef" class="headerlink" title="typedef"></a>typedef</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">double</span> wages;  <span class="comment">//wages是double的同义词</span></span><br><span class="line"><span class="keyword">typedef</span> wages base, *p;  <span class="comment">//base是double的同义词，p是double*的同义词</span></span><br></pre></td></tr></table></figure>
+
+<p>含有<code>typedef</code>的语句定义的不是变量而是类型别名</p>
+<h3 id="using"><a href="#using" class="headerlink" title="using"></a>using</h3><p>新标准规定了一种新的方法，使用别名声明</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> size = <span class="built_in">std</span>::<span class="built_in">string</span>::size_type;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法使用<code>using</code>作为别名声明的开始，其后紧跟别名和等号，其作用是把左侧的名字规定成等号右侧类型的别名。</p>
+<h3 id="指针，常量和类型别名"><a href="#指针，常量和类型别名" class="headerlink" title="指针，常量和类型别名"></a>指针，常量和类型别名</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> *pstring;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *cstr1 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> pstring cstr2 = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>再上例中，人们可能会误以为cstr1和cstr2是等价的，实际上，这两种定义截然不同，cstr1的<code>const</code>是底层的，即值为常量，而cstr2为顶层<code>const</code>，即指针为常量，后者相当于</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *<span class="keyword">const</span> cstr2 = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="auto类型说明符"><a href="#auto类型说明符" class="headerlink" title="auto类型说明符"></a>auto类型说明符</h2><p>C++11新标准引入了<code>auto</code>类型说明符，用它就能让编译器替我们分析表达式所属的类型，<code>auto</code>让编译器通过初始值来推算变量类型，因此<code>auto</code>定义的变量必须有初始值</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> num = func();  <span class="comment">//假设func()返回float，则num类型就是float</span></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>auto</code>也能在一条语句中声明多个变量，该语句中所有变量的初始基本数据类型必须一致</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> i = <span class="number">0</span>, *p = &amp;i;     <span class="comment">//正确，i是整数，p是整数指针</span></span><br><span class="line"><span class="keyword">auto</span> sz = <span class="number">0</span>, pi = <span class="number">3.14</span>;  <span class="comment">//错误，类型不一致</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="复合类型，常量和auto"><a href="#复合类型，常量和auto" class="headerlink" title="复合类型，常量和auto"></a>复合类型，常量和auto</h3><p>编译器推断出来的<code>auto</code>类型有时候和初始值的类型不完全一样，编译器会适当的改变结果使其更符合初始化规则</p>
+<ul>
+<li>引用<br>当引用备用作初始值时，真正参与初始化的其实是引用对象的值，此时编译器以引用对象的类型作为<code>auto</code>的类型<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>, &amp;r = i;</span><br><span class="line"><span class="keyword">auto</span> a = r;  <span class="comment">//a为int类型</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>对于a的定义相当于</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a = r;</span><br></pre></td></tr></table></figure>
+
+<p>而不是</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> &amp;a = r;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>const<br><code>auto</code>一般忽略顶层const，保留底层const</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ci = i, &amp;cr = ci;</span><br><span class="line"><span class="keyword">auto</span> b = ci;  <span class="comment">//b是int类型(忽略了顶层const)</span></span><br><span class="line"><span class="keyword">auto</span> c = cr;  <span class="comment">//c是int类型(cr是ci引用，ci本身是顶层const)</span></span><br><span class="line"><span class="keyword">auto</span> d = &amp;i;  <span class="comment">//d是一个int*类型</span></span><br><span class="line"><span class="keyword">auto</span> e = &amp;ci; <span class="comment">//e是指向const int的指针(对常量取地址是一种底层const)</span></span><br></pre></td></tr></table></figure>
+
+<p>如果希望<code>auto</code>是顶层const，可以明确指出</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> f = ci;</span><br></pre></td></tr></table></figure>
+
+<p>还可以将引用的类型设为<code>auto</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> &amp;g = ci;</span><br><span class="line"><span class="keyword">auto</span> &amp;h = <span class="number">42</span>;        <span class="comment">//错误，不能将非常量引用绑定到字面值</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> &amp;j = <span class="number">42</span>;  <span class="comment">//正确</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="decltype类型指示符"><a href="#decltype类型指示符" class="headerlink" title="decltype类型指示符"></a>decltype类型指示符</h2><p>C++11新标准引入，它的作用是选择并返回操作数的数据类型，在此过程中，编译器分析表达式并得到其类型，却不实际计算表达式的值</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(f()) sum = x;  <span class="comment">//sum类型就是函数f的返回类型</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，这里并不实际调用f()，而只是识别其返回类型</p>
+<ul>
+<li><p>对比auto<br><code>decltype</code>处理类型和<code>auto</code>有些不同，如果<code>decltype</code>使用的表达式是一个变量，则返回<strong>包括顶层const和引用在内的</strong>该变量的类型。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ci = <span class="number">0</span>, &amp;cj = ci;</span><br><span class="line"><span class="keyword">decltype</span>(ci) x = <span class="number">0</span>;   <span class="comment">//x类型是const int</span></span><br><span class="line"><span class="keyword">decltype</span>(cj) y = x;   <span class="comment">//y类型是const int&amp;，绑定到x</span></span><br><span class="line"><span class="keyword">decltype</span>(cj) z;       <span class="comment">//错误，z是一个引用，必须初始化</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>decltype和引用<br>如果<code>decltype</code>使用的表达式不是一个变量而是表达式，则返回表达式结果对应的类型</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>, *p = &amp;i, &amp;r = i;</span><br><span class="line"><span class="keyword">decltype</span>(r + <span class="number">0</span>) b;   <span class="comment">//正确，加法的结果是int，因此b类型为int</span></span><br><span class="line"><span class="keyword">decltype</span>(*p) c;      <span class="comment">//错误，c是一个引用，必须初始化</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>如<code>decltype(*p)</code>所示的那样，如果表达式的内容是解引用操作，则<code>decltype</code>将得到引用类型，正如我们熟悉的那样，<code>*p</code>解引用可以得到对象的值，并可以给对象赋值，所以<code>decltype</code>得到的是<code>int&amp;</code>而不是<code>int</code></p>
+<p><code>decltype</code>和表达式形式密切相关，如果给变量名加上了一对或多对括号，编译器就把它当成了表达式，这样的<code>decltype</code>会得到引用类型</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>((i)) d; <span class="comment">//错误，d是int&amp;，必须初始化</span></span><br><span class="line"><span class="keyword">decltype</span>(i) e;   <span class="comment">//正确，e是int</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>切记：<code>decltype((variable))</code>结果永远是引用，而<code>decltype(variable)</code>只有当<code>variable</code>本身是引用时才是引用</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>类型别名</tag>
+        <tag>auto关键字</tag>
+        <tag>decltype关键字</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++的const和constexpr</title>
+    <url>/2020/04/24/C-%E7%9A%84const%E5%92%8Cconstexpr/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h2 id="const"><a href="#const" class="headerlink" title="const"></a>const</h2><ul>
+<li>因为const对象一旦创建后就不能改变，所以必须初始化</li>
+<li>一般变量的定义不能使用<code>extern</code>关键字，而如果想在多个文件之间共享<code>const</code>对象，必须在变量的定义之前加<code>extern</code><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//file1.cc定义</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> BUFFER_SIZE = fcn();</span><br><span class="line"><span class="comment">//file1.h声明</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> BUFFER_SIZE;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="顶层const"><a href="#顶层const" class="headerlink" title="顶层const"></a>顶层const</h3><p>顶层const表示指针本身是个常量，底层const表示指针所指的对象是一个常量。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> *<span class="keyword">const</span> p1 = &amp;i;        <span class="comment">//不能改变p1，顶层const</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ci = <span class="number">42</span>;         <span class="comment">//不能改变ci，顶层const</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p2 = &amp;ci;       <span class="comment">//可以改变p2，底层const</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *<span class="keyword">const</span> p3 = p2;  <span class="comment">//左const为底层，右const为顶层</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;r = ci;         <span class="comment">//声明引用的const都是底层const</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="constexpr和常量表达式"><a href="#constexpr和常量表达式" class="headerlink" title="constexpr和常量表达式"></a>constexpr和常量表达式</h2><p>常量表达式是指值不会改变并且在编译过程中就能得到计算结果的表达式。<br>C++11允许将变量声明为<code>constexpr</code>类型以便编译器来验证变量是否是一个常量表达式。声明为<code>constexpr</code>的变量一定是一个常量，并且用常量表达式初始化</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">constexpr</span> <span class="keyword">int</span> mf = <span class="number">20</span>;         <span class="comment">//20是常量表达式</span></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">int</span> limit = mf + <span class="number">1</span>;  <span class="comment">//mf+1是常量表达式</span></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">int</span> sz = size();     <span class="comment">//只有size()是constexpr函数时才正确</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="constexpr函数"><a href="#constexpr函数" class="headerlink" title="constexpr函数"></a>constexpr函数</h3><p>是指能用于常量表达式的函数，定义<code>constexpr</code>函数的方法与其他函数类似，不过要遵从：函数的返回值及所有形参的类型都得是字面值类型，函数体有且只有一条<code>return</code>语句</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="keyword">int</span> <span class="title">new_sz</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="number">42</span>; &#125;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">int</span> foo = new_sz();</span><br></pre></td></tr></table></figure>
+
+<p>因为编译器能在编译时验证<code>new_sz</code>函数返回的是常量表达式，所以可以用它来初始化<code>foo</code><br>执行初始化任务时，编译器把对<code>constexpr</code>函数的调用替换成其结果值，为了在编译过程中随时可以展开，<code>constexpr</code>函数隐式被声明为内联的<br>内联函数和<code>constexpr</code>函数通常定义在头文件中</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> size_t <span class="title">scale</span><span class="params">(<span class="keyword">size_t</span> cnt)</span> </span>&#123; <span class="keyword">return</span> new_sz() * cnt; &#125;</span><br><span class="line"><span class="keyword">int</span> arr[scale(<span class="number">2</span>)];  <span class="comment">//正确</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> arr2[scale(i)]; <span class="comment">//错误，scale(i)不是常量表达式</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="指针和constexpr"><a href="#指针和constexpr" class="headerlink" title="指针和constexpr"></a>指针和constexpr</h3><p>在<code>constexpr</code>中如果声明了指针，则其只对指针有效，而对于指针所指的值无效</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p = <span class="literal">nullptr</span>;     <span class="comment">//p指向的值为常量</span></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">int</span> *q = <span class="literal">nullptr</span>; <span class="comment">//q指针为常量</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>const</tag>
+        <tag>constexpr</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言位运算符及其使用</title>
     <url>/2020/04/23/%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<a id="more"></a>
@@ -2359,7 +2470,7 @@
 <h3 id="函数小结"><a href="#函数小结" class="headerlink" title="函数小结"></a>函数小结</h3><p>服务端函数调用的流程是：socket-&gt;bind-&gt;listen-&gt;accept-&gt;recv/send-&gt;close<br>客户端函数调用的流程是：socket-&gt;connect-&gt;send/recv-&gt;close</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>socket</tag>
@@ -2426,7 +2537,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>多态</tag>
@@ -2469,7 +2580,7 @@
 <p>其中，访问修饰符继承方式是 public、protected 或 private 其中的一个，用来修饰每个基类，各个基类之间用逗号分隔。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>继承</tag>
@@ -2484,7 +2595,7 @@
 <p><a href="https://blog.csdn.net/wucz122140729/article/details/98582930" target="_blank" rel="noopener">运算符重载</a></p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>动态内存</tag>
@@ -2571,7 +2682,7 @@
 <h4 id="判断容器的大小"><a href="#判断容器的大小" class="headerlink" title="判断容器的大小"></a>判断容器的大小</h4><p>bool empty()：判断容器是否为空。<br>int size()：返回容器中元素的个数。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>容器</tag>
@@ -2635,7 +2746,7 @@
 <p>所以，了解string类的原理和一些用得着的成员函数就可以了，不必太深入研究，意义不大。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>string类</tag>
@@ -2686,7 +2797,7 @@
 <p>引用还可以作为函数的返回值，但我不建议这么用，我实在看不出这样做有什么好处，那就没必要把事情搞得那么复杂，所以这里就不介绍了。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>引用</tag>
@@ -2742,7 +2853,7 @@
 <p>可变参数的知识不只这些，但是，在实际开发中，我只见过用于格式化输出，其它的应用场景我没有见过。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>面向对象</tag>
@@ -2789,7 +2900,7 @@
 <p>面向对象编程在代码执行效率上绝对没有任何优势，它的主要目的是方便程序员组织和管理代码，快速梳理编程思路，带来编程思想上的革新。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>面向对象</tag>
@@ -2818,7 +2929,7 @@
 <p>从这个角度讲，函数重载仅仅是语法层面的，本质上它们还是不同的函数，占用不同的内存，入口地址也不一样。</p>
 ]]></content>
       <categories>
-        <category>C++</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>重载</tag>
@@ -5523,51 +5634,6 @@
       </tags>
   </entry>
   <entry>
-    <title>wordPress文章版本</title>
-    <url>/2019/09/22/wordPress%E6%96%87%E7%AB%A0%E7%89%88%E6%9C%AC/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<p>修改站点的<code>wp-config.php</code>文件，在其中添加如下代码</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">define(<span class="string">'WP_POST_REVISIONS'</span>, <span class="number">0</span>);     <span class="comment">//不启用修订版本</span></span><br><span class="line">define(<span class="string">'WP_POST_REVISIONS'</span>, <span class="number">3</span>);     <span class="comment">//共保存3个版本</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>wordPress</category>
-      </categories>
-      <tags>
-        <tag>文章版本</tag>
-        <tag>wordPress配置</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>wordPress的文章和页面</title>
-    <url>/2019/09/22/wordPress-1/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<h2 id="文章和页面"><a href="#文章和页面" class="headerlink" title="文章和页面"></a>文章和页面</h2><blockquote>
-<p>文章：是网站的主要内容<br>页面：是网站的其他一些信息</p>
-</blockquote>
-<ul>
-<li>以<strong>哔哩哔哩</strong>网为例<blockquote>
-<p>它的主要内容是视频，所以打开它的网站可以看到许多视频推送，这就是它的<strong>文章</strong><br><img src="wp_1.png" alt="文章"></p>
-</blockquote>
-</li>
-</ul>
-<blockquote>
-<p>而下拉到末尾，可以看到其他一些次要信息，这些就是<strong>页面</strong><br><img src="wp_2.png" alt="页面"></p>
-</blockquote>
-<ul>
-<li>由于<strong>文章</strong>内容繁杂，所以可以创建分类便于管理和用户查询，而页面没有分类功能<br><img src="wp_2.png" alt="分类"></li>
-</ul>
-]]></content>
-      <categories>
-        <category>wordPress</category>
-      </categories>
-      <tags>
-        <tag>wordpress一些基础概念</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>时域分析</title>
     <url>/2019/09/22/%E6%97%B6%E5%9F%9F%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<a id="more"></a>
@@ -6049,8 +6115,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>python网络编程</tag>
         <tag>udp</tag>
+        <tag>python网络编程</tag>
       </tags>
   </entry>
   <entry>
