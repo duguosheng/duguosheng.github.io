@@ -1,11 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>将博客搬至CSDN</title>
-    <url>/2020/04/27/%E5%B0%86%E5%8D%9A%E5%AE%A2%E6%90%AC%E8%87%B3CSDN/</url>
-    <content><![CDATA[<a id="more"></a>
-<p>abcd</p>
+    <title>MySql联结表</title>
+    <url>/2020/04/29/MySql%E8%81%94%E7%BB%93%E8%A1%A8/</url>
+    <content><![CDATA[<h2 id="联结表"><a href="#联结表" class="headerlink" title="联结表"></a>联结表</h2><p>分解数据为多个表能更有效地存储，更方便的处理，比如学生的信息和学生选课的信息，存在两个表更为方便，但这些好处是有代价的。</p>
+<a id="more"></a>
+<p>如果数据存储在多个表中，怎样用单条<code>SELECT</code>语句检索出数据？<br>答案是使用<strong>联结</strong>。</p>
+<blockquote>
+<p>简单来说，联结是一种机制，用来在一条<code>SELECT</code>语句中关联表，因此称之为联结。使用特殊的语法，可以联结多个表返回一组输出</p>
+</blockquote>
+<h3 id="创建联结"><a href="#创建联结" class="headerlink" title="创建联结"></a>创建联结</h3><p>联结的创建非常简单，规定要联结的所有表及其如何关联即可</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> vend_name, prod_name, prod_price</span><br><span class="line"><span class="keyword">FROM</span> vendors <span class="keyword">AS</span> v, products <span class="keyword">AS</span> p</span><br><span class="line"><span class="keyword">WHERE</span> v.vend_id = p.vend_id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> vend_name, prod_name;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://www.greatboy.xyz/wp-content/uploads/2020/04/image-1588069934633.png" alt="file"></p>
+<p>查询中指定的三个列中，有两个列在一张表中，另一个列在另一个表中，这两个表用<code>WHERE</code>正确联结，应当保证所有的联结都有<code>WHERE</code>子句</p>
+<h3 id="内部联结"><a href="#内部联结" class="headerlink" title="内部联结"></a>内部联结</h3><p>目前为止所用的联结称为等值联结，它基于两个表之间的相等测试，。这种联结也称为内部联结。这种联结还可以使用稍微不同的语法，下面的例子返回与前面的例子完全相同</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> vend_name, prod_name, prod_price</span><br><span class="line"><span class="keyword">FROM</span> vendors <span class="keyword">AS</span> v <span class="keyword">INNER</span> <span class="keyword">JOIN</span> products <span class="keyword">AS</span> p</span><br><span class="line"><span class="keyword">ON</span> v.vend_id = p.vend_id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> vend_name, prod_name;</span><br></pre></td></tr></table></figure>
+
+<p>两个表用<code>INNER JOIN</code>指定，条件用<code>ON</code>指定而不是<code>WHERE</code></p>
+<blockquote>
+<p>ANSI SQL规范首选<code>INNER JOIN</code>语法</p>
+</blockquote>
+<h3 id="联结多个表"><a href="#联结多个表" class="headerlink" title="联结多个表"></a>联结多个表</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> prod_name, vend_name, prod_price, quantity</span><br><span class="line"><span class="keyword">FROM</span> orderitems <span class="keyword">AS</span> o, products <span class="keyword">AS</span> p, vendors <span class="keyword">AS</span> v</span><br><span class="line"><span class="keyword">WHERE</span> v.vend_id = p.vend_id</span><br><span class="line">  <span class="keyword">AND</span> o.prod_id = p.prod_id</span><br><span class="line">  <span class="keyword">AND</span> order_num = <span class="number">20005</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建高级联结"><a href="#创建高级联结" class="headerlink" title="创建高级联结"></a>创建高级联结</h2><h3 id="自联结"><a href="#自联结" class="headerlink" title="自联结"></a>自联结</h3><p>假如发现物品ID为DTNTR存在问题，想知道生产该物品的供应商生产的其他物品是否也存在这些问题。此查询要求首先查询到DTNTR的供应商，再查询其生产的其他产品</p>
+<ul>
+<li><p>使用子查询</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> prod_id, prod_name</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">WHERE</span> vend_id = (<span class="keyword">SELECT</span> vend_id</span><br><span class="line">				 <span class="keyword">FROM</span> products</span><br><span class="line">                 <span class="keyword">WHERE</span> prod_id = <span class="string">'DTNTR'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用自联结</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> p1.prod_id, p1.prod_name</span><br><span class="line"><span class="keyword">FROM</span> products <span class="keyword">AS</span> p1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> products <span class="keyword">AS</span> p2</span><br><span class="line"><span class="keyword">ON</span> p2.prod_id = <span class="string">'DTNTR'</span></span><br><span class="line"><span class="keyword">AND</span> p1.vend_id = p2.vend_id;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>此查询使用的两个表实际上是同一张表，通过使用别名消除了二义性</p>
+<h3 id="自然联结"><a href="#自然联结" class="headerlink" title="自然联结"></a>自然联结</h3><p>无论何时对表联结，应该至少有一个列出现在不止一个表中（被联结的列）。标准的联结返回所有数据，<strong>甚至相同的列出现多次</strong>，自然联结排除多次出现，使每个列只返回一次。<br>怎样完成这项工作呢？答案是由你自己完成。<strong>你只能选择那些唯一的列</strong>。这一般是通过对表使用通配符(<code>SELECT *</code>)，对所有其他表的列使用明确的子集（防止出现重复列）来完成的。<br>前面所使用的联结都是自然联结，也许永远都用不到非自然联结。</p>
+<h3 id="外部联结"><a href="#外部联结" class="headerlink" title="外部联结"></a>外部联结</h3><p>许多联结将一个表中的行与另一个表中的行相关联，但有时需要包含没有关联行的那些行，例如：对每个客户下了多少订单计数，包括至今未下单的客户</p>
+<p><strong>联结包含了那些在相关表中没有关联行的行，这种联结称为外部联结</strong></p>
+<ul>
+<li>内部联结和外部联结对比</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 内部联结</span></span><br><span class="line"><span class="keyword">SELECT</span> c.cust_id, o.order_num</span><br><span class="line"><span class="keyword">FROM</span> customers <span class="keyword">AS</span> c <span class="keyword">INNER</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o</span><br><span class="line">  <span class="keyword">ON</span> c.cust_id = o.cust_id;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://www.greatboy.xyz/wp-content/uploads/2020/04/image-1588083832395.png" alt="file"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 外部联结</span></span><br><span class="line"><span class="keyword">SELECT</span> c.cust_id, o.order_num</span><br><span class="line"><span class="keyword">FROM</span> customers <span class="keyword">AS</span> c <span class="keyword">LEFT</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o</span><br><span class="line">  <span class="keyword">ON</span> c.cust_id = o.cust_id;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://www.greatboy.xyz/wp-content/uploads/2020/04/image-1588083853817.png" alt="file"></p>
+<p>可见，外部联结可以返回没有关联行的行</p>
+<ul>
+<li>使用外部联结<br>外部联结使用<code>OUTER JOIN</code>指定联结的类型，同时也必须使用<code>LEFT</code>或<code>RIGHT</code>指定包括其所有行的表</li>
+</ul>
+<p><code>A LEFT OUTER JOIN B</code>，A的所有行在B中检索，如果B无匹配项，就返回NULL<br><code>A RIGHT OUTER JOIN B</code>，B的所有行在A中检索，如果A无匹配项，就返回NULL</p>
 ]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+        <tag>联结表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++遍历数组</title>
+    <url>/2020/04/28/C-%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<p>首先，我们定义一个二维数组</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[<span class="number">3</span>][<span class="number">4</span>] = &#123;&#123;<span class="number">1</span>&#125;, &#123;<span class="number">1</span>, <span class="number">2</span>&#125;, &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用别名"><a href="#使用别名" class="headerlink" title="使用别名"></a>使用别名</h2><p>读，写和理解一个指向多维数组的指针是一项繁琐的工作，使用别名可以简化一些</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//以下是两条等价的声明</span></span><br><span class="line"><span class="keyword">using</span> int_array = <span class="keyword">int</span>[<span class="number">4</span>];</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> int_array[<span class="number">4</span>];</span><br></pre></td></tr></table></figure>
+
+<p>接下来就使用<code>int_array</code>进行遍历</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//输出每个元素的值</span></span><br><span class="line"><span class="keyword">for</span> (int_array *p = ia; p != ia + <span class="number">3</span>; ++p) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> *q = *p; q != *p + <span class="number">4</span>; ++q)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *q &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用auto"><a href="#使用auto" class="headerlink" title="使用auto"></a>使用auto</h2><p>C++11新标准指出，通过使用<code>auto</code>或<code>decltype</code>就能尽可能避免在数组前面加上一个指针类型了</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> p = ia; p != ia + <span class="number">3</span>; ++p) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> q = *p; q != *p + <span class="number">4</span>; ++q)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *q &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用迭代器"><a href="#使用迭代器" class="headerlink" title="使用迭代器"></a>使用迭代器</h2><p>使用标准库<code>&lt;iterator&gt;</code>中的函数<code>begin()</code>和<code>end()</code>也可以实现相同的功能，且更简洁一些</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> p = begin(ia); p != end(ia); ++p) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> q = begin(*p); q != end(*p); ++q)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *q &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+        <tag>C++</tag>
+      </tags>
   </entry>
   <entry>
     <title>C++的string类型及范围for语句</title>
@@ -118,6 +200,11 @@
 <p>还可以将引用的类型设为<code>auto</code></p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> &amp;g = ci;</span><br><span class="line"><span class="keyword">auto</span> &amp;h = <span class="number">42</span>;        <span class="comment">//错误，不能将非常量引用绑定到字面值</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> &amp;j = <span class="number">42</span>;  <span class="comment">//正确</span></span><br></pre></td></tr></table></figure>
 
+<ul>
+<li>数组<br>当使用一个数组作为<code>auto</code>变量的初始值时，推断得到的类型是指针而不是数组<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[] = &#123; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125;</span><br><span class="line"><span class="keyword">auto</span> ia2(ia);    <span class="comment">//ia2是一个指针，指向ia的第一个元素</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 <h2 id="decltype类型指示符"><a href="#decltype类型指示符" class="headerlink" title="decltype类型指示符"></a>decltype类型指示符</h2><p>C++11新标准引入，它的作用是选择并返回操作数的数据类型，在此过程中，编译器分析表达式并得到其类型，却不实际计算表达式的值</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(f()) sum = x;  <span class="comment">//sum类型就是函数f的返回类型</span></span><br></pre></td></tr></table></figure>
 
@@ -138,6 +225,11 @@
 <blockquote>
 <p>切记：<code>decltype((variable))</code>结果永远是引用，而<code>decltype(variable)</code>只有当<code>variable</code>本身是引用时才是引用</p>
 </blockquote>
+<ul>
+<li>数组<br>当使用<code>decltype</code>且初始值为一个数组时，不会发生<code>auto</code>那样的转化<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[] = &#123; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125;</span><br><span class="line"><span class="keyword">decltype</span>(ia) ia2 = &#123; <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span> &#125;;  <span class="comment">//ia2是一个含有5个元素的数组</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>C/C++</category>
@@ -5703,20 +5795,6 @@
       </categories>
       <tags>
         <tag>python多任务</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>时域分析</title>
-    <url>/2019/09/22/%E6%97%B6%E5%9F%9F%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<h2 id="一阶动态性能指标"><a href="#一阶动态性能指标" class="headerlink" title="一阶动态性能指标"></a>一阶动态性能指标</h2><p><img src="sy_1.png" alt="一阶"></p>
-]]></content>
-      <categories>
-        <category>自动控制原理</category>
-      </categories>
-      <tags>
-        <tag>时域分析</tag>
       </tags>
   </entry>
   <entry>

@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="Oh, My Blog!">
 <meta property="og:description" content="随着程序越来越复杂，程序用到的类型也越来越复杂">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-27T07:00:25.874Z">
+<meta property="og:updated_time" content="2020-04-28T02:35:39.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++处理类型">
 <meta name="twitter:description" content="随着程序越来越复杂，程序用到的类型也越来越复杂">
@@ -240,10 +240,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-27 13:43:54 / 修改时间：15:00:25" itemprop="dateCreated datePublished" datetime="2020-04-27T13:43:54+08:00">2020-04-27</time>
+              <time title="创建时间：2020-04-27 13:43:54" itemprop="dateCreated datePublished" datetime="2020-04-27T13:43:54+08:00">2020-04-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-28 10:35:39" itemprop="dateModified" datetime="2020-04-28T10:35:39+08:00">2020-04-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -269,7 +275,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -332,6 +338,11 @@
 <p>还可以将引用的类型设为<code>auto</code></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> &amp;g = ci;</span><br><span class="line"><span class="keyword">auto</span> &amp;h = <span class="number">42</span>;        <span class="comment">//错误，不能将非常量引用绑定到字面值</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> &amp;j = <span class="number">42</span>;  <span class="comment">//正确</span></span><br></pre></td></tr></table></figure>
 
+<ul>
+<li>数组<br>当使用一个数组作为<code>auto</code>变量的初始值时，推断得到的类型是指针而不是数组<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[] = &#123; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125;</span><br><span class="line"><span class="keyword">auto</span> ia2(ia);    <span class="comment">//ia2是一个指针，指向ia的第一个元素</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 <h2 id="decltype类型指示符"><a href="#decltype类型指示符" class="headerlink" title="decltype类型指示符"></a>decltype类型指示符</h2><p>C++11新标准引入，它的作用是选择并返回操作数的数据类型，在此过程中，编译器分析表达式并得到其类型，却不实际计算表达式的值</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(f()) sum = x;  <span class="comment">//sum类型就是函数f的返回类型</span></span><br></pre></td></tr></table></figure>
 
@@ -352,6 +363,11 @@
 <blockquote>
 <p>切记：<code>decltype((variable))</code>结果永远是引用，而<code>decltype(variable)</code>只有当<code>variable</code>本身是引用时才是引用</p>
 </blockquote>
+<ul>
+<li>数组<br>当使用<code>decltype</code>且初始值为一个数组时，不会发生<code>auto</code>那样的转化<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[] = &#123; <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125;</span><br><span class="line"><span class="keyword">decltype</span>(ia) ia2 = &#123; <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span> &#125;;  <span class="comment">//ia2是一个含有5个元素的数组</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
 
     </div>
 
@@ -463,13 +479,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">106</span>
+        <span class="site-state-item-count">108</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -507,12 +523,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">202k</span>
+    <span title="站点总字数">205k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:04</span>
+    <span title="站点阅读时长">3:06</span>
 </div>
 
         
